@@ -8,7 +8,7 @@ import {
 } from './repository.js';
 import { repoGetLocationById } from '@/modules/locations/repository.js';
 import { repoGetFrostForecastsAboveThreshold } from '@/modules/weather/repository.js';
-import { telegramNotify } from '@agro/shared-backend/modules/telegram/helpers';
+import { telegramNotify } from '@agro/shared-backend/modules/telegram';
 import { sendFcmFrostAlert } from './fcm.js';
 import { sendFrostAlertEmail } from './email-delivery.js';
 
