@@ -1,4 +1,4 @@
-@import '../../../../../packages/shared-config/tailwind-tokens.css';
+@import '@agro/shared-config/tailwind-tokens';
 @import 'tailwindcss';
 
 /* Varsayilanlar: layout body uzerinde API /theme ile gelen tokenlar bunlari ezer */
