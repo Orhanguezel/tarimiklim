@@ -8,7 +8,7 @@ import {
 } from './repository.js';
 import { repoGetLocationById } from '@/modules/locations/repository.js';
 import { repoGetFrostForecastsAboveThreshold } from '@/modules/weather/repository.js';
-import { env } from '@/core/env.js';
+import { telegramNotify } from '@agro/shared-backend/modules/telegram/helpers';
 import { sendFcmFrostAlert } from './fcm.js';
 import { sendFrostAlertEmail } from './email-delivery.js';
 
@@ -137,20 +137,9 @@ function buildFrostMessage(locationName: string, forecast: any, severity: AlertS
 }
 
 async function sendTelegramAlert(title: string, message: string): Promise<boolean> {
-  const token = env.TELEGRAM_BOT_TOKEN;
-  const chatId = env.TELEGRAM_ALERT_CHANNEL_ID;
-  if (!token || !chatId) return false;
-
-  const text = `*${title}*\n\n${message}`;
-  const url = `https://api.telegram.org/bot${token}/sendMessage`;
-
   try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'Markdown' }),
-    });
-    return res.ok;
+    await telegramNotify({ title, message });
+    return true;
   } catch {
     return false;
   }
