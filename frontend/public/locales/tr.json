@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "title": "Hava Durumu & Don Uyarisi",
+    "description": "Tarim icin hava tahmini, don riski uyarisi ve sulama planlama servisi"
+  },
+  "home": {
+    "title": "Hava Durumu & Don Uyarisi",
+    "description": "Bolgeniz icin 7 gunluk hava tahmini ve don riski uyarisi",
+    "preview": {
+      "loading": "Hava verisi yukleniyor...",
+      "sectionTitle": "{place} — 7 gunluk onizleme",
+      "errorNetwork": "API'ye baglanilamadi: {message}",
+      "errorApi": "Sunucu yaniti: {status}",
+      "hint": "Backend calisiyor mu? Beklenen taban adres: {url}"
+    },
+    "dashboard": {
+      "selectLocation": "Konum secin",
+      "bannerHigh": "Yuksek don riski (en fazla {max}). Koruma onlemleri alin.",
+      "bannerMedium": "Orta don riski ({max}). Sicakliklari takip edin."
+    },
+    "hourly": {
+      "title": "Saatlik tahmin (3 saatlik dilimler)",
+      "hadise": "Hadise",
+      "sicaklik": "Sicaklik (°C)",
+      "ruzgar": "Ruzgar",
+      "yagis": "Yagis",
+      "ziraiDon": "Zirai don",
+      "ilaclama": "Ilaclama",
+      "sicaklikStresi": "Sicaklik stresi",
+      "saat": "Saat araligi",
+      "gun": "Gun",
+      "uygun": "Ilaclama icin uygun",
+      "uygunDegil": "Uygun degil",
+      "loading": "Saatlik veri yukleniyor...",
+      "footnote": "OpenWeatherMap 3 saatlik tahmin · yerel saat (TR)"
+    }
+  },
+  "weather": {
+    "forecast": "Hava Tahmini",
+    "current": "Anlik Hava",
+    "frostRisk": "Don Riski",
+    "rain": "Yagis",
+    "humidity": "Nem",
+    "wind": "Ruzgar",
+    "uvIndex": "UV Endeksi",
+    "temp": "Sicaklik",
+    "tempMin": "Min",
+    "tempMax": "Maks",
+    "frostAlert": "Don Uyarisi"
+  }
+}

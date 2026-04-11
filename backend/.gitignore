@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+
+# Compiled artifacts (never belong in src/)
+src/**/*.js
+src/**/*.js.map
+src/**/*.d.ts
+src/**/*.d.ts.map

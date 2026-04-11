@@ -1,0 +1,30 @@
+---
+description: Hava Durumu frontend — tema, renk ve hydration (Next.js 16)
+globs: "**/*.{tsx,ts,css}"
+---
+
+# Hava Durumu — Frontend kurallari
+
+## Tema ve renk (kesin)
+
+- **Renk yasagi:** Bilesenlerde `#hex`, `rgb()`, `hsl()` veya `bg-blue-500` gibi sabit palet renkleri **kullanma**. Tek kaynak: CSS tokenlari (`var(--color-*)`).
+- **Token kaynagi:** Calisma zamaninda `GET /api/v1/theme` + `@agro/shared-config/theme-css-vars` ile `body` uzerine enjekte edilir; `globals.css` icindeki `@theme` sadece **fallback** (API kapali iken).
+- **Yeni renk ihtiyaci:**
+  1. `@agro/shared-types/theme` icinde `ColorTokens` / `ThemeConfig` alanlarini genislet.
+  2. `packages/shared-config/theme-css-vars.ts` icinde yeni alani `--color-*` ile esle.
+  3. `packages/shared-types/theme.ts` `DEFAULT_THEME_CONFIG` + backend `seed.ts` `seedTheme` guncelle (veya admin `PUT /api/v1/admin/theme`).
+  4. Burada **hard-coded** renk ekleme.
+
+## Stil kullanimi
+
+- Tailwind: `bg-[var(--color-bg)]`, `text-[var(--color-text)]`, `border-[var(--color-border)]` gibi token bagli siniflar tercih et.
+- `style={{ color: '...' }}` ile sabit renk verme.
+
+## Hydration
+
+- Kok layout: `html` ve `body` uzerinde `suppressHydrationWarning` tut (tarayici eklentileri `body` attribute degistirebilir).
+- Client bilesenlerde `Date.now()`, `Math.random()`, `typeof window` ile SSR/client dallanmasi olusturma; gerekirse client-only wrapper veya tutarli snapshot kullan.
+
+## API
+
+- Veri: `src/lib/api.ts` ve env `NEXT_PUBLIC_API_URL`. URL/port hard-code etme.

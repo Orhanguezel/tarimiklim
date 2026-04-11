@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "title": "Weather & Frost Alert",
+    "description": "Weather forecast, frost risk alerts and irrigation planning service for agriculture"
+  },
+  "home": {
+    "title": "Weather & Frost Alert",
+    "description": "7-day weather forecast and frost risk alerts for your region",
+    "preview": {
+      "loading": "Loading weather data...",
+      "sectionTitle": "{place} — 7-day preview",
+      "errorNetwork": "Could not reach API: {message}",
+      "errorApi": "Server response: {status}",
+      "hint": "Is the backend running? Expected base URL: {url}"
+    },
+    "dashboard": {
+      "selectLocation": "Select location",
+      "bannerHigh": "High frost risk (max {max}). Take protective measures.",
+      "bannerMedium": "Moderate frost risk ({max}). Monitor temperatures."
+    },
+    "hourly": {
+      "title": "Hourly forecast (3-hour steps)",
+      "hadise": "Condition",
+      "sicaklik": "Temperature (°C)",
+      "ruzgar": "Wind",
+      "yagis": "Precipitation",
+      "ziraiDon": "Agricultural frost",
+      "ilaclama": "Spraying",
+      "sicaklikStresi": "Temperature stress",
+      "saat": "Time window",
+      "gun": "Day",
+      "uygun": "Suitable for spraying",
+      "uygunDegil": "Not suitable",
+      "loading": "Loading hourly data...",
+      "footnote": "OpenWeatherMap 3-hour forecast · local time (TR)"
+    }
+  },
+  "weather": {
+    "forecast": "Forecast",
+    "current": "Current Weather",
+    "frostRisk": "Frost Risk",
+    "rain": "Rain",
+    "humidity": "Humidity",
+    "wind": "Wind",
+    "uvIndex": "UV Index",
+    "temp": "Temperature",
+    "tempMin": "Min",
+    "tempMax": "Max",
+    "frostAlert": "Frost Alert"
+  }
+}

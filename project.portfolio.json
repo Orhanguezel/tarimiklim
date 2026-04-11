@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1",
+  "id": "tarimiklim",
+  "displayName": "TarımİKlim — Hava Durumu ve Don Uyarısı",
+  "kind": "product",
+  "ecosystemLayer": "Katman 4 — Veri ve AI",
+  "status": "in-progress",
+  "summary": "Bölgesel hava tahmini, don riski uyarısı ve sulama desteği; diğer modüllere REST ve widget olarak veri sağlayan servis katmanı.",
+  "urls": {
+    "production": ["https://tarimbilgi.com", "https://tarimbilgi.com.tr"],
+    "repository": "https://github.com/Orhanguezel/tarimiklim"
+  },
+  "paths": {
+    "backend": "backend",
+    "frontend": "frontend"
+  },
+  "stack": {
+    "backend": "Fastify 5, Drizzle ORM, MySQL, BullMQ, Redis",
+    "frontend": "Next.js 16, next-intl (tr/en)"
+  },
+  "ports": {
+    "api": 8088,
+    "frontend": 3088
+  },
+  "sharedPackages": ["@agro/shared-backend", "@agro/shared-types"],
+  "primaryDocs": ["README.md", "PROJE-DEVIR-NOTU.md", "EKOSISTEM-PLAN.md", "CLAUDE.md"]
+}
