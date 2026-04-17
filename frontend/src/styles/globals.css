@@ -209,10 +209,22 @@ img, svg, video { display: block; max-width: 100%; }
 }
 
 /* ===== SITE NAV =============================================== */
+.brand-logo {
+  display: block;
+  height: 110px;
+  width: auto;
+  max-width: 480px;
+  object-fit: contain;
+}
+.site-footer .brand-logo {
+  height: 220px;
+  max-width: 600px;
+  margin-bottom: 12px;
+}
 .site-nav {
-  padding: 20px 0;
+  padding: 8px 0;
   border-bottom: 1px solid var(--line);
-  background: rgba(241, 235, 221, 0.92);
+  background: rgba(241, 235, 221, 0.96);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   position: sticky;
@@ -261,18 +273,6 @@ img, svg, video { display: block; max-width: 100%; }
   width: 8px; height: 8px;
   background: var(--terra);
   border-radius: 50%;
-}
-.brand-logo {
-  display: block;
-  height: 72px;
-  width: auto;
-  max-width: 320px;
-  object-fit: contain;
-}
-.site-footer .brand-logo {
-  height: 150px;
-  max-width: 480px;
-  margin-bottom: 8px;
 }
 .site-nav-desktop { display: flex; align-items: center; gap: 32px; }
 .site-nav-links {
@@ -1080,9 +1080,6 @@ img, svg, video { display: block; max-width: 100%; }
   text-transform: uppercase;
   color: var(--ink-soft);
   opacity: 0.6;
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
 }
 
 /* ===== MEGA TYPE + FINAL CTA ================================= */
@@ -1168,11 +1165,12 @@ img, svg, video { display: block; max-width: 100%; }
 .footer-card { padding: 80px 0 40px; }
 .footer-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1.4fr repeat(4, 1fr);
   gap: 48px;
   padding-bottom: 60px;
   border-bottom: 1px solid var(--line);
   margin-bottom: 28px;
+  align-items: start;
 }
 .footer-tag {
   font-family: var(--display);
@@ -1184,7 +1182,14 @@ img, svg, video { display: block; max-width: 100%; }
   font-weight: 300;
 }
 .footer-copy { font-size: 13px; color: var(--ink-soft); line-height: 1.55; margin-bottom: 24px; }
-.footer-divider { border-top: 1px solid var(--line); padding-top: 20px; margin-top: 20px; }
+.footer-divider {
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+  margin-top: 28px;
+  display: grid;
+  gap: 6px;
+}
+.footer-bottom.footer-divider { display: flex; }
 .footer-link-title {
   font-family: var(--mono);
   font-size: 10px;
