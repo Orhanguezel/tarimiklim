@@ -1,0 +1,8 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#F1EBDD"/>
+  <circle cx="1020" cy="126" r="56" fill="#B8553A"/>
+  <path d="M0 470C176 398 319 372 431 392C546 412 679 465 835 470C947 474 1069 454 1200 402V630H0V470Z" fill="#C69B3A"/>
+  <path d="M0 352C146 297 287 274 424 290C545 304 673 363 844 366C984 368 1104 334 1200 286V630H0V352Z" fill="#1E3023"/>
+  <text x="96" y="228" fill="#141B14" font-family="Georgia, serif" font-size="96" font-style="italic">TarimIKlim</text>
+  <text x="96" y="320" fill="#2B3527" font-family="system-ui, sans-serif" font-size="34">Turkiye'nin iklim zekasi. Ciftci icin kurulmus veri ve AI katmani.</text>
+</svg>
