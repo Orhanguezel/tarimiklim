@@ -98,7 +98,7 @@ export function WeatherDashboard() {
       try {
         const raw = await fetchWeather(active.lat, active.lon, 7);
         const list = raw?.forecasts ?? [];
-        const mapped = dedupeForecastDays(list as Record<string, unknown>[]);
+        const mapped = dedupeForecastDays(list as unknown as Record<string, unknown>[]);
         if (!cancelled) setDays(mapped);
       } catch (e) {
         if (!cancelled) {
