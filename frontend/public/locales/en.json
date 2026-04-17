@@ -47,5 +47,579 @@
     "tempMin": "Min",
     "tempMax": "Max",
     "frostAlert": "Frost Alert"
+  },
+  "premium": {
+    "meta": {
+      "title": "TarimIKlim — Turkiye's Climate Intelligence",
+      "description": "7-day forecast, four-factor frost risk scoring and climate infrastructure for agricultural products."
+    },
+    "alertBar": {
+      "message": "Active alert · frost risk in Central Anatolia · 34 locations · updated 12 min ago",
+      "uptime": "API 99.97% uptime",
+      "version": "v2.4.1",
+      "locales": "TR · EN · AR",
+      "metricsLabel": "Service metrics"
+    },
+    "nav": {
+      "menu": "Menu",
+      "close": "Close",
+      "cta": "Open panel",
+      "links": {
+        "panel": "Live Panel",
+        "modules": "Modules",
+        "api": "API & Widget",
+        "ekosistem": "Ecosystem",
+        "docs": "Documentation"
+      }
+    },
+    "hero": {
+      "eyebrow": "Layer 04 · Data & AI Infrastructure",
+      "title": {
+        "line1": "Turkiye's",
+        "line2": "climate intelligence.",
+        "line3": "Built for growers."
+      },
+      "copy": "A 7-day forecast, four-factor frost risk scoring and parcel-level irrigation planning on top of OpenWeatherMap, Open-Meteo and local station data. It powers every product in the ecosystem from greenhouse SaaS to agricultural media.",
+      "actions": {
+        "primary": "Open live panel",
+        "secondary": "API documentation",
+        "tertiaryPrefix": "or",
+        "tertiary": "watch the 30-second demo ↗"
+      },
+      "stats": {
+        "queries": {
+          "value": "1.2M/day",
+          "label": "Forecast requests"
+        },
+        "accuracy": {
+          "value": "97%",
+          "label": "Frost prediction accuracy"
+        },
+        "latency": {
+          "value": "<50ms",
+          "label": "Median response time"
+        }
+      },
+      "card": {
+        "location": "Konya · Cumra",
+        "coordinates": "37.5731° N, 32.7734° E · 1013 m",
+        "live": "Live",
+        "temp": "8°C",
+        "condition": "Partly cloudy · clear overnight, radiation frost possible by dawn",
+        "metrics": {
+          "humidity": {
+            "label": "Humidity",
+            "value": "64%"
+          },
+          "wind": {
+            "label": "Wind",
+            "value": "11 km/h"
+          },
+          "min": {
+            "label": "Min (06:00)",
+            "value": "-2°"
+          }
+        }
+      },
+      "alert": {
+        "eyebrow": "Early warning",
+        "title": "78% frost probability by sunrise",
+        "copy": "Sensitive parcels should prepare cover or fogging. SMS and Telegram notifications are scheduled for 04:30.",
+        "titleLive": "Tonight frost probability {score}%"
+      }
+    },
+    "ticker": {
+      "label": "Service overview",
+      "items": {
+        "locations": "81 provinces · live",
+        "parcels": "1,200 active parcels",
+        "risk": "frost risk · 4-factor",
+        "cache": "Redis TTL · 30 min",
+        "jobs": "BullMQ · daily 06:00",
+        "sources": "OpenWeatherMap + Open-Meteo"
+      }
+    },
+    "dashboard": {
+      "label": "Live Panel · Grower View",
+      "title": {
+        "prefix": "Current status from",
+        "emphasis": "eight provinces."
+      },
+      "lead": "A real-time slice of major agricultural basins. Yellow means caution, red means act now — every card is backed by the four-factor frost risk score.",
+      "tabLabel": "Timeframe filter",
+      "tabs": {
+        "now": "Now",
+        "6h": "6 hours",
+        "24h": "24 hours",
+        "7d": "7 days"
+      },
+      "riskLabel": "Risk",
+      "cities": {
+        "konya": {
+          "name": "Konya",
+          "region": "Cumra · Central Anatolia",
+          "temp": "8°",
+          "condition": "Partly cloudy · frost",
+          "bar": "85%",
+          "riskValue": "CRITICAL · 78%",
+          "riskTone": "critical"
+        },
+        "kayseri": {
+          "name": "Kayseri",
+          "region": "Develi · Central Anatolia",
+          "temp": "6°",
+          "condition": "Clear · radiation frost",
+          "bar": "65%",
+          "riskValue": "ALERT · 54%",
+          "riskTone": "alert"
+        },
+        "antalya": {
+          "name": "Antalya",
+          "region": "Kumluca · Mediterranean",
+          "temp": "18°",
+          "condition": "Clear · high radiation",
+          "bar": "22%",
+          "riskValue": "LOW · 8%",
+          "riskTone": "normal"
+        },
+        "bursa": {
+          "name": "Bursa",
+          "region": "Karacabey · Marmara",
+          "temp": "11°",
+          "condition": "Mostly cloudy · rain",
+          "bar": "18%",
+          "riskValue": "LOW · 5%",
+          "riskTone": "normal"
+        },
+        "erzurum": {
+          "name": "Erzurum",
+          "region": "Pasinler · Eastern Anatolia",
+          "temp": "2°",
+          "condition": "Light snow · hard frost",
+          "bar": "72%",
+          "riskValue": "ALERT · 61%",
+          "riskTone": "alert"
+        },
+        "izmir": {
+          "name": "Izmir",
+          "region": "Menemen · Aegean",
+          "temp": "15°",
+          "condition": "Clear · 18 km/h wind",
+          "bar": "15%",
+          "riskValue": "LOW · 4%",
+          "riskTone": "normal"
+        },
+        "ankara": {
+          "name": "Ankara",
+          "region": "Polatli · Central Anatolia",
+          "temp": "7°",
+          "condition": "Clear · morning frost",
+          "bar": "82%",
+          "riskValue": "CRITICAL · 71%",
+          "riskTone": "critical"
+        },
+        "sanliurfa": {
+          "name": "Sanliurfa",
+          "region": "Harran · Southeast",
+          "temp": "16°",
+          "condition": "Clear · mild",
+          "bar": "10%",
+          "riskValue": "LOW · 2%",
+          "riskTone": "normal"
+        }
+      },
+      "riskValueLive": "{tone} · {score}%",
+      "risk": {
+        "critical": "CRITICAL",
+        "alert": "HIGH",
+        "warn": "MEDIUM",
+        "ok": "LOW"
+      }
+    },
+    "pillars": {
+      "label": "Core Modules",
+      "title": {
+        "line1": "Three services.",
+        "line2": "One infrastructure."
+      },
+      "lead": "Each module is already shipped as an API; together they turn planting, irrigation and harvest planning into data-driven decisions.",
+      "items": {
+        "risk": {
+          "index": "01 — Risk",
+          "titlePrefix": "Frost risk,",
+          "titleEmphasis": "four factors.",
+          "copy": "A score blending temperature drop rate, humidity, wind and cloud cover. Different thresholds for orchards and open fields; SMS and Telegram alerts at ≤-2°C.",
+          "features": {
+            "one": {
+              "label": "Scoring interval",
+              "value": "1 hour"
+            },
+            "two": {
+              "label": "Prediction window",
+              "value": "72 hours"
+            },
+            "three": {
+              "label": "Channels",
+              "value": "SMS · TG · Push"
+            },
+            "four": {
+              "label": "Accuracy (2024)",
+              "value": "97.2%"
+            }
+          }
+        },
+        "forecast": {
+          "index": "02 — Forecast",
+          "titlePrefix": "Seven-day weather,",
+          "titleEmphasis": "hourly detail.",
+          "copy": "OpenWeatherMap primary, Open-Meteo fallback; district-scale resolution and parcel coordinates with Redis caching on a 30-minute TTL.",
+          "features": {
+            "one": {
+              "label": "Data sources",
+              "value": "2 + local"
+            },
+            "two": {
+              "label": "Resolution",
+              "value": "District · 9 km"
+            },
+            "three": {
+              "label": "Refresh",
+              "value": "Every 30 min"
+            },
+            "four": {
+              "label": "Metrics",
+              "value": "14"
+            }
+          }
+        },
+        "irrigation": {
+          "index": "03 — Irrigation",
+          "titlePrefix": "Irrigation plan,",
+          "titleEmphasis": "with evapotranspiration.",
+          "copy": "ETo calculation, rain forecast and soil type are combined into a parcel-specific schedule with dedicated formulas for drip, sprinkler and flood methods.",
+          "features": {
+            "one": {
+              "label": "Method support",
+              "value": "3 types"
+            },
+            "two": {
+              "label": "Crop templates",
+              "value": "48"
+            },
+            "three": {
+              "label": "Water savings",
+              "value": "22%"
+            },
+            "four": {
+              "label": "Integration",
+              "value": "IoT sensors"
+            }
+          }
+        }
+      }
+    },
+    "api": {
+      "label": "API & Widget",
+      "title": {
+        "prefix": "Fetch your first forecast",
+        "emphasis": "in three lines."
+      },
+      "lead": "Use REST endpoints or a one-line iframe widget — the same infrastructure already powers Bereketfide and VistaSeed sidebars.",
+      "code": {
+        "filename": "terminal · curl",
+        "copy": "Copy",
+        "body": "# 7-day forecast + frost risk score\ncurl 'https://api.tarimiklim.com/v2/forecast' \\\n  -H 'Authorization: Bearer tk_live_...' \\\n  -d \"'{' \"lat\": 37.5731, \"lon\": 32.7734, \"days\": 7 '}'\"\n\n# -> response (trimmed)\n'{'\n  \"location\": \"Konya · Cumra\",\n  \"updated_at\": \"2026-04-17T14:32:18Z\",\n  \"frost_risk_24h\": 0.78,\n  \"frost_level\": \"critical\",\n  \"forecast\": [\n    '{' \"t\": \"06:00\", \"temp\": -2.1, \"hum\": 89 '}',\n    '{' \"t\": \"09:00\", \"temp\": 4.8, \"hum\": 72 '}'\n  ],\n  \"irrigation_advice\": \"skip_wednesday_night\"\n'}'",
+        "copied": "Copied",
+        "copyError": "Error"
+      },
+      "side": {
+        "titlePrefix": "REST API,",
+        "titleEmphasis": "JS SDK, iframe widget.",
+        "copy": "Get an API key and make your first call in 60 seconds. Rate limit 10k req/min · p95 response 48ms."
+      },
+      "endpoints": {
+        "forecast": {
+          "method": "GET",
+          "path": "/v2/forecast",
+          "copy": "7-day hourly forecast"
+        },
+        "frostRisk": {
+          "method": "GET",
+          "path": "/v2/frost-risk",
+          "copy": "24/48/72h frost score"
+        },
+        "irrigation": {
+          "method": "GET",
+          "path": "/v2/irrigation/plan",
+          "copy": "Parcel-level irrigation schedule"
+        },
+        "alerts": {
+          "method": "POST",
+          "path": "/v2/alerts/subscribe",
+          "copy": "SMS/TG subscription"
+        },
+        "stations": {
+          "method": "GET",
+          "path": "/v2/stations/nearby",
+          "copy": "Nearest weather station"
+        },
+        "widget": {
+          "method": "GET",
+          "path": "/widget/embed.js",
+          "copy": "Single-line iframe"
+        }
+      }
+    },
+    "stats": {
+      "items": {
+        "cities": {
+          "label": "Active Provinces",
+          "value": "81",
+          "copy": "Nationwide coverage; 973 live district-level locations."
+        },
+        "accuracy": {
+          "label": "Frost Forecast Accuracy",
+          "value": "97.2%",
+          "copy": "Share of 24-hour warnings correctly predicted by the four-factor score in the 2024 season."
+        },
+        "latency": {
+          "label": "Median Response",
+          "value": "48ms",
+          "copy": "Redis cache hit rate is 91%; even the cold path stays below 200ms."
+        },
+        "water": {
+          "label": "Irrigation Savings",
+          "value": "22%",
+          "copy": "Average water savings measured in pilot farms with ETo-based scheduling."
+        }
+      }
+    },
+    "ecosystem": {
+      "label": "Ecosystem Modules",
+      "title": {
+        "prefix": "Who is using",
+        "emphasis": "TarimIKlim?"
+      },
+      "lead": "Independent products powered by the same Layer 4 climate service.",
+      "items": {
+        "bereketfide": {
+          "label": "Field Management",
+          "status": "Live",
+          "statusTone": "live",
+          "name": "Bereketfide",
+          "copy": "Field parcel, planting and harvest tracking for growers. TarimIKlim appears on the main screen via widget.",
+          "meta": "API · Widget · TG Bot"
+        },
+        "vistaseed": {
+          "label": "Seeds & Nursery",
+          "status": "Live",
+          "statusTone": "live",
+          "name": "VistaSeed",
+          "copy": "Region-specific seed recommendations powered by TarimIKlim climate profiles.",
+          "meta": "API · Climate profile"
+        },
+        "sera": {
+          "label": "Greenhouse SaaS",
+          "status": "Live",
+          "statusTone": "live",
+          "name": "Sera Kontrol",
+          "copy": "Greenhouse controls use outside conditions from TarimIKlim and inside data from sensors.",
+          "meta": "API · IoT bridge"
+        },
+        "ziraatHaber": {
+          "label": "Media",
+          "status": "Soon",
+          "statusTone": "wip",
+          "name": "Ziraat Haber",
+          "copy": "Daily agriculture content with regional weather modules rendered through TarimIKlim widgets.",
+          "meta": "Widget · v2 sprint"
+        },
+        "hal": {
+          "label": "Marketplace",
+          "status": "Soon",
+          "statusTone": "wip",
+          "name": "Hal Fiyatlari",
+          "copy": "Wholesale produce pricing product that will use yield signals from TarimIKlim.",
+          "meta": "API · planning"
+        },
+        "yield": {
+          "label": "AI Module",
+          "status": "Pilot",
+          "statusTone": "wip",
+          "name": "Yield Prediction",
+          "copy": "Pre-harvest yield prediction combining parcel history, climate and fertilization data.",
+          "meta": "ML · pilot"
+        },
+        "disease": {
+          "label": "Plant Health",
+          "status": "Q3 2026",
+          "statusTone": "wip",
+          "name": "Disease Warning",
+          "copy": "Humidity and temperature-driven fungal disease probability with preventive spraying windows.",
+          "meta": "ML · Q3 2026"
+        },
+        "open": {
+          "label": "Open Platform",
+          "status": "Open",
+          "statusTone": "open",
+          "name": "Your product?",
+          "copy": "If you are building for agriculture, apply for the API. A developer program and free tier already exist.",
+          "meta": "→ dev.tarimiklim.com"
+        }
+      }
+    },
+    "finalCta": {
+      "megaPrefix": "Soil",
+      "megaEmphasis": "speaks",
+      "megaSuffix": "through data.",
+      "title": {
+        "line1": "Panel in one minute.",
+        "line2": "Integration in one afternoon."
+      },
+      "copy": "The developer tier is free — 100k requests per month, full endpoints and Telegram notifications. No credit card required.",
+      "actions": {
+        "primary": "Get API key",
+        "secondary": "Start demo"
+      }
+    },
+    "footer": {
+      "tagline": "The service that knows the grower's night and prepares the morning.",
+      "copy": "Built by Vista Agriculture Technologies. Based in Turkiye with multi-language support planned for the EU and MENA regions.",
+      "contact": {
+        "company": "Vista Agriculture Technologies",
+        "city": "Ankara · Turkiye",
+        "email": "destek@tarimiklim.com",
+        "social": "@tarimiklim"
+      },
+      "groups": {
+        "product": {
+          "title": "Product",
+          "items": {
+            "panel": {
+              "label": "Live Panel",
+              "href": "#panel"
+            },
+            "frost": {
+              "label": "Frost Risk Service",
+              "href": "#modules"
+            },
+            "irrigation": {
+              "label": "Irrigation Plan",
+              "href": "#modules"
+            },
+            "forecast": {
+              "label": "7-Day Forecast",
+              "href": "#api"
+            },
+            "alerts": {
+              "label": "Alert System",
+              "href": "#api"
+            },
+            "widgets": {
+              "label": "Widget Gallery",
+              "href": "#api"
+            }
+          }
+        },
+        "developer": {
+          "title": "Developer",
+          "items": {
+            "api": {
+              "label": "API Reference",
+              "href": "#api"
+            },
+            "sdk": {
+              "label": "JS SDK",
+              "href": "#api"
+            },
+            "widget": {
+              "label": "Widget Setup",
+              "href": "#api"
+            },
+            "webhooks": {
+              "label": "Webhooks",
+              "href": "#docs"
+            },
+            "status": {
+              "label": "Status Page",
+              "href": "#top"
+            },
+            "changelog": {
+              "label": "Changelog",
+              "href": "#docs"
+            }
+          }
+        },
+        "ecosystem": {
+          "title": "Ecosystem",
+          "items": {
+            "bereketfide": {
+              "label": "Bereketfide",
+              "href": "#ekosistem"
+            },
+            "vistaseed": {
+              "label": "VistaSeed",
+              "href": "#ekosistem"
+            },
+            "sera": {
+              "label": "Sera Kontrol",
+              "href": "#ekosistem"
+            },
+            "ziraatHaber": {
+              "label": "Ziraat Haber",
+              "href": "#ekosistem"
+            },
+            "hal": {
+              "label": "Hal Fiyatlari",
+              "href": "#ekosistem"
+            },
+            "yield": {
+              "label": "Yield Prediction",
+              "href": "#ekosistem"
+            }
+          }
+        },
+        "company": {
+          "title": "Company",
+          "items": {
+            "about": {
+              "label": "About",
+              "href": "#top"
+            },
+            "blog": {
+              "label": "Blog",
+              "href": "#docs"
+            },
+            "careers": {
+              "label": "Careers",
+              "href": "#docs"
+            },
+            "press": {
+              "label": "Press",
+              "href": "#docs"
+            },
+            "privacy": {
+              "label": "Privacy",
+              "href": "#docs"
+            },
+            "kvkk": {
+              "label": "KVKK",
+              "href": "#docs"
+            }
+          }
+        }
+      },
+      "bottom": {
+        "copyright": "© 2026 Vista Agriculture Technologies · All rights reserved.",
+        "privacy": "Privacy",
+        "privacyHref": "#docs",
+        "terms": "Terms",
+        "termsHref": "#docs",
+        "cookies": "Cookies",
+        "cookiesHref": "#docs",
+        "security": "Security",
+        "securityHref": "#docs"
+      }
+    }
   }
 }
