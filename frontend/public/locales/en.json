@@ -137,14 +137,24 @@
             "label": "Min (06:00)",
             "value": "-2°"
           }
-        }
+        },
+        "loading": "Loading…"
       },
       "alert": {
-        "eyebrow": "Early warning",
+        "eyebrow": {
+          "clear": "All Clear",
+          "alert": "Early Warning",
+          "critical": "Critical Alert"
+        },
         "title": "78% frost probability by sunrise",
         "copy": "Sensitive parcels should prepare cover or fogging. SMS and Telegram notifications are scheduled for 04:30.",
-        "titleLive": "Tonight frost probability {score}%"
-      }
+        "titleLive": "Tonight frost probability {score}%",
+        "titleClear": "No frost risk in the coming days",
+        "titleCritical": "Critical frost tonight: {score}%",
+        "copyClear": "Temperatures are safe for open-field work and irrigation. Frost watch is clear.",
+        "copyCritical": "URGENT: cover crops, deploy fog machine or greenhouse heating. Protect sensitive plants."
+      },
+      "currentArea": "Current location"
     },
     "ticker": {
       "label": "Service overview",

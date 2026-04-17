@@ -137,14 +137,24 @@
             "label": "Min (06:00)",
             "value": "-2°"
           }
-        }
+        },
+        "loading": "Veri alınıyor…"
       },
       "alert": {
-        "eyebrow": "Erken Uyari",
+        "eyebrow": {
+          "clear": "Durum İyi",
+          "alert": "Erken Uyarı",
+          "critical": "Acil Uyarı"
+        },
         "title": "Sabaha don ihtimali %78",
         "copy": "Hassas parsellerde ortu veya sis makinesi onerilir. SMS/Telegram bildirimi 04:30'da gonderilecek.",
-        "titleLive": "Bu gece don ihtimali %{score}"
-      }
+        "titleLive": "Bu gece don ihtimali %{score}",
+        "titleClear": "Yakın vadede don riski yok",
+        "titleCritical": "Gece kritik don riski: %{score}",
+        "copyClear": "Sıcaklık değerleri açık tarla ve sulama için uygun. Don tarafı temiz.",
+        "copyCritical": "ACİL: Örtü, sis makinesi veya sera ısıtması gerekli. Hassas bitkileri koru."
+      },
+      "currentArea": "Mevcut konum"
     },
     "ticker": {
       "label": "Servis ozeti",

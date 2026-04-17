@@ -70,9 +70,17 @@ function normalize(item: NominatimItem): GeocodeResult {
   };
 }
 
+interface SearchOptions {
+  /** ISO-3166-1 alpha-2 country codes, comma-separated. Boş bırakılırsa tüm dünya. */
+  countryCodes?: string;
+  limit?: number;
+  language?: string;
+}
+
 export async function searchPlaces(
   query: string,
   signal?: AbortSignal,
+  options: SearchOptions = {},
 ): Promise<GeocodeResult[]> {
   const q = query.trim();
   if (q.length < 2) return [];
@@ -81,9 +89,11 @@ export async function searchPlaces(
   url.searchParams.set('q', q);
   url.searchParams.set('format', 'json');
   url.searchParams.set('addressdetails', '1');
-  url.searchParams.set('limit', '6');
-  url.searchParams.set('accept-language', 'tr');
-  url.searchParams.set('countrycodes', 'tr');
+  url.searchParams.set('limit', String(options.limit ?? 6));
+  url.searchParams.set('accept-language', options.language ?? 'tr');
+  if (options.countryCodes) {
+    url.searchParams.set('countrycodes', options.countryCodes);
+  }
 
   const res = await fetch(url.toString(), {
     signal,

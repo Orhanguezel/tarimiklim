@@ -147,22 +147,41 @@ img, svg, video { display: block; max-width: 100%; }
   color: var(--paper);
   font-family: var(--mono);
   font-size: 11px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 9px 0;
+  padding: 10px 0;
   border-bottom: 1px solid rgba(241, 235, 221, 0.1);
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+}
+.alert-bar-track {
+  display: flex;
+  width: max-content;
+  animation: alert-scroll 60s linear infinite;
+  gap: 80px;
+  padding-right: 80px;
 }
 .alert-bar-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  gap: 80px;
+}
+.alert-group {
+  display: flex;
+  align-items: center;
+  gap: 40px;
 }
 .alert-left { display: flex; align-items: center; gap: 14px; }
 .alert-right {
   display: flex;
-  gap: 28px;
+  gap: 40px;
   opacity: 0.75;
+}
+
+@keyframes alert-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
 /* Pulse dot */
@@ -242,6 +261,13 @@ img, svg, video { display: block; max-width: 100%; }
   width: 8px; height: 8px;
   background: var(--terra);
   border-radius: 50%;
+}
+.brand-logo {
+  display: block;
+  height: 36px;
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
 }
 .site-nav-desktop { display: flex; align-items: center; gap: 32px; }
 .site-nav-links {
@@ -545,7 +571,18 @@ img, svg, video { display: block; max-width: 100%; }
   transform: rotate(3deg);
   max-width: 240px;
   z-index: 10;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
+.weather-alert-card[data-tier="clear"] {
+  background: var(--moss);
+  box-shadow: 0 20px 40px -20px rgba(59, 90, 60, 0.5);
+}
+.weather-alert-card[data-tier="critical"] {
+  background: var(--danger);
+  box-shadow: 0 20px 40px -20px rgba(194, 59, 44, 0.55);
+}
+.weather-alert-card[data-tier="clear"] .weather-alert-eyebrow::before { content: "✓"; }
+.weather-alert-card[data-tier="critical"] .weather-alert-eyebrow::before { content: "⚠"; }
 .weather-alert-eyebrow {
   font-family: var(--mono);
   font-size: 10px;

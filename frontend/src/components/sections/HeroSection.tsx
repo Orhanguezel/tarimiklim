@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { useTranslations } from 'next-intl';
 import { HeroLiveCard } from './HeroLiveCard';
 
@@ -40,19 +39,8 @@ export function HeroSection() {
             ))}
           </div>
         </div>
-        <Suspense fallback={<HeroCardSkeleton />}>
-          <HeroLiveCard />
-        </Suspense>
+        <HeroLiveCard />
       </div>
     </section>
-  );
-}
-
-function HeroCardSkeleton() {
-  return (
-    <div className="hero-card-stack" aria-hidden="true">
-      <article className="weather-card" style={{ minHeight: '20rem' }} />
-      <article className="weather-alert-card" style={{ minHeight: '8rem' }} />
-    </div>
   );
 }
