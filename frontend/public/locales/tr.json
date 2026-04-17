@@ -5,10 +5,10 @@
   },
   "home": {
     "title": "Hava Durumu & Don Uyarisi",
-    "description": "Bolgeniz icin 7 gunluk hava tahmini ve don riski uyarisi",
+    "description": "Bolgeniz icin 7 günluk hava tahmini ve don riski uyarisi",
     "preview": {
       "loading": "Hava verisi yukleniyor...",
-      "sectionTitle": "{place} — 7 gunluk önizleme",
+      "sectionTitle": "{place} — 7 günluk önizleme",
       "errorNetwork": "API'ye baglanilamadi: {message}",
       "errorApi": "Sunucu yaniti: {status}",
       "hint": "Backend calisiyor mu? Beklenen taban adres: {url}"
@@ -22,7 +22,7 @@
       "title": "Saatlik tahmin (3 saatlik dilimler)",
       "hadise": "Hadise",
       "sicaklik": "Sicaklik (°C)",
-      "ruzgar": "Ruzgar",
+      "ruzgar": "Rüzgâr",
       "yagis": "Yagis",
       "ziraiDon": "Zirai don",
       "ilaclama": "Ilaclama",
@@ -59,7 +59,7 @@
     "frostRisk": "Don Riski",
     "rain": "Yagis",
     "humidity": "Nem",
-    "wind": "Ruzgar",
+    "wind": "Rüzgâr",
     "uvIndex": "UV Endeksi",
     "temp": "Sicaklik",
     "tempMin": "Min",
@@ -68,11 +68,11 @@
   },
   "premium": {
     "meta": {
-      "title": "TarimIKlim — Turkiye'nin Iklim Zekasi",
-      "description": "7 gunluk tahmin, dort faktorlu don riski ve tarimsal karar destek sistemi."
+      "title": "TarımİKlim — Türkiye'nin İklim Zekâsı",
+      "description": "7 günlük tahmin, dört faktörlü don riski ve tarımsal karar destek sistemi."
     },
     "alertBar": {
-      "message": "Aktif uyari · Ic Anadolu'da don riski · 34 lokasyon · son guncelleme 12 dk once",
+      "message": "Aktif uyarı · İç Anadolu'da don riski · 34 lokasyon · son güncelleme 12 dk önce",
       "uptime": "API 99.97% uptime",
       "version": "v2.4.1",
       "locales": "TR · EN · AR",
@@ -91,46 +91,46 @@
       }
     },
     "hero": {
-      "eyebrow": "Katman 04 · Veri & AI Altyapisi",
+      "eyebrow": "Katman 04 · Veri & Yapay Zekâ Altyapısı",
       "title": {
-        "line1": "Turkiye'nin",
-        "line2": "iklim zekasi.",
-        "line3": "Ciftci icin kurulmus."
+        "line1": "Türkiye'nin",
+        "line2": "iklim zekâsı.",
+        "line3": "Çiftçi için kurulmuş."
       },
-      "copy": "7 gunluk tahmin, dort faktorlu don riski algoritmasi ve parsel bazli sulama planlamasi — OpenWeatherMap, Open-Meteo ve yerel istasyon verileri uzerinde calisan dayanikli bir servis katmani. Sera SaaS'tan Ziraat Haber'e kadar ekosistemin tum uygulamalarini besler.",
+      "copy": "7 günlük tahmin, dört faktörlü don riski algoritması ve parsel bazlı sulama planlaması — OpenWeatherMap, Open-Meteo ve yerel istasyon verileri üzerinde çalışan dayanıklı bir servis katmanı. Sera SaaS'tan Ziraat Haber'e kadar ekosistemin tüm uygulamalarını besler.",
       "actions": {
         "primary": "Canlı Paneli Aç",
-        "secondary": "API dokumantasyonu",
+        "secondary": "API dokümantasyonu",
         "tertiaryPrefix": "veya",
         "tertiary": "30 saniyelik demo izle ↗"
       },
       "stats": {
         "queries": {
-          "value": "1.2M/gun",
+          "value": "1.2M/gün",
           "label": "Tahmin sorgusu"
         },
         "accuracy": {
           "value": "97%",
-          "label": "Don tahmin dogrulugu"
+          "label": "Don tahmin doğruluğu"
         },
         "latency": {
           "value": "<50ms",
-          "label": "Medyan yanit suresi"
+          "label": "Medyan yanıt süresi"
         }
       },
       "card": {
-        "location": "Konya · Cumra",
+        "location": "Konya · Çumra",
         "coordinates": "37.5731° N, 32.7734° E · 1013 m",
         "live": "Canlı",
         "temp": "8°C",
-        "condition": "Parcali bulutlu · gece acik, sabah radyasyon donu olasi",
+        "condition": "Parçalı bulutlu · gece açık, sabah radyasyon donu olası",
         "metrics": {
           "humidity": {
             "label": "Nem",
             "value": "64%"
           },
           "wind": {
-            "label": "Ruzgar",
+            "label": "Rüzgâr",
             "value": "11 km/sa"
           },
           "min": {
@@ -149,7 +149,7 @@
           "critical": "Acil Uyarı"
         },
         "title": "Sabaha don ihtimali %78",
-        "copy": "Hassas parsellerde ortu veya sis makinesi onerilir. SMS/Telegram bildirimi 04:30'da gonderilecek.",
+        "copy": "Hassas parsellerde örtü veya sis makinesi önerilir. SMS/Telegram bildirimi 04:30'da gönderilecek.",
         "titleLive": "Bu gece don ihtimali %{score}",
         "titleClear": "Yakın vadede don riski yok",
         "titleCritical": "Gece kritik don riski: %{score}",
@@ -159,13 +159,13 @@
       "currentArea": "Mevcut konum"
     },
     "ticker": {
-      "label": "Servis ozeti",
+      "label": "Servis özeti",
       "items": {
-        "locations": "81 il · canli",
+        "locations": "81 il · canlı",
         "parcels": "1.200 aktif parsel",
-        "risk": "don riski · 4 faktor",
+        "risk": "don riski · 4 faktör",
         "cache": "Redis TTL · 30 dk",
-        "jobs": "BullMQ · gunluk 06:00",
+        "jobs": "BullMQ · günlük 06:00",
         "sources": "OpenWeatherMap + Open-Meteo"
       }
     },
@@ -173,97 +173,97 @@
       "label": "Canlı Panel · Ciftci Gorunumu",
       "title": {
         "prefix": "Sekiz ilden",
-        "emphasis": "su anki durum."
+        "emphasis": "şu anki durum."
       },
-      "lead": "Tarim havzalarindan gercek zamanli kesit. Sari nokta dikkat, kirmizi nokta acil eylem demek — her hucrenin arkasinda 4 faktorlu don risk skoru calisir.",
-      "tabLabel": "Gorunum filtresi",
+      "lead": "Tarım havzalarından gerçek zamanlı kesit. Sarı nokta dikkat, kırmızı nokta acil eylem demek — her hücrenin arkasında 4 faktörlü don risk skoru calisir.",
+      "tabLabel": "Görünüm filtresi",
       "tabs": {
-        "now": "Simdi",
+        "now": "Şimdi",
         "6h": "6 saat",
         "24h": "24 saat",
-        "7d": "7 gun"
+        "7d": "7 gün"
       },
       "riskLabel": "Risk",
       "cities": {
         "konya": {
           "name": "Konya",
-          "region": "Cumra · Ic Anadolu",
+          "region": "Cumra · İç Anadolu",
           "temp": "8°",
-          "condition": "Parcali bulutlu · don",
+          "condition": "Parçalı bulutlu · don",
           "bar": "85%",
-          "riskValue": "ACIL · %78",
+          "riskValue": "ACİL · %78",
           "riskTone": "critical"
         },
         "kayseri": {
           "name": "Kayseri",
-          "region": "Develi · Ic Anadolu",
+          "region": "Develi · İç Anadolu",
           "temp": "6°",
-          "condition": "Acik · radyasyon donu",
+          "condition": "Açık · radyasyon donu",
           "bar": "65%",
-          "riskValue": "DIKKAT · %54",
+          "riskValue": "DİKKAT · %54",
           "riskTone": "alert"
         },
         "antalya": {
           "name": "Antalya",
           "region": "Kumluca · Akdeniz",
           "temp": "18°",
-          "condition": "Acik · yuksek radyasyon",
+          "condition": "Açık · yüksek radyasyon",
           "bar": "22%",
-          "riskValue": "DUSUK · %8",
+          "riskValue": "DÜŞÜK · %8",
           "riskTone": "normal"
         },
         "bursa": {
           "name": "Bursa",
           "region": "Karacabey · Marmara",
           "temp": "11°",
-          "condition": "Cok bulutlu · yagis",
+          "condition": "Çok bulutlu · yağış",
           "bar": "18%",
-          "riskValue": "DUSUK · %5",
+          "riskValue": "DÜŞÜK · %5",
           "riskTone": "normal"
         },
         "erzurum": {
           "name": "Erzurum",
-          "region": "Pasinler · D. Anadolu",
+          "region": "Pasinler · Doğu Anadolu",
           "temp": "2°",
           "condition": "Hafif kar · kuvvetli don",
           "bar": "72%",
-          "riskValue": "DIKKAT · %61",
+          "riskValue": "DİKKAT · %61",
           "riskTone": "alert"
         },
         "izmir": {
-          "name": "Izmir",
+          "name": "İzmir",
           "region": "Menemen · Ege",
           "temp": "15°",
-          "condition": "Acik · ruzgar 18 km/sa",
+          "condition": "Açık · rüzgâr 18 km/sa",
           "bar": "15%",
-          "riskValue": "DUSUK · %4",
+          "riskValue": "DÜŞÜK · %4",
           "riskTone": "normal"
         },
         "ankara": {
           "name": "Ankara",
-          "region": "Polatli · Ic Anadolu",
+          "region": "Polatli · İç Anadolu",
           "temp": "7°",
-          "condition": "Acik · sabah don",
+          "condition": "Açık · sabah don",
           "bar": "82%",
-          "riskValue": "ACIL · %71",
+          "riskValue": "ACİL · %71",
           "riskTone": "critical"
         },
         "sanliurfa": {
-          "name": "Sanliurfa",
-          "region": "Harran · GDA",
+          "name": "Şanlıurfa",
+          "region": "Harran · Güneydoğu Anadolu",
           "temp": "16°",
-          "condition": "Acik · iliman",
+          "condition": "Açık · ılıman",
           "bar": "10%",
-          "riskValue": "DUSUK · %2",
+          "riskValue": "DÜŞÜK · %2",
           "riskTone": "normal"
         }
       },
       "riskValueLive": "{tone} · %{score}",
       "risk": {
         "critical": "ACIL",
-        "alert": "YUKSEK",
+        "alert": "YÜKSEK",
         "warn": "ORTA",
-        "ok": "DUSUK"
+        "ok": "DÜŞÜK"
       },
       "openDetail": "Detayları aç",
       "cityCardAria": "{city} için detaylı paneli aç"
@@ -271,48 +271,48 @@
     "pillars": {
       "label": "Cekirdek Modüller",
       "title": {
-        "line1": "Uc servis.",
-        "line2": "Bir altyapi."
+        "line1": "Üç servis.",
+        "line2": "Bir altyapı."
       },
-      "lead": "Her modul bagimsiz API olarak yayinda; birlikte kullanildiginda ekim, sulama ve hasat kararlarini veri temelli hale getirir.",
+      "lead": "Her modül bağımsız API olarak yayında; birlikte kullanıldığında ekim, sulama ve hasat kararlarını veri temelli hale getirir.",
       "items": {
         "risk": {
           "index": "01 — Risk",
           "titlePrefix": "Don riski,",
-          "titleEmphasis": "dort faktorlu.",
-          "copy": "Sicaklik dusus hizi, nem, ruzgar ve bulut ortusunu harmanlayan bir skor. Meyve bahceleri ve acik tarla icin farkli esikler; ≤-2°C'de SMS ve Telegram uyarisi.",
+          "titleEmphasis": "dört faktörlü.",
+          "copy": "Sıcaklık düşüş hızı, nem, rüzgâr ve bulut örtüsünü harmanlayan bir skor. Meyve bahçeleri ve açık tarla için farklı eşikler; ≤-2°C'de SMS ve Telegram uyarisi.",
           "features": {
             "one": {
-              "label": "Skor hesaplama araligi",
+              "label": "Skor hesaplama aralığı",
               "value": "1 saat"
             },
             "two": {
-              "label": "Ileri tahmin penceresi",
+              "label": "İleri tahmin penceresi",
               "value": "72 saat"
             },
             "three": {
-              "label": "Bildirim kanallari",
+              "label": "Bildirim kanalları",
               "value": "SMS · TG · Push"
             },
             "four": {
-              "label": "Dogruluk (2024)",
+              "label": "Doğruluk (2024)",
               "value": "%97.2"
             }
           }
         },
         "forecast": {
           "index": "02 — Tahmin",
-          "titlePrefix": "7 gun hava,",
-          "titleEmphasis": "saat cozunurlukte.",
-          "copy": "OpenWeatherMap birincil, Open-Meteo fallback; ilce seviyesinde cozum, parsel koordinatina dusen saatlik seri. Redis ustunde 30 dk TTL ile cache.",
+          "titlePrefix": "7 gün hava,",
+          "titleEmphasis": "saat çözünürlükte.",
+          "copy": "OpenWeatherMap birincil, Open-Meteo fallback; ilçe seviyesinde çözüm, parsel koordinatına düşen saatlik seri. Redis ustunde 30 dk TTL ile cache.",
           "features": {
             "one": {
-              "label": "Kaynak sayisi",
+              "label": "Kaynak sayısı",
               "value": "2 + yerel"
             },
             "two": {
-              "label": "Cozunurluk",
-              "value": "Ilce · 9 km"
+              "label": "Çözünürlük",
+              "value": "İlçe · 9 km"
             },
             "three": {
               "label": "Tazeleme",
@@ -326,17 +326,17 @@
         },
         "irrigation": {
           "index": "03 — Sulama",
-          "titlePrefix": "Sulama plani,",
+          "titlePrefix": "Sulama planı,",
           "titleEmphasis": "evapotranspirasyonla.",
-          "copy": "ETo hesabi, yagis tahmini ve toprak turune gore her parsele ozel sulama takvimi. Damla, yagmurlama ve salma icin ayri formuller.",
+          "copy": "ETo hesabı, yağış tahmini ve toprak türüne göre her parsele özel sulama takvimi. Damla, yağmurlama ve salma için ayrı formüller.",
           "features": {
             "one": {
-              "label": "Yontem destegi",
-              "value": "3 tur"
+              "label": "Yöntem desteği",
+              "value": "3 tür"
             },
             "two": {
-              "label": "Urun sablonu",
-              "value": "48 hazir"
+              "label": "Ürün şablonu",
+              "value": "48 hazır"
             },
             "three": {
               "label": "Su tasarrufu",
@@ -344,7 +344,7 @@
             },
             "four": {
               "label": "Entegrasyon",
-              "value": "IoT sensor"
+              "value": "IoT sensör"
             }
           }
         }
@@ -353,27 +353,27 @@
     "api": {
       "label": "API & Widget",
       "title": {
-        "prefix": "Uc satirda",
-        "emphasis": "ilk tahmininizi cekin."
+        "prefix": "Üç satırda",
+        "emphasis": "ilk tahmininizi çekin."
       },
-      "lead": "REST endpoint'leri veya tek satirlik iframe widget — ayni altyapi Bereketfide ve VistaSeed sidebar'larinda su anda calisiyor.",
+      "lead": "REST endpoint'leri veya tek satırlık iframe widget — aynı altyapı Bereketfide ve VistaSeed sidebar'larında şu anda çalışıyor.",
       "code": {
         "filename": "terminal · curl",
         "copy": "Kopyala",
-        "body": "# 7 gunluk tahmin + don riski skoru\ncurl 'https://api.tarimiklim.com/v2/forecast' \\\n  -H 'Authorization: Bearer tk_live_...' \\\n  -d \"'{\"' \"lat\": 37.5731, \"lon\": 32.7734, \"days\": 7 \"'}'\"\"\n\n# -> response (kisaltilmis)\n'{'\n  \"location\": \"Konya · Cumra\",\n  \"updated_at\": \"2026-04-17T14:32:18Z\",\n  \"frost_risk_24h\": 0.78,\n  \"frost_level\": \"critical\",\n  \"forecast\": [\n    '{' \"t\": \"06:00\", \"temp\": -2.1, \"hum\": 89 '}',\n    '{' \"t\": \"09:00\", \"temp\": 4.8, \"hum\": 72 '}'\n  ],\n  \"irrigation_advice\": \"skip_wednesday_night\"\n'}'",
-        "copied": "Kopyalandi",
+        "body": "# 7 günluk tahmin + don riski skoru\ncurl 'https://api.tarimiklim.com/v2/forecast' \\\n  -H 'Authorization: Bearer tk_live_...' \\\n  -d \"'{\"' \"lat\": 37.5731, \"lon\": 32.7734, \"days\": 7 \"'}'\"\"\n\n# -> response (kisaltilmis)\n'{'\n  \"location\": \"Konya · Çumra\",\n  \"updated_at\": \"2026-04-17T14:32:18Z\",\n  \"frost_risk_24h\": 0.78,\n  \"frost_level\": \"critical\",\n  \"forecast\": [\n    '{' \"t\": \"06:00\", \"temp\": -2.1, \"hum\": 89 '}',\n    '{' \"t\": \"09:00\", \"temp\": 4.8, \"hum\": 72 '}'\n  ],\n  \"irrigation_advice\": \"skip_wednesday_night\"\n'}'",
+        "copied": "Kopyalandı",
         "copyError": "Hata"
       },
       "side": {
         "titlePrefix": "REST API,",
         "titleEmphasis": "JS SDK, iframe widget.",
-        "copy": "API anahtarinizi alin, 60 saniye icinde ilk isteginizi atin. Rate-limit 10k req/dk · yanit p95 48ms."
+        "copy": "API anahtarınızı alın, 60 saniye içinde ilk isteğinizi atın. Rate-limit 10k req/dk · yanıt p95 48ms."
       },
       "endpoints": {
         "forecast": {
           "method": "GET",
           "path": "/v2/forecast",
-          "copy": "7 gunluk saatlik tahmin"
+          "copy": "7 günluk saatlik tahmin"
         },
         "frostRisk": {
           "method": "GET",
@@ -383,63 +383,63 @@
         "irrigation": {
           "method": "GET",
           "path": "/v2/irrigation/plan",
-          "copy": "Parsel bazli sulama takvimi"
+          "copy": "Parsel bazlı sulama takvimi"
         },
         "alerts": {
           "method": "POST",
           "path": "/v2/alerts/subscribe",
-          "copy": "SMS/TG bildirim kaydi"
+          "copy": "SMS/TG bildirim kaydı"
         },
         "stations": {
           "method": "GET",
           "path": "/v2/stations/nearby",
-          "copy": "En yakin MGM istasyonu"
+          "copy": "En yakın MGM istasyonu"
         },
         "widget": {
           "method": "GET",
           "path": "/widget/embed.js",
-          "copy": "Tek satirlik iframe"
+          "copy": "Tek satırlık iframe"
         }
       }
     },
     "stats": {
       "items": {
         "cities": {
-          "label": "Aktif Il",
+          "label": "Aktif İl",
           "value": "81",
-          "copy": "Turkiye'nin tamami; ilce seviyesinde 973 lokasyon canli."
+          "copy": "Türkiye'nin tamami; ilce seviyesinde 973 lokasyon canli."
         },
         "accuracy": {
-          "label": "Don Tahmin Dogrulugu",
+          "label": "Don Tahmin Doğruluğu",
           "value": "97.2%",
-          "copy": "2024 sezonu, dort faktorlu skorun 24 saat onceden dogru uyardigi oran."
+          "copy": "2024 sezonu, dört faktörlü skorun 24 saat önceden doğru uyardığı oran."
         },
         "latency": {
-          "label": "Medyan Yanit",
+          "label": "Medyan Yanıt",
           "value": "48ms",
-          "copy": "Redis cache hit orani %91; cold path bile 200ms altinda."
+          "copy": "Redis cache hit oranı %91; cold path bile 200ms altında."
         },
         "water": {
           "label": "Sulama Tasarrufu",
           "value": "22%",
-          "copy": "Pilot ciftliklerde ETo tabanli takvim ile olculen ortalama su tasarrufu."
+          "copy": "Pilot çiftliklerde ETo tabanlı takvim ile ölçülen ortalama su tasarrufu."
         }
       }
     },
     "ecosystem": {
       "label": "Ekosistem Modülleri",
       "title": {
-        "prefix": "TarimIKlim'i",
-        "emphasis": "kim kullaniyor?"
+        "prefix": "TarımİKlim'i",
+        "emphasis": "kim kullanıyor?"
       },
-      "lead": "Ayni Katman 4 servisini besleyen uygulamalar. Her biri bagimsiz urun, ayni iklim beynine bagli.",
+      "lead": "Aynı Katman 4 servisini besleyen uygulamalar. Her biri bağımsız ürün, aynı iklim beynine bağlı.",
       "items": {
         "bereketfide": {
-          "label": "Tarla Yonetimi",
+          "label": "Tarla Yönetimi",
           "status": "Canlı",
           "statusTone": "live",
           "name": "Bereketfide",
-          "copy": "Acik tarla ciftcisi icin parsel, ekim ve hasat takibi. Widget ile TarimIKlim tahminini ana ekranda gosterir.",
+          "copy": "Açık tarla çiftçisi için parsel, ekim ve hasat takibi. Widget ile TarımİKlim tahminini ana ekranda gösterir.",
           "meta": "API · Widget · TG Bot"
         },
         "vistaseed": {
@@ -447,55 +447,55 @@
           "status": "Canlı",
           "statusTone": "live",
           "name": "VistaSeed",
-          "copy": "Bolge bazli tohum onerisi. TarimIKlim'in iklim profilini urun seciminde kullanir.",
-          "meta": "API · Iklim profili"
+          "copy": "Bölge bazlı tohum önerisi. TarımİKlim'in iklim profilini ürün seçiminde kullanır.",
+          "meta": "API · İklim profili"
         },
         "sera": {
           "label": "Sera SaaS",
           "status": "Canlı",
           "statusTone": "live",
           "name": "Sera Kontrol",
-          "copy": "Sera ortam kontrolu; dis hava verisini TarimIKlim'den, ic ortami sensorlerden alir.",
-          "meta": "API · IoT kopru"
+          "copy": "Sera ortam kontrolü; dış hava verisini TarımİKlim'den, iç ortamı sensörlerden alır.",
+          "meta": "API · IoT köprü"
         },
         "ziraatHaber": {
-          "label": "Haber Ajansi",
-          "status": "Yakinda",
+          "label": "Haber Ajansı",
+          "status": "Yakında",
           "statusTone": "wip",
           "name": "Ziraat Haber",
-          "copy": "Gunluk tarim icerikleri; bolgesel hava durumu modulu TarimIKlim widget'i ile cikar.",
+          "copy": "Günlük tarım içerikleri; bölgesel hava durumu modülü TarımİKlim widget'ı ile çıkar.",
           "meta": "Widget · v2 sprint"
         },
         "hal": {
           "label": "Pazar",
-          "status": "Yakinda",
+          "status": "Yakında",
           "statusTone": "wip",
           "name": "Hal Fiyatları",
-          "copy": "Sebze-meyve toptan fiyat takibi. Hasat tahmini icin TarimIKlim verim modelini kullanacak.",
+          "copy": "Sebze-meyve toptan fiyat takibi. Hasat tahmini için TarımİKlim verim modelini kullanacak.",
           "meta": "API · planlama"
         },
         "yield": {
-          "label": "AI Modul",
+          "label": "AI Modül",
           "status": "Pilot",
           "statusTone": "wip",
           "name": "Verim Tahmini",
-          "copy": "Parsel + iklim + gubre gecmisi kombinasyonu ile hasat oncesi verim tahmini.",
+          "copy": "Parsel + iklim + gübre geçmişi kombinasyonu ile hasat öncesi verim tahmini.",
           "meta": "ML · pilot"
         },
         "disease": {
-          "label": "Bitki Sagligi",
+          "label": "Bitki Sağlığı",
           "status": "Q3 2026",
           "statusTone": "wip",
-          "name": "Hastalik Uyari",
-          "copy": "Nem-sicaklik kombinasyonundan fungal hastalik olasiligi; onleyici ilaclama takvimi.",
+          "name": "Hastalık Uyarı",
+          "copy": "Nem-sıcaklık kombinasyonundan fungal hastalık olasılığı; önleyici ilaçlama takvimi.",
           "meta": "ML · Q3 2026"
         },
         "open": {
-          "label": "Acik Platform",
+          "label": "Açık Platform",
           "status": "Acik",
           "statusTone": "open",
-          "name": "Senin urunun?",
-          "copy": "Tarim odakli uygulama yapiyorsan API'ye basvur; developer programi ve ucretsiz tier mevcut.",
+          "name": "Senin ürünün?",
+          "copy": "Tarım odaklı uygulama yapıyorsan API'ye başvur; developer programı ve ücretsiz tier mevcut.",
           "meta": "→ dev.tarimiklim.com"
         }
       }
@@ -503,15 +503,15 @@
     "finalCta": {
       "megaPrefix": "Toprak",
       "megaEmphasis": "veriyle",
-      "megaSuffix": "konusur.",
+      "megaSuffix": "konuşur.",
       "title": {
         "line1": "Panel bir dakikada.",
-        "line2": "Entegrasyon bir ogleden sonra."
+        "line2": "Entegrasyon bir öğleden sonra."
       },
-      "copy": "Developer tier ucretsiz — ayda 100k istek, tum endpoint'ler, Telegram bildirim. Kredi karti istemiyoruz.",
+      "copy": "Developer tier ücretsiz — ayda 100k istek, tüm endpoint'ler, Telegram bildirim. Kredi kartı istemiyoruz.",
       "actions": {
-        "primary": "API anahtari al",
-        "secondary": "Demoya basla"
+        "primary": "API anahtarı al",
+        "secondary": "Demoya başla"
       }
     },
     "footer": {
