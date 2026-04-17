@@ -13,6 +13,7 @@ export function SiteNavMobile({ locale }: Props) {
   const t = useTranslations('premium.nav');
   const [open, setOpen] = useState(false);
   const panelHref = `/${locale}/don-uyarisi`;
+  const anchorHref = (id: string) => `/${locale}#${id}`;
 
   return (
     <>
@@ -34,7 +35,7 @@ export function SiteNavMobile({ locale }: Props) {
           </li>
           {ANCHOR_IDS.map((id) => (
             <li key={id}>
-              <a href={`#${id}`} onClick={() => setOpen(false)}>
+              <a href={anchorHref(id)} onClick={() => setOpen(false)}>
                 {t(`links.${id}`)}
               </a>
             </li>
