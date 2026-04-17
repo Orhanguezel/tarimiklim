@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TarımİKlim — Türkiye'nin İklim Zekâsı</title>
+<meta name="description" content="Türk çiftçisi için 7 günlük tahmin, don riski erken uyarı ve sulama planlama servisi. Katman 4 veri & AI altyapısı." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F1EBDD;
+    --paper-dim: #E8DFCB;
+    --paper-deep: #DDD1B6;
+    --ink: #141B14;
+    --ink-soft: #2B3527;
+    --pine: #1E3023;
+    --moss: #3B5A3C;
+    --sage: #7A8C6A;
+    --terra: #B8553A;
+    --terra-deep: #8E3F2C;
+    --wheat: #C69B3A;
+    --sky: #5D7A8C;
+    --danger: #C23B2C;
+    --line: rgba(20, 27, 20, 0.14);
+    --line-soft: rgba(20, 27, 20, 0.08);
+    --display: "Fraunces", Georgia, serif;
+    --sans: "Inter Tight", -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.5;
+    overflow-x: hidden;
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Paper grain overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(139, 100, 50, 0.04) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(30, 48, 35, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    opacity: 0.06;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    z-index: 2;
+  }
+
+  main, header, footer, section { position: relative; z-index: 3; }
+
+  /* ====== TOP ALERT BAR ====== */
+  .alert-bar {
+    background: var(--pine);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(241, 235, 221, 0.1);
+  }
+  .alert-bar-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .alert-left { display: flex; align-items: center; gap: 14px; }
+  .pulse {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #E8C764;
+    position: relative;
+  }
+  .pulse::before {
+    content: ""; position: absolute; inset: -4px;
+    border-radius: 50%;
+    background: #E8C764;
+    opacity: 0.4;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.4; }
+    50% { transform: scale(1.8); opacity: 0; }
+  }
+  .alert-right { display: flex; gap: 28px; opacity: 0.75; }
+  .alert-right span { display: flex; align-items: center; gap: 6px; }
+
+  /* ====== NAV ====== */
+  nav {
+    padding: 28px 0;
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+  .nav-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-family: var(--display);
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-mark {
+    width: 32px; height: 32px;
+    background: var(--pine);
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+  }
+  .logo-mark::before {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 55%;
+    background: var(--wheat);
+    border-radius: 50% 50% 0 0 / 30% 30% 0 0;
+  }
+  .logo-mark::after {
+    content: "";
+    position: absolute;
+    top: 8px; right: 6px;
+    width: 8px; height: 8px;
+    background: var(--terra);
+    border-radius: 50%;
+  }
+  .logo em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--moss);
+  }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .nav-links a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a:hover { color: var(--terra); }
+  .nav-links a.has-dot::after {
+    content: "";
+    position: absolute;
+    top: 4px; right: -10px;
+    width: 5px; height: 5px;
+    background: var(--terra);
+    border-radius: 50%;
+  }
+  .nav-cta {
+    padding: 12px 22px;
+    background: var(--pine);
+    color: var(--paper);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 999px;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-cta:hover { background: var(--ink); transform: translateY(-1px); }
+  .nav-cta span { font-size: 16px; }
+
+  /* ====== HERO ====== */
+  .hero {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 80px 32px 60px;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 60px;
+    align-items: start;
+    position: relative;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--moss);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: ""; width: 40px; height: 1px; background: var(--moss);
+  }
+  h1.hero-title {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: clamp(48px, 7.2vw, 108px);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+  .hero-title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--terra-deep);
+    font-variation-settings: "SOFT" 100;
+  }
+  .hero-title .break { display: block; }
+  .hero-title .indent { padding-left: 1.2em; }
+
+  .hero-sub {
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 540px;
+    margin-bottom: 40px;
+    font-weight: 400;
+  }
+  .hero-sub strong { color: var(--ink); font-weight: 600; }
+
+  .hero-ctas {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    padding: 16px 28px;
+    background: var(--ink);
+    color: var(--paper);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s;
+    border: 1px solid var(--ink);
+  }
+  .btn-primary:hover {
+    background: var(--terra-deep);
+    border-color: var(--terra-deep);
+  }
+  .btn-primary svg { transition: transform 0.3s; }
+  .btn-primary:hover svg { transform: translateX(3px); }
+
+  .btn-ghost {
+    padding: 16px 24px;
+    background: transparent;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s;
+  }
+  .btn-ghost:hover { border-color: var(--ink); background: var(--paper-dim); }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    border-top: 1px solid var(--line);
+    padding-top: 28px;
+    max-width: 520px;
+  }
+  .hero-stat {
+    padding-right: 20px;
+  }
+  .hero-stat-num {
+    font-family: var(--display);
+    font-size: 38px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--pine);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .hero-stat-num sup { font-size: 18px; vertical-align: top; color: var(--terra); }
+  .hero-stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0.7;
+  }
+
+  /* ====== HERO WEATHER CARD ====== */
+  .hero-card-wrap {
+    position: relative;
+    margin-top: 20px;
+  }
+  .weather-card {
+    background: var(--pine);
+    color: var(--paper);
+    border-radius: 20px;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 30px 60px -30px rgba(20, 27, 20, 0.4);
+  }
+  .weather-card::before {
+    content: "";
+    position: absolute;
+    top: -100px; right: -60px;
+    width: 260px; height: 260px;
+    background: radial-gradient(circle, rgba(232, 199, 100, 0.25) 0%, transparent 60%);
+    border-radius: 50%;
+  }
+  .wc-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 2;
+  }
+  .wc-location { display: flex; flex-direction: column; gap: 4px; }
+  .wc-loc-main { font-family: var(--display); font-size: 22px; font-weight: 400; letter-spacing: -0.01em; }
+  .wc-loc-sub { font-family: var(--mono); font-size: 11px; opacity: 0.6; letter-spacing: 0.08em; }
+  .wc-live {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    padding: 6px 10px;
+    border: 1px solid rgba(241, 235, 221, 0.2);
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .wc-live-dot {
+    width: 6px; height: 6px;
+    background: #E8C764;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  .wc-temp {
+    font-family: var(--display);
+    font-size: 128px;
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .wc-temp sup {
+    font-size: 36px;
+    font-weight: 400;
+    margin-top: 20px;
+    color: var(--wheat);
+  }
+  .wc-cond {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 18px;
+    opacity: 0.85;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 2;
+  }
+  .wc-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(241, 235, 221, 0.15);
+    position: relative;
+    z-index: 2;
+  }
+  .wc-metric-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    margin-bottom: 6px;
+  }
+  .wc-metric-val {
+    font-family: var(--display);
+    font-size: 24px;
+    font-weight: 400;
+  }
+  .wc-metric-val small { font-size: 12px; opacity: 0.6; margin-left: 2px; }
+
+  .hero-badge {
+    position: absolute;
+    right: -30px;
+    top: 280px;
+    background: var(--terra);
+    color: var(--paper);
+    border-radius: 16px;
+    padding: 18px 22px;
+    box-shadow: 0 20px 40px -20px rgba(184, 85, 58, 0.5);
+    transform: rotate(3deg);
+    max-width: 240px;
+    z-index: 10;
+  }
+  .hero-badge-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hero-badge-label::before {
+    content: "⚠";
+    font-size: 12px;
+  }
+  .hero-badge-title { font-family: var(--display); font-size: 18px; font-weight: 500; margin-bottom: 6px; line-height: 1.2; }
+  .hero-badge-desc { font-size: 12px; line-height: 1.4; opacity: 0.9; }
+
+  /* ====== TICKER ====== */
+  .ticker {
+    background: var(--ink);
+    color: var(--paper);
+    overflow: hidden;
+    border-top: 1px solid rgba(241, 235, 221, 0.1);
+    border-bottom: 1px solid rgba(241, 235, 221, 0.1);
+    padding: 22px 0;
+  }
+  .ticker-track {
+    display: flex;
+    gap: 60px;
+    animation: ticker 40s linear infinite;
+    white-space: nowrap;
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+  }
+  .ticker-track em {
+    font-style: italic;
+    color: var(--wheat);
+    font-weight: 400;
+  }
+  .ticker-track span:nth-child(odd) {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ticker-track .sep {
+    font-size: 36px;
+    color: var(--moss);
+    opacity: 0.6;
+  }
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ====== SECTION COMMON ====== */
+  section.main-section {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 120px 32px;
+  }
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--terra-deep);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .section-label-num {
+    font-family: var(--display);
+    font-style: italic;
+    color: var(--moss);
+    font-size: 14px;
+  }
+  h2.section-title {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: clamp(36px, 5vw, 72px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 20px;
+    max-width: 900px;
+  }
+  h2.section-title em { font-style: italic; font-weight: 400; color: var(--moss); }
+  .section-lead {
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 640px;
+    margin-bottom: 60px;
+  }
+
+  /* ====== LIVE DASHBOARD ====== */
+  .dashboard-section {
+    background: var(--ink);
+    color: var(--paper);
+    margin: 0;
+    padding: 0;
+  }
+  .dashboard-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 120px 32px;
+  }
+  .dashboard-section .section-label { color: var(--wheat); }
+  .dashboard-section .section-label-num { color: var(--sage); }
+  .dashboard-section h2.section-title { color: var(--paper); }
+  .dashboard-section h2.section-title em { color: var(--wheat); }
+  .dashboard-section .section-lead { color: rgba(241, 235, 221, 0.7); }
+
+  .dashboard-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 56px;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .dashboard-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(241, 235, 221, 0.06);
+    padding: 6px;
+    border-radius: 999px;
+    border: 1px solid rgba(241, 235, 221, 0.1);
+  }
+  .dash-tab {
+    padding: 10px 18px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(241, 235, 221, 0.6);
+    background: transparent;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .dash-tab.active {
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .dash-tab:hover:not(.active) { color: var(--paper); }
+
+  .city-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(241, 235, 221, 0.1);
+    border: 1px solid rgba(241, 235, 221, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .city-cell {
+    background: var(--ink);
+    padding: 28px 24px;
+    position: relative;
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .city-cell:hover { background: #1C231C; }
+  .city-cell.alert::after {
+    content: "";
+    position: absolute;
+    top: 16px; right: 16px;
+    width: 6px; height: 6px;
+    background: var(--wheat);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--wheat);
+  }
+  .city-cell.danger::after {
+    background: var(--terra);
+    box-shadow: 0 0 12px var(--terra);
+  }
+  .city-name {
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 4px;
+  }
+  .city-region {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: rgba(241, 235, 221, 0.4);
+    margin-bottom: 20px;
+  }
+  .city-temp {
+    font-family: var(--display);
+    font-size: 48px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  .city-temp sup { font-size: 18px; color: var(--wheat); }
+  .city-cond {
+    font-size: 13px;
+    color: rgba(241, 235, 221, 0.6);
+    margin-bottom: 16px;
+  }
+  .city-bar {
+    height: 3px;
+    background: rgba(241, 235, 221, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .city-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sage), var(--wheat));
+    border-radius: 2px;
+  }
+  .city-risk {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(241, 235, 221, 0.5);
+    display: flex;
+    justify-content: space-between;
+  }
+  .city-risk strong { color: var(--paper); font-weight: 500; }
+  .city-cell.alert .city-risk strong { color: var(--wheat); }
+  .city-cell.danger .city-risk strong { color: var(--terra); }
+  .city-cell.danger .city-bar-fill { background: linear-gradient(90deg, var(--terra), var(--wheat)); width: 85% !important; }
+  .city-cell.alert .city-bar-fill { background: linear-gradient(90deg, var(--wheat), var(--terra)); width: 65% !important; }
+
+  /* ====== PILLARS (3 core features) ====== */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--line);
+    margin-top: 60px;
+  }
+  .pillar {
+    padding: 48px 40px 48px 0;
+    border-right: 1px solid var(--line);
+    position: relative;
+  }
+  .pillar:last-child { border-right: none; padding-right: 0; }
+  .pillar:not(:first-child) { padding-left: 40px; }
+  .pillar-num {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--terra);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pillar-num::before {
+    content: "";
+    width: 20px; height: 1px; background: var(--terra);
+  }
+  .pillar-icon {
+    width: 56px; height: 56px;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+    color: var(--pine);
+  }
+  .pillar-title {
+    font-family: var(--display);
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    color: var(--ink);
+  }
+  .pillar-title em { font-style: italic; color: var(--terra-deep); }
+  .pillar-desc {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+  }
+  .pillar-features {
+    list-style: none;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .pillar-features li {
+    padding: 10px 0;
+    border-top: 1px dashed var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .pillar-features li::before {
+    content: "→";
+    margin-right: 10px;
+    color: var(--terra);
+  }
+  .pillar-features li span:first-child { flex: 1; }
+  .pillar-features li span:last-child {
+    color: var(--moss);
+    font-weight: 500;
+  }
+
+  /* ====== ARCHITECTURE (Katman 4) ====== */
+  .architecture {
+    background: var(--paper-dim);
+    padding: 0;
+    margin: 0;
+  }
+  .arch-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 120px 32px;
+  }
+  .layers {
+    margin-top: 60px;
+    position: relative;
+  }
+  .layer {
+    display: grid;
+    grid-template-columns: 140px 1fr 360px;
+    gap: 40px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: center;
+    transition: background 0.3s;
+  }
+  .layer:first-child { border-top: 1px solid var(--line); }
+  .layer.active {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 40px 28px;
+    margin: 0 -28px;
+    border-radius: 8px;
+    border-color: var(--ink);
+    box-shadow: 0 30px 80px -40px rgba(20, 27, 20, 0.4);
+    position: relative;
+    z-index: 2;
+  }
+  .layer-num {
+    font-family: var(--display);
+    font-size: 56px;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--moss);
+    opacity: 0.5;
+  }
+  .layer.active .layer-num { color: var(--wheat); opacity: 1; font-style: italic; }
+  .layer-body { }
+  .layer-title {
+    font-family: var(--display);
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .layer.active .layer-title { font-size: 28px; }
+  .layer.active .layer-title em { font-style: italic; color: var(--wheat); }
+  .layer-desc {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .layer.active .layer-desc { color: rgba(241, 235, 221, 0.8); font-size: 15px; }
+  .layer-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+  .layer-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--ink-soft);
+  }
+  .layer.active .layer-tag {
+    border-color: rgba(241, 235, 221, 0.25);
+    color: var(--paper);
+    background: rgba(241, 235, 221, 0.06);
+  }
+  .layer.active .layer-tag.highlight {
+    background: var(--wheat);
+    color: var(--ink);
+    border-color: var(--wheat);
+  }
+
+  /* ====== API & WIDGET ====== */
+  .api-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .code-block {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px -40px rgba(20, 27, 20, 0.5);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .code-head {
+    background: #0F140F;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(241, 235, 221, 0.08);
+  }
+  .code-dots { display: flex; gap: 6px; }
+  .code-dots span {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: rgba(241, 235, 221, 0.2);
+  }
+  .code-dots span:nth-child(1) { background: #E8796A; }
+  .code-dots span:nth-child(2) { background: #E8C764; }
+  .code-dots span:nth-child(3) { background: #7A9B5E; }
+  .code-filename {
+    font-size: 11px;
+    color: rgba(241, 235, 221, 0.5);
+    letter-spacing: 0.05em;
+    margin-left: 8px;
+  }
+  .code-copy {
+    margin-left: auto;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border: 1px solid rgba(241, 235, 221, 0.15);
+    border-radius: 4px;
+    color: rgba(241, 235, 221, 0.6);
+    cursor: pointer;
+    background: transparent;
+    font-family: var(--mono);
+  }
+  .code-copy:hover { color: var(--paper); border-color: rgba(241, 235, 221, 0.3); }
+  .code-body { padding: 24px 24px; }
+  .code-body .c-com { color: #7A8C6A; font-style: italic; }
+  .code-body .c-key { color: #E8C764; }
+  .code-body .c-str { color: #C69B7A; }
+  .code-body .c-fn { color: #E8A06E; }
+  .code-body .c-num { color: #D4A72C; }
+  .code-body .c-kw { color: #B88AA8; }
+
+  .api-right h3 {
+    font-family: var(--display);
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .api-right h3 em { font-style: italic; color: var(--terra-deep); }
+  .api-right p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+  }
+  .api-endpoints {
+    border-top: 1px solid var(--line);
+    margin-top: 32px;
+  }
+  .endpoint {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  .ep-method {
+    font-weight: 600;
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.08em;
+  }
+  .ep-method.get { background: rgba(59, 90, 60, 0.12); color: var(--moss); }
+  .ep-method.post { background: rgba(184, 85, 58, 0.12); color: var(--terra-deep); }
+  .ep-path { color: var(--ink); font-weight: 500; flex: 1; }
+  .ep-desc { color: var(--ink-soft); opacity: 0.7; }
+
+  /* ====== STATS STRIP ====== */
+  .stats-strip {
+    background: var(--pine);
+    color: var(--paper);
+    padding: 100px 32px;
+  }
+  .stats-strip-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+  }
+  .big-stat {
+    border-left: 1px solid rgba(241, 235, 221, 0.15);
+    padding-left: 28px;
+  }
+  .big-stat:first-child { border-left: none; padding-left: 0; }
+  .big-stat-num {
+    font-family: var(--display);
+    font-size: clamp(48px, 6vw, 84px);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 12px;
+  }
+  .big-stat-num em { font-style: italic; color: var(--wheat); font-weight: 400; }
+  .big-stat-num sup { font-size: 0.4em; color: var(--wheat); vertical-align: top; margin-left: 4px; }
+  .big-stat-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(241, 235, 221, 0.6);
+    margin-bottom: 10px;
+  }
+  .big-stat-desc {
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(241, 235, 221, 0.75);
+  }
+
+  /* ====== ECOSYSTEM ====== */
+  .ecosystem-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 40px;
+  }
+  .eco-card {
+    background: var(--paper);
+    padding: 32px 28px;
+    position: relative;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: background 0.3s;
+  }
+  .eco-card:hover { background: var(--paper-dim); }
+  .eco-card.live::before {
+    content: "CANLI";
+    position: absolute;
+    top: 16px; right: 16px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    background: var(--pine);
+    color: var(--paper);
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  .eco-card.wip::before {
+    content: "GELİŞTİRİLİYOR";
+    position: absolute;
+    top: 16px; right: 16px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    background: var(--paper-deep);
+    color: var(--ink-soft);
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  .eco-top { }
+  .eco-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--moss);
+    margin-bottom: 16px;
+  }
+  .eco-name {
+    font-family: var(--display);
+    font-size: 24px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+  .eco-desc {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .eco-meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0.6;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+
+  /* ====== FINAL CTA ====== */
+  .final-cta {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 140px 32px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-cta::before {
+    content: "";
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(198, 155, 58, 0.15) 0%, transparent 60%);
+    border-radius: 50%;
+  }
+  .final-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 80px;
+    align-items: end;
+  }
+  .final-cta h2 {
+    font-family: var(--display);
+    font-size: clamp(48px, 7vw, 104px);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    margin-bottom: 0;
+  }
+  .final-cta h2 em { font-style: italic; color: var(--wheat); font-weight: 400; }
+  .final-right p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: rgba(241, 235, 221, 0.75);
+    margin-bottom: 28px;
+  }
+  .final-btns { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn-final {
+    padding: 18px 30px;
+    background: var(--wheat);
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s;
+  }
+  .btn-final:hover { background: var(--paper); transform: translateY(-2px); }
+  .btn-final-ghost {
+    padding: 18px 26px;
+    background: transparent;
+    color: var(--paper);
+    border: 1px solid rgba(241, 235, 221, 0.25);
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s;
+  }
+  .btn-final-ghost:hover { border-color: var(--paper); background: rgba(241, 235, 221, 0.05); }
+
+  /* ====== FOOTER ====== */
+  footer {
+    background: var(--paper);
+    padding: 80px 32px 40px;
+    border-top: 1px solid var(--line);
+  }
+  .footer-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 60px;
+    border-bottom: 1px solid var(--line);
+  }
+  .footer-brand { max-width: 360px; }
+  .footer-tag {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.3;
+    color: var(--ink);
+    margin: 20px 0;
+    font-weight: 300;
+  }
+  .footer-desc {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    margin-bottom: 24px;
+  }
+  .footer-contact {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+    line-height: 1.8;
+  }
+  .footer-contact a { color: var(--terra-deep); text-decoration: none; }
+  .footer-col h4 {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--moss);
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  .footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .footer-col a {
+    font-size: 14px;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--terra); }
+  .footer-bottom {
+    padding-top: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 0.05em;
+  }
+  .footer-bottom-links { display: flex; gap: 24px; }
+  .footer-bottom-links a { color: var(--ink-soft); text-decoration: none; }
+  .footer-bottom-links a:hover { color: var(--terra); }
+
+  /* BIG TYPO FOOTER */
+  .mega-type {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: clamp(80px, 18vw, 280px);
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    color: var(--pine);
+    text-align: center;
+    padding: 40px 0 20px;
+    overflow: hidden;
+  }
+  .mega-type em { font-style: italic; color: var(--terra-deep); font-weight: 400; }
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 1080px) {
+    .hero { grid-template-columns: 1fr; gap: 60px; }
+    .hero-card-wrap { max-width: 520px; }
+    .hero-badge { right: 10px; top: auto; bottom: -20px; }
+    .city-grid { grid-template-columns: repeat(2, 1fr); }
+    .pillars { grid-template-columns: 1fr; }
+    .pillar { border-right: none; border-bottom: 1px solid var(--line); padding: 40px 0; }
+    .pillar:last-child { border-bottom: none; }
+    .pillar:not(:first-child) { padding-left: 0; }
+    .api-section { grid-template-columns: 1fr; }
+    .stats-strip-inner { grid-template-columns: repeat(2, 1fr); }
+    .big-stat { border-left: none; padding-left: 0; }
+    .ecosystem-grid { grid-template-columns: repeat(2, 1fr); }
+    .final-inner { grid-template-columns: 1fr; gap: 40px; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .layer { grid-template-columns: 80px 1fr; }
+    .layer-tags { grid-column: 1 / -1; justify-content: flex-start; margin-top: 8px; }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .alert-right { display: none; }
+    section.main-section, .dashboard-inner, .arch-inner { padding: 80px 20px; }
+    .hero { padding: 50px 20px; }
+    .city-grid { grid-template-columns: 1fr; }
+    .stats-strip-inner { grid-template-columns: 1fr; }
+    .ecosystem-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; }
+    .hero-stats { grid-template-columns: 1fr 1fr; gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ALERT BAR -->
+<div class="alert-bar">
+  <div class="alert-bar-inner">
+    <div class="alert-left">
+      <span class="pulse"></span>
+      <span>Aktif uyarı · İç Anadolu'da don riski · 34 lokasyon · <em style="color:#E8C764;font-style:italic;">son güncelleme 12 dk önce</em></span>
+    </div>
+    <div class="alert-right">
+      <span>API 99.97% uptime</span>
+      <span>v2.4.1</span>
+      <span>TR · EN · AR</span>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <span class="logo-mark"></span>
+      Tarım<em>İKlim</em>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#panel">Canlı Panel</a></li>
+      <li><a href="#modules">Modüller</a></li>
+      <li><a href="#api" class="has-dot">API & Widget</a></li>
+      <li><a href="#ekosistem">Ekosistem</a></li>
+      <li><a href="#fiyat">Fiyatlandırma</a></li>
+      <li><a href="#docs">Dokümantasyon</a></li>
+    </ul>
+    <a href="#" class="nav-cta">
+      Panel'e giriş <span>→</span>
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-eyebrow">
+      <span>Katman 04 · Veri & AI Altyapısı</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="break">Türkiye'nin</span>
+      <span class="break"><em>iklim zekâsı.</em></span>
+      <span class="break indent">Çiftçi için kurulmuş.</span>
+    </h1>
+    <p class="hero-sub">
+      7 günlük tahmin, dört faktörlü <strong>don riski algoritması</strong> ve parsel bazlı sulama planlaması — OpenWeatherMap, Open-Meteo ve yerel istasyon verileri üzerinde çalışan <strong>dayanıklı bir servis katmanı.</strong> Sera SaaS'tan Ziraat Haber'e kadar ekosistemin tüm uygulamalarını besler.
+    </p>
+    <div class="hero-ctas">
+      <a href="#" class="btn-primary">
+        Canlı Panel'i aç
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#" class="btn-ghost">
+        API dokümantasyonu
+      </a>
+      <a href="#" style="font-family:var(--mono);font-size:12px;letter-spacing:0.08em;color:var(--ink-soft);text-decoration:none;margin-left:8px;">
+        veya <span style="color:var(--terra-deep);border-bottom:1px solid var(--terra-deep);padding-bottom:2px;">30-saniyelik demo izle ↗</span>
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">1.2M<sup>/gün</sup></div>
+        <div class="hero-stat-label">Tahmin sorgusu</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">97<sup>%</sup></div>
+        <div class="hero-stat-label">Don tahmin doğruluğu</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">&lt;50<sup>ms</sup></div>
+        <div class="hero-stat-label">Medyan yanıt süresi</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Weather Card -->
+  <div class="hero-card-wrap">
+    <div class="weather-card">
+      <div class="wc-top">
+        <div class="wc-location">
+          <div class="wc-loc-main">Konya · Çumra</div>
+          <div class="wc-loc-sub">37.5731° N, 32.7734° E · 1013 m</div>
+        </div>
+        <div class="wc-live">
+          <span class="wc-live-dot"></span>
+          CANLI
+        </div>
+      </div>
+      <div class="wc-temp">8<sup>°C</sup></div>
+      <div class="wc-cond">Parçalı bulutlu · gece açık, sabah radyasyon donu olası</div>
+      <div class="wc-metrics">
+        <div>
+          <div class="wc-metric-label">Nem</div>
+          <div class="wc-metric-val">64<small>%</small></div>
+        </div>
+        <div>
+          <div class="wc-metric-label">Rüzgâr</div>
+          <div class="wc-metric-val">11<small>km/sa</small></div>
+        </div>
+        <div>
+          <div class="wc-metric-label">Min (06:00)</div>
+          <div class="wc-metric-val" style="color:var(--wheat);">-2°</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-badge">
+      <div class="hero-badge-label">Erken Uyarı</div>
+      <div class="hero-badge-title">Sabaha don ihtimali %78</div>
+      <div class="hero-badge-desc">Hassas parsellerde örtü veya sis makinesi önerilir. SMS/Telegram bildirimi 04:30'da gönderilecek.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span>81 il <em>· canlı</em></span>
+    <span class="sep">✴</span>
+    <span>1.200 <em>aktif parsel</em></span>
+    <span class="sep">✴</span>
+    <span>don riski <em>4-faktörlü</em></span>
+    <span class="sep">✴</span>
+    <span>Redis TTL <em>30dk</em></span>
+    <span class="sep">✴</span>
+    <span>BullMQ <em>günlük 06:00</em></span>
+    <span class="sep">✴</span>
+    <span>OpenWeatherMap <em>+ Open-Meteo</em></span>
+    <span class="sep">✴</span>
+    <!-- duplicate -->
+    <span>81 il <em>· canlı</em></span>
+    <span class="sep">✴</span>
+    <span>1.200 <em>aktif parsel</em></span>
+    <span class="sep">✴</span>
+    <span>don riski <em>4-faktörlü</em></span>
+    <span class="sep">✴</span>
+    <span>Redis TTL <em>30dk</em></span>
+    <span class="sep">✴</span>
+    <span>BullMQ <em>günlük 06:00</em></span>
+    <span class="sep">✴</span>
+    <span>OpenWeatherMap <em>+ Open-Meteo</em></span>
+    <span class="sep">✴</span>
+  </div>
+</div>
+
+<!-- DASHBOARD SECTION -->
+<section class="dashboard-section" id="panel">
+  <div class="dashboard-inner">
+    <div class="section-label">
+      <span class="section-label-num">I.</span>
+      <span>Canlı Panel · Çiftçi Görünümü</span>
+    </div>
+    <div class="dashboard-head">
+      <div>
+        <h2 class="section-title">Sekiz ilden <em>şu anki durum.</em></h2>
+        <p class="section-lead">Tarım havzalarından gerçek zamanlı kesit. Sarı nokta dikkat, kırmızı nokta acil eylem demek — her hücrenin arkasında 4 faktörlü don risk skoru (sıcaklık, nem, rüzgâr, bulut örtüsü) çalışır.</p>
+      </div>
+      <div class="dashboard-controls">
+        <button class="dash-tab active">Şimdi</button>
+        <button class="dash-tab">6 saat</button>
+        <button class="dash-tab">24 saat</button>
+        <button class="dash-tab">7 gün</button>
+      </div>
+    </div>
+
+    <div class="city-grid">
+      <div class="city-cell danger">
+        <div class="city-name">Konya</div>
+        <div class="city-region">Çumra · İç Anadolu</div>
+        <div class="city-temp">8<sup>°</sup></div>
+        <div class="city-cond">Parçalı bulutlu · don</div>
+        <div class="city-bar"><div class="city-bar-fill" style="width:85%;"></div></div>
+        <div class="city-risk"><span>Risk</span><strong>ACİL · %78</strong></div>
+      </div>
+      <div class="city-cell alert">
+        <div class="city-name">Kayseri</div>
+        <div class="city-region">Develi · İç Anadolu</div>
+        <div class="city-temp">6<sup>°</sup></div>
+        <div class="city-cond">Açık · radyasyon donu</div>
+        <div class="city-bar"><div class="city-bar-fill" style="width:65%;"></div></div>
+        <div class="city-risk"><span>Risk</span><strong>DİKKAT · %54</strong></div>
+      </div>
+      <div class="city-cell">
+        <div class="city-name">Antalya</div>
+        <div class="city-region">Kumluca · Akdeniz</div>
+        <div class="city-temp">18<sup>°</sup></div>
+        <div class="city-cond">Açık · yüksek radyasyon</div>
+        <div class="city-bar"><div class="city-bar-fill" style="width:22%;"></div></div>
+        <div class="city-risk"><span>Risk</span><strong>DÜŞÜK · %8</strong></div>
+      </div>
+      <div class="city-cell">
+        <div class="city-name">Bursa</div>
+        <div class="city-region">Karacabey · Marmara</div>
+        <div class="city-temp">11<sup>°</sup></div>
+        <div class="city-cond">Çok bulutlu · yağış</div>
+        <div class="city-bar"><div class="city-bar-fill" style="width:18%;"></div></div>
+        <div class="city-risk"><span>Risk</span><strong>DÜŞÜK · %5</strong></div>
+      </div>
+      <div class="city-cell alert">
+        <div class="city-name">Erzurum</div>
+        <div class="city-region">Pasinler · D. Anadolu</div>
+        <div class="city-temp">2<sup>°</sup></div>
+        <div class="city-cond">Hafif kar · kuvvetli don</div>
+        <div class="city-bar"><div class="city-bar-fill" style="width:72%;"></div></div>
+        <div class="city-risk"><span>Risk</span><strong>DİKKAT · %61</strong></div>
+      </div>
+      <div class="city-cell">
+        <div class="city-name">İzmir</div>
+        <div class="city-region">Menemen · Ege</div>
+        <div class="city-temp">15<sup>°</sup></div>
+        <div class="city-cond">Açık · rüzgâr 18 km/sa</div>
+        <div class="city-bar"><div class="city-bar-fill" style="width:15%;"></div></div>
+        <div class="city-risk"><span>Risk</span><strong>DÜŞÜK · %4</strong></div>
+      </div>
+      <div class="city-cell danger">
+        <div class="city-name">Ankara</div>
+        <div class="city-region">Polatlı · İç Anadolu</div>
+        <div class="city-temp">7<sup>°</sup></div>
+        <div class="city-cond">Açık · sabah don</div>
+        <div class="city-bar"><div class="city-bar-fill" style="width:82%;"></div></div>
+        <div class="city-risk"><span>Risk</span><strong>ACİL · %71</strong></div>
+      </div>
+      <div class="city-cell">
+        <div class="city-name">Şanlıurfa</div>
+        <div class="city-region">Harran · GDA</div>
+        <div class="city-temp">16<sup>°</sup></div>
+        <div class="city-cond">Açık · ılıman</div>
+        <div class="city-bar"><div class="city-bar-fill" style="width:10%;"></div></div>
+        <div class="city-risk"><span>Risk</span><strong>DÜŞÜK · %2</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULES / PILLARS -->
+<section class="main-section" id="modules">
+  <div class="section-label">
+    <span class="section-label-num">II.</span>
+    <span>Çekirdek Modüller</span>
+  </div>
+  <h2 class="section-title">Üç servis. <em>Bir altyapı.</em><br>Binlerce parsel için doğru karar.</h2>
+  <p class="section-lead">Her modül bağımsız API olarak yayında; birlikte kullanıldığında bir günün içinde ekim, sulama ve hasat kararlarını veri temelli hale getirir.</p>
+
+  <div class="pillars">
+    <div class="pillar">
+      <div class="pillar-num">01 — Risk</div>
+      <div class="pillar-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2l2 4 4 1-3 3 1 4-4-2-4 2 1-4-3-3 4-1z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="pillar-title">Don riski, <em>dört faktörlü.</em></div>
+      <div class="pillar-desc">Sıcaklık düşüş hızı, nem, rüzgâr ve bulut örtüsünü harmanlayan bir skor. Meyve bahçeleri ve açık tarla için farklı eşikler; ≤-2°C'de SMS ve Telegram üzerinden çiftçiye gece uyarısı.</div>
+      <ul class="pillar-features">
+        <li><span>Skor hesaplama aralığı</span><span>1 saat</span></li>
+        <li><span>İleri tahmin penceresi</span><span>72 saat</span></li>
+        <li><span>Bildirim kanalları</span><span>SMS · TG · Push</span></li>
+        <li><span>Doğruluk (2024 sezonu)</span><span>%97.2</span></li>
+      </ul>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-num">02 — Tahmin</div>
+      <div class="pillar-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 18c0-3 2-5 5-5 1-3 4-5 7-5s6 2 6 5c2 0 3 1 3 3s-1 3-3 3H5c-1 0-2-1-2-1z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="pillar-title">7 gün hava, <em>saat çözünürlükte.</em></div>
+      <div class="pillar-desc">OpenWeatherMap birincil, Open-Meteo fallback; ilçe seviyesinde çözünürlük, parsel koordinatına düşen saatlik seri. Redis üzerinde 30dk TTL ile cache, BullMQ ile otomatik tazeleme.</div>
+      <ul class="pillar-features">
+        <li><span>Kaynak sayısı</span><span>2 + yerel</span></li>
+        <li><span>Çözünürlük</span><span>İlçe · 9 km</span></li>
+        <li><span>Tazeleme</span><span>Her 30 dk</span></li>
+        <li><span>Parametreler</span><span>14 metrik</span></li>
+      </ul>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-num">03 — Sulama</div>
+      <div class="pillar-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2s6 6 6 11a6 6 0 01-12 0c0-5 6-11 6-11z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="pillar-title">Sulama planı, <em>evapotranspirasyonla.</em></div>
+      <div class="pillar-desc">ETo hesabı, yağış tahmini ve toprak türüne göre her parsele özel sulama takvimi. "Bu hafta Çarşamba gecesi sulama yapma" seviyesinde somut tavsiye; damla, yağmurlama veya salma için ayrı formüller.</div>
+      <ul class="pillar-features">
+        <li><span>Yöntem desteği</span><span>3 tür</span></li>
+        <li><span>Ürün şablonu</span><span>48 hazır</span></li>
+        <li><span>Su tasarrufu (pilot)</span><span>%22</span></li>
+        <li><span>Entegrasyon</span><span>IoT sensör</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE / KATMAN 4 -->
+<section class="architecture">
+  <div class="arch-inner">
+    <div class="section-label">
+      <span class="section-label-num">III.</span>
+      <span>Mimari Pozisyon</span>
+    </div>
+    <h2 class="section-title">Ekosistemin <em>dördüncü katmanı.</em></h2>
+    <p class="section-lead">TarımİKlim bağımsız bir uygulama değil; Vista tarım teknolojisi ekosisteminin veri omurgasıdır. Sera SaaS, Açık Tarla, Ziraat Haber ve Hal Fiyatları modülleri aynı iklim servisinden beslenir.</p>
+
+    <div class="layers">
+      <div class="layer">
+        <div class="layer-num">01</div>
+        <div class="layer-body">
+          <div class="layer-title">Arayüz Katmanı</div>
+          <div class="layer-desc">Son kullanıcı uygulamaları · Sera SaaS, Ziraat Haber, Hal Fiyatları · Next.js + React Native</div>
+        </div>
+        <div class="layer-tags">
+          <span class="layer-tag">Web</span>
+          <span class="layer-tag">iOS</span>
+          <span class="layer-tag">Android</span>
+        </div>
+      </div>
+
+      <div class="layer">
+        <div class="layer-num">02</div>
+        <div class="layer-body">
+          <div class="layer-title">İş Mantığı Katmanı</div>
+          <div class="layer-desc">Domain servisleri, auth, kullanıcı yönetimi · Shared-Backend üzerinden modüller arası iletişim</div>
+        </div>
+        <div class="layer-tags">
+          <span class="layer-tag">Fastify</span>
+          <span class="layer-tag">Drizzle ORM</span>
+        </div>
+      </div>
+
+      <div class="layer">
+        <div class="layer-num">03</div>
+        <div class="layer-body">
+          <div class="layer-title">Kalıcılık & Mesajlaşma</div>
+          <div class="layer-desc">MySQL · Redis cache · BullMQ iş kuyruğu · Telegram / SMTP / FCM bildirim hubu</div>
+        </div>
+        <div class="layer-tags">
+          <span class="layer-tag">MySQL</span>
+          <span class="layer-tag">Redis</span>
+          <span class="layer-tag">BullMQ</span>
+        </div>
+      </div>
+
+      <div class="layer active">
+        <div class="layer-num">04</div>
+        <div class="layer-body">
+          <div class="layer-title">Veri & AI — <em>TarımİKlim</em></div>
+          <div class="layer-desc">İklim verisi toplama, don riski modelleme, sulama optimizasyonu, verim tahmini, hastalık erken uyarısı. Tüm yukarı katmanlar bu servisten API veya widget ile beslenir.</div>
+        </div>
+        <div class="layer-tags">
+          <span class="layer-tag highlight">SEN BURADASIN</span>
+          <span class="layer-tag">OpenWeatherMap</span>
+          <span class="layer-tag">Open-Meteo</span>
+          <span class="layer-tag">ML</span>
+        </div>
+      </div>
+
+      <div class="layer">
+        <div class="layer-num">05</div>
+        <div class="layer-body">
+          <div class="layer-title">Harici Kaynaklar</div>
+          <div class="layer-desc">MGM istasyonları, TÜİK, Sentinel-2 uydu görüntüleri, IoT toprak sensörleri</div>
+        </div>
+        <div class="layer-tags">
+          <span class="layer-tag">MGM</span>
+          <span class="layer-tag">Satellite</span>
+          <span class="layer-tag">IoT</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- API & WIDGET -->
+<section class="main-section" id="api">
+  <div class="section-label">
+    <span class="section-label-num">IV.</span>
+    <span>API & Widget</span>
+  </div>
+  <h2 class="section-title">Üç satırda <em>ilk tahmininizi çekin.</em></h2>
+  <p class="section-lead" style="margin-bottom: 80px;">REST endpoint'leri veya tek satırlık iframe widget — hangisi sizin ürününüz için daha kolaysa. Aynı altyapı Bereketfide ve VistaSeed sidebar'larında şu anda çalışıyor.</p>
+
+  <div class="api-section">
+    <div>
+      <div class="code-block">
+        <div class="code-head">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-filename">terminal · curl</span>
+          <button class="code-copy">Kopyala</button>
+        </div>
+        <div class="code-body">
+<span class="c-com"># 7 günlük tahmin + don riski skoru</span><br>
+<span class="c-fn">curl</span> <span class="c-str">'https://api.tarimiklim.com/v2/forecast'</span> \<br>
+&nbsp;&nbsp;-H <span class="c-str">'Authorization: Bearer tk_live_...'</span> \<br>
+&nbsp;&nbsp;-d <span class="c-str">'{ "lat": 37.5731, "lon": 32.7734, "days": 7 }'</span><br>
+<br>
+<span class="c-com"># → response (kısaltılmış)</span><br>
+<span class="c-kw">{</span><br>
+&nbsp;&nbsp;<span class="c-key">"location"</span>: <span class="c-str">"Konya · Çumra"</span>,<br>
+&nbsp;&nbsp;<span class="c-key">"updated_at"</span>: <span class="c-str">"2026-04-17T14:32:18Z"</span>,<br>
+&nbsp;&nbsp;<span class="c-key">"frost_risk_24h"</span>: <span class="c-num">0.78</span>,<br>
+&nbsp;&nbsp;<span class="c-key">"frost_level"</span>: <span class="c-str">"critical"</span>,<br>
+&nbsp;&nbsp;<span class="c-key">"forecast"</span>: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-kw">{</span> <span class="c-key">"t"</span>: <span class="c-str">"06:00"</span>, <span class="c-key">"temp"</span>: <span class="c-num">-2.1</span>, <span class="c-key">"hum"</span>: <span class="c-num">89</span> <span class="c-kw">}</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-kw">{</span> <span class="c-key">"t"</span>: <span class="c-str">"09:00"</span>, <span class="c-key">"temp"</span>: <span class="c-num">4.8</span>, <span class="c-key">"hum"</span>: <span class="c-num">72</span> <span class="c-kw">}</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-com">// ...</span><br>
+&nbsp;&nbsp;],<br>
+&nbsp;&nbsp;<span class="c-key">"irrigation_advice"</span>: <span class="c-str">"skip_wednesday_night"</span><br>
+<span class="c-kw">}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="api-right">
+      <h3>REST API, <em>JS SDK,</em> iframe widget.</h3>
+      <p>API anahtarınızı alın, 60 saniye içinde ilk isteğinizi atın. Rate-limit 10k req/dk · yanıt p95 48ms · TR bölgesinde Frankfurt edge'i.</p>
+      <div class="api-endpoints">
+        <div class="endpoint">
+          <span class="ep-method get">GET</span>
+          <span class="ep-path">/v2/forecast</span>
+          <span class="ep-desc">7 günlük saatlik tahmin</span>
+        </div>
+        <div class="endpoint">
+          <span class="ep-method get">GET</span>
+          <span class="ep-path">/v2/frost-risk</span>
+          <span class="ep-desc">24/48/72 saat don skoru</span>
+        </div>
+        <div class="endpoint">
+          <span class="ep-method get">GET</span>
+          <span class="ep-path">/v2/irrigation/plan</span>
+          <span class="ep-desc">Parsel bazlı sulama takvimi</span>
+        </div>
+        <div class="endpoint">
+          <span class="ep-method post">POST</span>
+          <span class="ep-path">/v2/alerts/subscribe</span>
+          <span class="ep-desc">SMS/TG bildirim kaydı</span>
+        </div>
+        <div class="endpoint">
+          <span class="ep-method get">GET</span>
+          <span class="ep-path">/v2/stations/nearby</span>
+          <span class="ep-desc">En yakın MGM istasyonu</span>
+        </div>
+        <div class="endpoint">
+          <span class="ep-method get">GET</span>
+          <span class="ep-path">/widget/embed.js</span>
+          <span class="ep-desc">Tek satırlık iframe</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BIG STATS -->
+<div class="stats-strip">
+  <div class="stats-strip-inner">
+    <div class="big-stat">
+      <div class="big-stat-label">Aktif İl</div>
+      <div class="big-stat-num">81</div>
+      <div class="big-stat-desc">Türkiye'nin tamamı; ilçe seviyesinde 973 lokasyon canlı.</div>
+    </div>
+    <div class="big-stat">
+      <div class="big-stat-label">Don Tahmin Doğruluğu</div>
+      <div class="big-stat-num"><em>97.2</em><sup>%</sup></div>
+      <div class="big-stat-desc">2024 sezonu, dört faktörlü skorun 24-saat önceden doğru uyardığı oran.</div>
+    </div>
+    <div class="big-stat">
+      <div class="big-stat-label">Medyan Yanıt</div>
+      <div class="big-stat-num">48<sup>ms</sup></div>
+      <div class="big-stat-desc">Redis cache hit oranı %91; cold path bile 200ms altında.</div>
+    </div>
+    <div class="big-stat">
+      <div class="big-stat-label">Sulama Tasarrufu</div>
+      <div class="big-stat-num"><em>22</em><sup>%</sup></div>
+      <div class="big-stat-desc">Pilot çiftliklerde ETo tabanlı takvim ile ölçülen ortalama su tasarrufu.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ECOSYSTEM -->
+<section class="main-section" id="ekosistem">
+  <div class="section-label">
+    <span class="section-label-num">V.</span>
+    <span>Ekosistem Modülleri</span>
+  </div>
+  <h2 class="section-title">TarımİKlim'i <em>kim kullanıyor?</em></h2>
+  <p class="section-lead">Aynı Katman 4 servisini besleyen uygulamalar. Her biri bağımsız ürün, aynı iklim beynine bağlı.</p>
+
+  <div class="ecosystem-grid">
+    <div class="eco-card live">
+      <div class="eco-top">
+        <div class="eco-label">Tarla Yönetimi</div>
+        <div class="eco-name">Bereketfide</div>
+        <div class="eco-desc">Açık tarla çiftçisi için parsel, ekim, hasat takibi. Widget ile TarımİKlim tahminini ana ekranda gösterir.</div>
+      </div>
+      <div class="eco-meta">API · Widget · TG Bot</div>
+    </div>
+    <div class="eco-card live">
+      <div class="eco-top">
+        <div class="eco-label">Tohum & Fidan</div>
+        <div class="eco-name">VistaSeed</div>
+        <div class="eco-desc">Çiftçiye bölge bazlı tohum önerisi. TarımİKlim'in iklim profilini ürün seçiminde kullanır.</div>
+      </div>
+      <div class="eco-meta">API · İklim profili</div>
+    </div>
+    <div class="eco-card live">
+      <div class="eco-top">
+        <div class="eco-label">Sera SaaS</div>
+        <div class="eco-name">Sera Kontrol</div>
+        <div class="eco-desc">Sera ortam kontrolü; dış hava verisini TarımİKlim'den, iç ortamı sensörlerden alır.</div>
+      </div>
+      <div class="eco-meta">API · IoT köprü</div>
+    </div>
+    <div class="eco-card wip">
+      <div class="eco-top">
+        <div class="eco-label">Haber Ajansı</div>
+        <div class="eco-name">Ziraat Haber</div>
+        <div class="eco-desc">Günlük tarım içerikleri; bölgesel hava durumu modülü TarımİKlim widget'ı ile çıkar.</div>
+      </div>
+      <div class="eco-meta">Widget · v2 sprint</div>
+    </div>
+    <div class="eco-card wip">
+      <div class="eco-top">
+        <div class="eco-label">Pazar</div>
+        <div class="eco-name">Hal Fiyatları</div>
+        <div class="eco-desc">Sebze-meyve toptan fiyat takibi. Hasat tahmini için TarımİKlim verim modelini kullanacak.</div>
+      </div>
+      <div class="eco-meta">API · planlama</div>
+    </div>
+    <div class="eco-card wip">
+      <div class="eco-top">
+        <div class="eco-label">AI Modül</div>
+        <div class="eco-name">Verim Tahmini</div>
+        <div class="eco-desc">Parsel + iklim + gübre geçmişi kombinasyonu ile hasat öncesi verim tahmini.</div>
+      </div>
+      <div class="eco-meta">ML · pilot</div>
+    </div>
+    <div class="eco-card wip">
+      <div class="eco-top">
+        <div class="eco-label">Bitki Sağlığı</div>
+        <div class="eco-name">Hastalık Uyarı</div>
+        <div class="eco-desc">Nem-sıcaklık kombinasyonundan fungal hastalık olasılığı; önleyici ilaçlama takvimi.</div>
+      </div>
+      <div class="eco-meta">ML · Q3 2026</div>
+    </div>
+    <div class="eco-card">
+      <div class="eco-top">
+        <div class="eco-label">Açık Platform</div>
+        <div class="eco-name">Senin ürünün?</div>
+        <div class="eco-desc">Tarım odaklı uygulama yapıyorsan API'ye başvur; developer programı ve ücretsiz tier mevcut.</div>
+      </div>
+      <div class="eco-meta">→ dev.tarimiklim.com</div>
+    </div>
+  </div>
+</section>
+
+<!-- MEGA TYPE -->
+<div class="mega-type">Toprak <em>veriyle</em> konuşur.</div>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="final-inner">
+    <div>
+      <h2>Panel bir dakikada. <em>Entegrasyon bir öğleden sonra.</em></h2>
+    </div>
+    <div class="final-right">
+      <p>Developer tier ücretsiz — ayda 100k istek, tüm endpoint'ler, Telegram bildirim. Kredi kartı istemiyoruz. Pilot çiftçi mi arıyorsunuz? Birlikte modeli eğitelim.</p>
+      <div class="final-btns">
+        <a href="#" class="btn-final">
+          API anahtarı al
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#" class="btn-final-ghost">Demoya başla</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo" style="margin-bottom: 8px;">
+          <span class="logo-mark"></span>
+          Tarım<em>İKlim</em>
+        </div>
+        <p class="footer-tag">Çiftçinin gecesini bilen, <em>sabahına hazırlayan</em> servis.</p>
+        <p class="footer-desc">Vista Tarım Teknolojileri A.Ş. tarafından geliştirilmektedir. Türkiye merkezli; EU ve MENA bölgesi için çoklu dil desteği planlanmaktadır.</p>
+        <div class="footer-contact">
+          <div>Vista İnşaat Tarım Tek. A.Ş.</div>
+          <div>Ankara · Türkiye</div>
+          <div><a href="mailto:destek@tarimiklim.com">destek@tarimiklim.com</a></div>
+          <div><a href="#">@tarimiklim</a></div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Ürün</h4>
+        <ul>
+          <li><a href="#">Canlı Panel</a></li>
+          <li><a href="#">Don Riski Servisi</a></li>
+          <li><a href="#">Sulama Planı</a></li>
+          <li><a href="#">7 Günlük Tahmin</a></li>
+          <li><a href="#">Uyarı Sistemi</a></li>
+          <li><a href="#">Widget Galerisi</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Geliştirici</h4>
+        <ul>
+          <li><a href="#">API Referansı</a></li>
+          <li><a href="#">JS SDK</a></li>
+          <li><a href="#">Widget Kurulumu</a></li>
+          <li><a href="#">Webhook'lar</a></li>
+          <li><a href="#">Durum Sayfası</a></li>
+          <li><a href="#">Changelog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Ekosistem</h4>
+        <ul>
+          <li><a href="#">Bereketfide</a></li>
+          <li><a href="#">VistaSeed</a></li>
+          <li><a href="#">Sera Kontrol</a></li>
+          <li><a href="#">Ziraat Haber</a></li>
+          <li><a href="#">Hal Fiyatları</a></li>
+          <li><a href="#">Verim Tahmini</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Şirket</h4>
+        <ul>
+          <li><a href="#">Hakkımızda</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Kariyer</a></li>
+          <li><a href="#">Basın</a></li>
+          <li><a href="#">Gizlilik</a></li>
+          <li><a href="#">KVKK</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Vista Tarım Teknolojileri A.Ş. · Tüm hakları saklıdır.</div>
+      <div class="footer-bottom-links">
+        <a href="#">Gizlilik</a>
+        <a href="#">Şartlar</a>
+        <a href="#">Çerezler</a>
+        <a href="#">Güvenlik</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Dashboard tab interaction
+  document.querySelectorAll('.dash-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  // Copy button
+  document.querySelectorAll('.code-copy').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const originalText = btn.textContent;
+      btn.textContent = 'Kopyalandı ✓';
+      btn.style.color = '#7A9B5E';
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.color = '';
+      }, 1500);
+    });
+  });
+</script>
+
+</body>
+</html>
