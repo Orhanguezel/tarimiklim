@@ -72,7 +72,7 @@ export function HourlyForecastTable({ slots, loading, labels }: Props) {
             <tr>
               <td style={labelCell}>{labels.hadise}</td>
               {slots.map((s, i) => (
-                <td key={`hadise-${i}-${s.dt}`} style={cell}>
+                <td key={`row-hadise-cell-${i}-${s.dt || i}`} style={cell}>
                   {s.icon ? (
                     <img src={OWM_ICON(s.icon)} alt="" width={36} height={36} style={{ display: 'block', margin: '0 auto' }} />
                   ) : (
@@ -84,7 +84,7 @@ export function HourlyForecastTable({ slots, loading, labels }: Props) {
             <tr>
               <td style={labelCell}>{labels.sicaklik}</td>
               {slots.map((s, i) => (
-                <td key={`sicak-${i}-${s.dt}`} style={cell}>
+                <td key={`row-sicak-cell-${i}-${s.dt || i}`} style={cell}>
                   {s.temp}°
                 </td>
               ))}
@@ -92,7 +92,7 @@ export function HourlyForecastTable({ slots, loading, labels }: Props) {
             <tr>
               <td style={{ ...labelCell, background: '#fef9c3' }}>{labels.ruzgar}</td>
               {slots.map((s, i) => (
-                <td key={`ruzgar-${i}-${s.dt}`} style={windRowBg}>
+                <td key={`row-ruzgar-cell-${i}-${s.dt || i}`} style={windRowBg}>
                   <span
                     title={`${s.windDir} ${s.windSpeedKmh} km/h`}
                     style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}
@@ -115,7 +115,7 @@ export function HourlyForecastTable({ slots, loading, labels }: Props) {
             <tr>
               <td style={labelCell}>{labels.yagis}</td>
               {slots.map((s, i) => (
-                <td key={`yagis-${i}-${s.dt}`} style={cell}>
+                <td key={`row-yagis-cell-${i}-${s.dt || i}`} style={cell}>
                   {s.precipitationLabel}
                 </td>
               ))}
@@ -123,7 +123,7 @@ export function HourlyForecastTable({ slots, loading, labels }: Props) {
             <tr>
               <td style={labelCell}>{labels.ziraiDon}</td>
               {slots.map((s, i) => (
-                <td key={`don-${i}-${s.dt}`} style={cell}>
+                <td key={`row-don-cell-${i}-${s.dt || i}`} style={cell}>
                   {s.frostShort}
                 </td>
               ))}
@@ -131,7 +131,7 @@ export function HourlyForecastTable({ slots, loading, labels }: Props) {
             <tr>
               <td style={labelCell}>{labels.ilaclama}</td>
               {slots.map((s, i) => (
-                <td key={`ilac-${i}-${s.dt}`} style={cell}>
+                <td key={`row-ilac-cell-${i}-${s.dt || i}`} style={cell}>
                   <span
                     title={s.sprayOk ? labels.uygun : labels.uygunDegil}
                     style={{
@@ -149,7 +149,7 @@ export function HourlyForecastTable({ slots, loading, labels }: Props) {
             <tr>
               <td style={labelCell}>{labels.sicaklikStresi}</td>
               {slots.map((s, i) => (
-                <td key={`stres-${i}-${s.dt}`} style={cell}>
+                <td key={`row-stres-cell-${i}-${s.dt || i}`} style={cell}>
                   {s.tempStressLabel}
                 </td>
               ))}
@@ -157,7 +157,7 @@ export function HourlyForecastTable({ slots, loading, labels }: Props) {
             <tr>
               <td style={footLabel}>{labels.saat}</td>
               {slots.map((s, i) => (
-                <td key={`saat-${i}-${s.dt}`} style={footCell}>
+                <td key={`row-saat-cell-${i}-${s.dt || i}`} style={footCell}>
                   {s.timeRangeLabel}
                 </td>
               ))}
@@ -165,7 +165,7 @@ export function HourlyForecastTable({ slots, loading, labels }: Props) {
             <tr>
               <td style={footLabel}>{labels.gun}</td>
               {slots.map((s, i) => (
-                <td key={`gun-${i}-${s.dt}`} style={footCell}>
+                <td key={`row-gun-cell-${i}-${s.dt || i}`} style={footCell}>
                   {s.weekdayShort}
                 </td>
               ))}

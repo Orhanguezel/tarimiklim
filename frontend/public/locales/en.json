@@ -33,6 +33,24 @@
       "uygunDegil": "Not suitable",
       "loading": "Loading hourly data...",
       "footnote": "OpenWeatherMap 3-hour forecast · local time (TR)"
+    },
+    "locationSearch": {
+      "eyebrow": "YOUR LOCATION",
+      "useMyLocation": "📍 Use my location",
+      "locating": "Locating…",
+      "searchOther": "🔍 Search another place",
+      "placeholder": "Province, district, village or address…",
+      "provinces": "Provinces",
+      "addresses": "Addresses",
+      "noResults": "No results. Try a different query or enter coordinates in advanced.",
+      "searching": "Searching…",
+      "advanced": "Advanced: Enter latitude / longitude",
+      "lat": "Latitude",
+      "lon": "Longitude",
+      "apply": "Apply",
+      "geoDenied": "Location permission denied. Enable in browser settings or search manually.",
+      "geoUnavailable": "Location service unavailable. Use search to pick a place.",
+      "currentArea": "Current location"
     }
   },
   "weather": {

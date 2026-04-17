@@ -1,0 +1,217 @@
+/* ==========================================================
+   /don-uyarisi paneli — LocationSearch + WeatherDashboard
+   ========================================================== */
+
+.location-search {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-strong);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.location-search-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.location-search-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--moss);
+  margin-bottom: 0.5rem;
+}
+
+.location-search-name {
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  line-height: 1.1;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+
+.location-search-sub {
+  margin-top: 0.3rem;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.location-search-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.location-search-actions button {
+  cursor: pointer;
+  border: 1px solid var(--line);
+  font-size: 0.88rem;
+  padding: 0.7rem 1.1rem;
+}
+
+.location-search-hint {
+  margin: 0.9rem 0 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.location-search-panel {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.location-search-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+}
+
+.location-search-input:focus {
+  outline: 2px solid var(--terra);
+  outline-offset: 2px;
+}
+
+.location-search-results {
+  margin-top: 0.75rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.location-search-group-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--moss);
+  margin-bottom: 0.35rem;
+}
+
+.location-search-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-xs);
+  background: var(--paper);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.location-search-item + .location-search-item {
+  margin-top: 0.35rem;
+}
+
+.location-search-item:hover,
+.location-search-item:focus-visible {
+  background: var(--paper-dim);
+  border-color: var(--moss);
+}
+
+.location-search-item-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.location-search-item-sub {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.location-search-advanced {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.location-search-advanced summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  user-select: none;
+}
+
+.location-search-manual {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}
+
+.location-search-manual input {
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xs);
+  background: var(--paper);
+  font-family: var(--sans);
+  font-size: 0.9rem;
+}
+
+.weather-dashboard {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.weather-dashboard-title {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(1.4rem, 2.5vw, 1.75rem);
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.weather-dashboard-loading,
+.weather-dashboard-error {
+  padding: 1.25rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+}
+
+.weather-dashboard-loading {
+  background: var(--surface-strong);
+  color: var(--ink-soft);
+}
+
+.weather-dashboard-error {
+  background: rgb(194 59 44 / 6%);
+  color: var(--terra-deep);
+  border-color: rgb(194 59 44 / 22%);
+}
+
+.weather-dashboard-error-hint {
+  margin: 0.6rem 0 0;
+  font-size: 0.82rem;
+  opacity: 0.85;
+}
+
+.weather-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+@media (width <= 640px) {
+  .location-search-manual {
+    grid-template-columns: 1fr;
+  }
+  .location-search-head {
+    flex-direction: column;
+  }
+}

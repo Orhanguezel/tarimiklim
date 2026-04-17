@@ -33,6 +33,24 @@
       "uygunDegil": "Uygun degil",
       "loading": "Saatlik veri yukleniyor...",
       "footnote": "OpenWeatherMap 3 saatlik tahmin · yerel saat (TR)"
+    },
+    "locationSearch": {
+      "eyebrow": "KONUMUNUZ",
+      "useMyLocation": "📍 Konumumu kullan",
+      "locating": "Konum alınıyor…",
+      "searchOther": "🔍 Başka yer ara",
+      "placeholder": "İl, ilçe, köy veya adres…",
+      "provinces": "İller",
+      "addresses": "Adresler",
+      "noResults": "Sonuç bulunamadı. Daha farklı bir arama deneyin veya gelişmiş seçeneklerden enlem/boylam girin.",
+      "searching": "Aranıyor…",
+      "advanced": "Gelişmiş: Enlem / boylam girin",
+      "lat": "Enlem",
+      "lon": "Boylam",
+      "apply": "Uygula",
+      "geoDenied": "Konum izni reddedildi. Tarayıcı ayarlarından izin verebilir veya arama ile yer seçebilirsiniz.",
+      "geoUnavailable": "Konum servisi kullanılamıyor. Arama ile yer seçin.",
+      "currentArea": "Mevcut konum"
     }
   },
   "weather": {

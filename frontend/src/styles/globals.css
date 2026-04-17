@@ -5,6 +5,7 @@
    ============================================================ */
 
 @import './design-tokens.css';
+@import './panel.css';
 @import '@agro/shared-config/tailwind-tokens';
 @import 'tailwindcss';
 

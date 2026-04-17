@@ -40,6 +40,14 @@ export async function fetchFrostRisk(location: string): Promise<FrostRiskRespons
   return data.data;
 }
 
+export async function fetchFrostRiskByCoords(
+  lat: number,
+  lon: number,
+): Promise<FrostRiskResponse> {
+  const { data } = await api.get('/weather/frost-risk', { params: { lat, lon } });
+  return data.data;
+}
+
 export async function fetchWidgetData(location: string): Promise<WidgetDataResponse> {
   const { data } = await api.get('/weather/widget-data', { params: { location } });
   return data.data;
