@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hava widget — iframe örneği</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 1rem; }
+      .frame-wrap {
+        max-width: 720px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+        min-height: 420px;
+      }
+      iframe { display: block; width: 100%; height: 560px; border: 0; }
+    </style>
+  </head>
+  <body>
+    <h1>Örnek: hava paneli iframe</h1>
+    <p><code>src</code> değerini kendi frontend URL’niz ile değiştirin (ör. <code>http://localhost:3088/tr</code>).</p>
+    <div class="frame-wrap">
+      <!-- PUBLIC_URL: production’da https://hava.example.com/tr -->
+      <iframe
+        src="http://localhost:3088/tr"
+        title="Hava durumu"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+  </body>
+</html>

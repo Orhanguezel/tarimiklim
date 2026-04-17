@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { fetchWidgetData } from '@/lib/api';
+import type { WidgetDataResponse } from '@/types/weather';
 
 export type Brand = 'bereketfide' | 'vistaseed';
 
@@ -58,26 +59,6 @@ function shortDate(dateStr: string) {
   return d.toLocaleDateString('tr-TR', { weekday: 'short', day: 'numeric', month: 'short' });
 }
 
-interface WidgetData {
-  location: { name: string; city?: string };
-  current: {
-    temp: number;
-    feelsLike: number;
-    humidity: number;
-    windSpeed: number;
-    condition: string;
-    icon: string;
-  };
-  forecast: Array<{
-    date: string;
-    forecastDate?: string;
-    tempMin: number;
-    tempMax: number;
-    frostRisk: number;
-    condition: string;
-  }>;
-}
-
 interface Props {
   location: string;
   brand: Brand;
@@ -86,7 +67,7 @@ interface Props {
 
 export function WeatherWidget({ location, brand, apiBase }: Props) {
   const c = BRAND[brand];
-  const [data, setData] = useState<WidgetData | null>(null);
+  const [data, setData] = useState<WidgetDataResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -95,7 +76,7 @@ export function WeatherWidget({ location, brand, apiBase }: Props) {
       process.env.NEXT_PUBLIC_API_URL = apiBase;
     }
     fetchWidgetData(location)
-      .then((d) => setData(d as WidgetData))
+      .then((d) => setData(d))
       .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, [location, apiBase]);
@@ -187,10 +168,10 @@ export function WeatherWidget({ location, brand, apiBase }: Props) {
 
       {/* 3 günlük mini tahmin */}
       <div style={{ borderTop: `1px solid ${c.border}`, paddingTop: '0.65rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-        {data.forecast.slice(0, 3).map((f) => {
-          const dk = f.date ?? f.forecastDate ?? '';
+        {data.forecast.slice(0, 3).map((f, i) => {
+          const dk = f.date ?? f.forecastDate ?? `day-${i}`;
           return (
-            <div key={dk} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8rem' }}>
+            <div key={`${dk}-${i}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8rem' }}>
               <span style={{ color: c.textMuted, minWidth: 80 }}>{shortDate(dk)}</span>
               <span style={{ fontWeight: 600, color: c.text }}>
                 {Math.round(f.tempMin)}° / {Math.round(f.tempMax)}°

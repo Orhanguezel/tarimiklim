@@ -1,27 +1,51 @@
 {
-  "schemaVersion": "1",
-  "id": "tarimiklim",
-  "displayName": "TarımİKlim — Hava Durumu ve Don Uyarısı",
-  "kind": "product",
-  "ecosystemLayer": "Katman 4 — Veri ve AI",
-  "status": "in-progress",
-  "summary": "Bölgesel hava tahmini, don riski uyarısı ve sulama desteği; diğer modüllere REST ve widget olarak veri sağlayan servis katmanı.",
-  "urls": {
-    "production": ["https://tarimbilgi.com", "https://tarimbilgi.com.tr"],
-    "repository": "https://github.com/Orhanguezel/tarimiklim"
-  },
-  "paths": {
-    "backend": "backend",
-    "frontend": "frontend"
-  },
-  "stack": {
-    "backend": "Fastify 5, Drizzle ORM, MySQL, BullMQ, Redis",
-    "frontend": "Next.js 16, next-intl (tr/en)"
-  },
-  "ports": {
-    "api": 8088,
-    "frontend": 3088
-  },
-  "sharedPackages": ["@agro/shared-backend", "@agro/shared-types"],
-  "primaryDocs": ["README.md", "PROJE-DEVIR-NOTU.md", "EKOSISTEM-PLAN.md", "CLAUDE.md"]
+  "title": "TarimIklim",
+  "slug": "tarimiklim",
+  "summary": "Bolgesel hava tahmini, don riski uyarisi ve sulama destegi saglayan tarim iklim servisi. Diger ekosistem modulleri icin REST API ve widget olarak iklim verisi saglayan servis katmani.",
+  "description": "Tarim Dijital Ekosistemi'nin Katman 4 veri ve AI katmanini olusturan iklim servisi. Fastify backend, BullMQ/Redis ile otomatik veri guncelleme ve Next.js frontend ile uretici dostu bolgesel iklim bilgisi sunar.",
+  "category": "AGRITECH PLATFORM",
+  "services": [
+    "Backend Development",
+    "Weather Data Integration",
+    "Real-time API",
+    "Frontend Development"
+  ],
+  "techs": [
+    "TypeScript",
+    "Next.js",
+    "Fastify",
+    "Drizzle ORM",
+    "MySQL",
+    "BullMQ",
+    "Redis",
+    "Bun",
+    "next-intl"
+  ],
+  "features": [
+    "Bolgesel hava tahmini (7 gunluk)",
+    "Don riski uyari sistemi (0-100 skor)",
+    "Sulama destek tavsiyeleri",
+    "Diger ekosistem modulleri icin REST API",
+    "Widget entegrasyon destegi",
+    "Telegram bildirim entegrasyonu"
+  ],
+  "designHighlights": [
+    "Ekosistem genelinde iklim veri servisi",
+    "IoT Sensor, Sera Yonetim ve Verim Tahmini modullerine veri saglayici"
+  ],
+  "featured": false,
+  "displayOrder": 30,
+  "clientName": "Own Project — Tarim Dijital Ekosistemi",
+  "status": "in-development",
+  "startDate": "2026-03-01",
+  "completeDate": null,
+  "completionTimeLabel": "Aktif gelistirme",
+  "repoUrl": "https://github.com/Orhanguezel/tarimiklim",
+  "websiteUrl": "https://tarimiklim.com",
+  "demoUrl": null,
+  "featuredImage": null,
+  "featuredImageAlt": "TarimIklim — Tarimsal Hava ve Don Uyari Servisi",
+  "resumeTitle": "TarimIklim",
+  "resumeSubtitle": "Tarimsal Hava Durumu ve Don Uyari Servisi",
+  "excludeFromPortfolio": false
 }

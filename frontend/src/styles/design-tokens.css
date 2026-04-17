@@ -1,0 +1,72 @@
+/* ============================================================
+   TarımİKlim Premium Design Tokens
+   Kaynak: tarimiklim-premium.html :root
+   Kural: Hiçbir component hard-code renk/font kullanmaz —
+          sadece bu custom property'leri referans alır.
+   ============================================================ */
+
+:root {
+  /* ── Marka Renk Paleti ──────────────────────────────────── */
+  --paper:       #F1EBDD;   /* Ana arka plan (papirus/krem) */
+  --paper-dim:   #E8DFCB;   /* Hafif koyu (architecture bölüm bg) */
+  --paper-deep:  #DDD1B6;   /* Daha derin (hover, wip badge) */
+
+  --ink:         #141B14;   /* Birincil metin / dark bg */
+  --ink-soft:    #2B3527;   /* İkincil metin */
+
+  --pine:        #1E3023;   /* Alert bar, nav cta, logo, stats bg */
+  --moss:        #3B5A3C;   /* Bölüm etiket rengi, hover */
+  --sage:        #7A8C6A;   /* İkincil vurgu, separator */
+
+  --terra:       #B8553A;   /* Birincil vurgu (nav hover, pillar num) */
+  --terra-deep:  #8E3F2C;   /* Koyu vurgu (h3 italics, link hover) */
+
+  --wheat:       #C69B3A;   /* Ticker em rengi, stats, wc-temp sup */
+  --sky:         #5D7A8C;   /* Rezerv (harita, UI) */
+  --danger:      #C23B2C;   /* Kritik uyarı rengi */
+
+  /* ── Çizgiler ve Yüzeyler ────────────────────────────────── */
+  --line:        rgba(20, 27, 20, 0.14);
+  --line-soft:   rgba(20, 27, 20, 0.08);
+  --surface-strong: rgba(255, 252, 246, 0.92);
+  --surface-panel:  rgba(245, 239, 226, 0.78);
+
+  /* ── Gölgeler ────────────────────────────────────────────── */
+  --shadow-soft: 0 18px 40px rgba(20, 27, 20, 0.10);
+  --shadow-card: 0 24px 60px rgba(30, 48, 35, 0.12);
+  --shadow-weather-card: 0 30px 60px -30px rgba(20, 27, 20, 0.40);
+
+  /* ── Border Radius ───────────────────────────────────────── */
+  --radius-xs:   12px;
+  --radius-sm:   20px;
+  --radius-md:   28px;
+  --radius-lg:   40px;
+  --radius-pill: 999px;
+
+  /* ── Layout ──────────────────────────────────────────────── */
+  --container-max: 1440px;
+  --container-pad: clamp(20px, 4vw, 32px);
+  --section-gap:   clamp(80px, 10vw, 120px);
+
+  /* ── Tipografi — Font family değişkenleri ────────────────── */
+  /* Gerçek font değerleri layout.tsx'te next/font ile inject edilir.
+     Buradaki değerler sadece fallback. */
+  --font-display: "Space Grotesk", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
+
+  /* Alias — component'ler bu kısa adları kullanır */
+  --display: var(--font-display);
+  --sans:    var(--font-sans);
+  --mono:    var(--font-mono);
+
+  /* ── Geçiş Hızları ───────────────────────────────────────── */
+  --transition-fast:   0.15s ease;
+  --transition-base:   0.25s ease;
+  --transition-slow:   0.4s ease;
+
+  /* ── Z-index Katmanları ──────────────────────────────────── */
+  --z-base:    3;
+  --z-sticky: 100;
+  --z-modal:  1000;
+}

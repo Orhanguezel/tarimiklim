@@ -1,51 +1,39 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { api, fetchHourlyForecast, fetchLocations, fetchWeather, type HourlySlot } from '@/lib/api';
-import { ForecastCard, type ForecastDay } from '@/components/ForecastCard';
+import { useSearchParams } from 'next/navigation';
+import { api, fetchHourlyForecast, fetchWeather } from '@/lib/api';
+import type { ForecastDay, HourlySlot } from '@/types/weather';
+import { ForecastCard } from '@/components/ForecastCard';
 import { FrostAlertBanner } from '@/components/FrostAlertBanner';
 import { HourlyForecastTable } from '@/components/HourlyForecastTable';
-import { LocationSelector, type LocationOption } from '@/components/LocationSelector';
+import { LocationSearch, type SelectedLocation } from '@/components/LocationSearch';
+import { saveLocation } from '@/lib/user-location';
 
-const DEFAULT_LOC: LocationOption = {
-  id: 'default-istanbul',
-  label: 'İstanbul',
-  lat: 41.0082,
-  lon: 28.9784,
-};
-
-function mapLocations(raw: unknown): LocationOption[] {
-  const items = (raw as { items?: Record<string, unknown>[] })?.items ?? [];
-  const out: LocationOption[] = [];
-  for (const it of items) {
-    const id = String(it.id ?? it.slug ?? `${it.latitude}-${it.longitude}`);
-    const lat = Number(it.latitude);
-    const lon = Number(it.longitude);
-    if (Number.isNaN(lat) || Number.isNaN(lon)) continue;
-    const label = String(it.name ?? it.city ?? id);
-    out.push({ id, label, lat, lon });
-  }
-  return out.length ? out : [DEFAULT_LOC];
-}
-
-function dedupeForecastDays(list: Record<string, unknown>[]): ForecastDay[] {
+function dedupeForecastDays(list: ForecastDay[]): ForecastDay[] {
   const seen = new Set<string>();
-  const mapped: ForecastDay[] = [];
-  for (const f of list) {
-    const rawDate = String(f.date ?? f.forecastDate ?? '');
-    const dayKey = rawDate.length >= 10 ? rawDate.slice(0, 10) : rawDate;
-    if (!dayKey || seen.has(dayKey)) continue;
+  const out: ForecastDay[] = [];
+  for (let i = 0; i < list.length; i++) {
+    const f = list[i];
+    const rawDate = String(f.date || f.forecastDate || '');
+    const dayKey =
+      rawDate && rawDate !== 'undefined'
+        ? rawDate.length >= 10
+          ? rawDate.slice(0, 10)
+          : rawDate
+        : `unknown-${i}`;
+    if (seen.has(dayKey)) continue;
     seen.add(dayKey);
-    mapped.push({
-      date: rawDate,
-      tempMin: Number(f.tempMin),
-      tempMax: Number(f.tempMax),
+    out.push({
+      ...f,
+      date: dayKey,
+      tempMin: Number(f.tempMin || 0),
+      tempMax: Number(f.tempMax || 0),
       frostRisk: Number(f.frostRisk ?? 0),
-      condition: String(f.condition ?? ''),
     });
   }
-  return mapped;
+  return out;
 }
 
 export function WeatherDashboard() {
@@ -53,40 +41,30 @@ export function WeatherDashboard() {
   const td = useTranslations('home.dashboard');
   const th = useTranslations('home.hourly');
   const tw = useTranslations('weather');
-  const [locations, setLocations] = useState<LocationOption[]>([]);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const urlInitRef = useRef(false);
+  const [active, setActive] = useState<SelectedLocation | null>(null);
   const [days, setDays] = useState<ForecastDay[]>([]);
   const [hourlySlots, setHourlySlots] = useState<HourlySlot[]>([]);
   const [hourlyLoading, setHourlyLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const locData = await fetchLocations();
-        const opts = mapLocations(locData);
-        if (!cancelled) {
-          setLocations(opts);
-          setSelectedId(opts[0]?.id ?? null);
-        }
-      } catch {
-        if (!cancelled) {
-          setLocations([DEFAULT_LOC]);
-          setSelectedId(DEFAULT_LOC.id);
-        }
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
+  const handleLocationChange = useCallback((loc: SelectedLocation) => {
+    setActive(loc);
   }, []);
 
-  const active = useMemo(
-    () => locations.find((l) => l.id === selectedId) ?? locations[0] ?? DEFAULT_LOC,
-    [locations, selectedId],
-  );
+  useEffect(() => {
+    if (urlInitRef.current) return;
+    const lat = Number(searchParams.get('lat'));
+    const lon = Number(searchParams.get('lon'));
+    const name = searchParams.get('name');
+    if (!Number.isFinite(lat) || !Number.isFinite(lon) || !name) return;
+    urlInitRef.current = true;
+    const loc: SelectedLocation = { lat, lon, name, source: 'search' };
+    setActive(loc);
+    saveLocation({ lat, lon, name, source: 'search' });
+  }, [searchParams]);
 
   useEffect(() => {
     if (!active) return;
@@ -96,10 +74,9 @@ export function WeatherDashboard() {
     setErr(null);
     (async () => {
       try {
-        const raw = await fetchWeather(active.lat, active.lon, 7);
-        const list = raw?.forecasts ?? [];
-        const mapped = dedupeForecastDays(list as Record<string, unknown>[]);
-        if (!cancelled) setDays(mapped);
+        const res = await fetchWeather(active.lat, active.lon, 7);
+        const list = res?.forecasts ?? [];
+        if (!cancelled) setDays(dedupeForecastDays(list));
       } catch (e) {
         if (!cancelled) {
           const msg = e instanceof Error ? e.message : 'unknown';
@@ -147,7 +124,11 @@ export function WeatherDashboard() {
     return { level: 'none' as const, max };
   }, [days]);
 
-  const labels = { tempMin: tw('tempMin'), tempMax: tw('tempMax'), frostRisk: tw('frostRisk') };
+  const labels = {
+    tempMin: tw('tempMin'),
+    tempMax: tw('tempMax'),
+    frostRisk: tw('frostRisk'),
+  };
   const hourlyLabels = {
     title: th('title'),
     hadise: th('hadise'),
@@ -165,72 +146,61 @@ export function WeatherDashboard() {
     footnote: th('footnote'),
   };
 
-  if (loading && days.length === 0 && !err) {
-    return (
-      <section
-        style={{
-          marginTop: '2rem',
-          padding: '1.25rem',
-          borderRadius: 12,
-          background: 'var(--color-surface, #f4f4f5)',
-        }}
-      >
-        <p style={{ margin: 0, color: 'var(--color-text-secondary)' }}>{t('loading')}</p>
-      </section>
-    );
-  }
-
-  if (err) {
-    return (
-      <section
-        style={{
-          marginTop: '2rem',
-          padding: '1.25rem',
-          borderRadius: 12,
-          background: '#fef2f2',
-          color: '#991b1b',
-        }}
-      >
-        <p style={{ margin: 0 }}>{err}</p>
-        <p style={{ margin: '0.75rem 0 0', fontSize: '0.875rem', opacity: 0.9 }}>
-          {t('hint', { url: String(api.defaults.baseURL) })}
-        </p>
-      </section>
-    );
-  }
-
   return (
-    <section style={{ marginTop: '2rem' }}>
-      <LocationSelector
-        options={locations}
-        valueId={selectedId}
-        onChange={setSelectedId}
-        label={td('selectLocation')}
+    <section className="weather-dashboard">
+      <LocationSearch
+        value={active}
+        onChange={handleLocationChange}
+        initialMode={searchParams.get('edit') === '1' ? 'search' : 'idle'}
       />
-      <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--color-text)' }}>
-        {t('sectionTitle', { place: active.label })}
-      </h2>
-      <FrostAlertBanner
-        level={frostLevel.level}
-        message={
-          frostLevel.level === 'high'
-            ? td('bannerHigh', { max: String(frostLevel.max) })
-            : td('bannerMedium', { max: String(frostLevel.max) })
-        }
-      />
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-          gap: '0.75rem',
-        }}
-      >
-        {days.map((d) => {
-          const dk = String(d.date).slice(0, 10) || d.date;
-          return <ForecastCard key={dk} day={d} labels={labels} />;
-        })}
-      </div>
-      <HourlyForecastTable slots={hourlySlots} loading={hourlyLoading} labels={hourlyLabels} />
+
+      {active ? (
+        <>
+          <header className="weather-dashboard-head">
+            <span className="weather-dashboard-eyebrow">{td('selectLocation')}</span>
+            <h2 className="weather-dashboard-title">
+              {t('sectionTitle', { place: active.name })}
+            </h2>
+          </header>
+          {err ? (
+            <div className="weather-dashboard-error">
+              <p>{err}</p>
+              <p className="weather-dashboard-error-hint">
+                {t('hint', { url: String(api.defaults.baseURL) })}
+              </p>
+            </div>
+          ) : loading && days.length === 0 ? (
+            <div className="weather-dashboard-loading">
+              <p>{t('loading')}</p>
+            </div>
+          ) : (
+            <>
+              <FrostAlertBanner
+                level={frostLevel.level}
+                message={
+                  frostLevel.level === 'high'
+                    ? td('bannerHigh', { max: String(frostLevel.max) })
+                    : td('bannerMedium', { max: String(frostLevel.max) })
+                }
+              />
+              <div className="forecast-grid">
+                {days.map((d, i) => (
+                  <ForecastCard
+                    key={`forecast-card-${d.date || 'idx'}-${i}`}
+                    day={d}
+                    labels={labels}
+                  />
+                ))}
+              </div>
+              <HourlyForecastTable
+                slots={hourlySlots}
+                loading={hourlyLoading}
+                labels={hourlyLabels}
+              />
+            </>
+          )}
+        </>
+      ) : null}
     </section>
   );
 }

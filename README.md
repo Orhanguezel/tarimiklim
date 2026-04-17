@@ -1,6 +1,6 @@
 # TarımİKlim — Hava Durumu ve Don Uyarısı
 
-**Canlı:** [tarimbilgi.com](https://tarimbilgi.com) · [tarimbilgi.com.tr](https://tarimbilgi.com.tr)  
+**Canlı:** [tarimiklim.com](https://tarimiklim.com) · [tarimiklim.com.tr](https://tarimiklim.com.tr)  
 **Repo:** [github.com/Orhanguezel/tarimiklim](https://github.com/Orhanguezel/tarimiklim)
 
 Ekosistem **Katman 4 (Veri & AI)** altında çalışan çevresel veri servisi: 7 günlük tahmin, don riski, sulama planlaması desteği. Bağımsız ürün değil — sera, açık tarla, haber portalı gibi modüllere **API ve widget olarak veri sağlar**.
@@ -41,13 +41,13 @@ Diğer projelerde iframe ile gömülebilir:
 ```html
 <!-- bereketfide.com sidebar'ı -->
 <iframe
-  src="https://tarimbilgi.com/widget/bereketfide?location=antalya-merkez"
+  src="https://tarimiklim.com/widget/bereketfide?location=antalya-merkez"
   width="300" height="360" frameborder="0" scrolling="no"
 ></iframe>
 
 <!-- vistaseed.com.tr sidebar'ı -->
 <iframe
-  src="https://tarimbilgi.com/widget/vistaseed?location=antalya-merkez"
+  src="https://tarimiklim.com/widget/vistaseed?location=antalya-merkez"
   width="300" height="360" frameborder="0" scrolling="no"
 ></iframe>
 ```
