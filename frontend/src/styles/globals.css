@@ -556,6 +556,19 @@ img, svg, video { display: block; max-width: 100%; }
   font-size: 24px;
   font-weight: 400;
 }
+.weather-card-edit {
+  display: inline-block;
+  margin-top: 20px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(241, 235, 221, 0.6);
+  transition: color var(--transition-fast);
+  position: relative;
+  z-index: 2;
+}
+.weather-card-edit:hover { color: var(--wheat); }
 
 /* Hero alert card (frost badge) */
 .weather-alert-card {
@@ -1177,10 +1190,15 @@ img, svg, video { display: block; max-width: 100%; }
 }
 .site-footer-logo {
   display: block;
-  height: 160px;
+  height: 120px;
   width: auto;
   max-width: 100%;
   object-fit: contain;
+  background: var(--paper);
+  padding: 16px 24px;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+  align-self: flex-start;
 }
 .site-footer-wordmark {
   font-family: var(--display);

@@ -138,7 +138,9 @@
             "value": "-2°"
           }
         },
-        "loading": "Loading…"
+        "loading": "Loading…",
+        "edit": "Wrong location? Correct",
+        "editLowAccuracy": "Approximate (±{km} km). Correct"
       },
       "alert": {
         "eyebrow": {

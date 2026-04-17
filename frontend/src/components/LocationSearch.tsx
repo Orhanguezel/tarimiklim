@@ -43,6 +43,8 @@ const DEFAULT_FALLBACK: SelectedLocation = {
 interface Props {
   value: SelectedLocation | null;
   onChange: (loc: SelectedLocation) => void;
+  /** İlk mount'ta arama modunda aç (hero'dan "düzelt" linki geldiğinde true). */
+  initialMode?: Mode;
 }
 
 function matchProvinces(q: string): Province[] {
@@ -57,9 +59,9 @@ function formatCoord(n: number): string {
   return n.toFixed(4);
 }
 
-export function LocationSearch({ value, onChange }: Props) {
+export function LocationSearch({ value, onChange, initialMode = 'idle' }: Props) {
   const t = useTranslations('home.locationSearch');
-  const [mode, setMode] = useState<Mode>('idle');
+  const [mode, setMode] = useState<Mode>(initialMode);
   const [query, setQuery] = useState('');
   const [remoteResults, setRemoteResults] = useState<GeocodeResult[]>([]);
   const [searching, setSearching] = useState(false);

@@ -148,7 +148,11 @@ export function WeatherDashboard() {
 
   return (
     <section className="weather-dashboard">
-      <LocationSearch value={active} onChange={handleLocationChange} />
+      <LocationSearch
+        value={active}
+        onChange={handleLocationChange}
+        initialMode={searchParams.get('edit') === '1' ? 'search' : 'idle'}
+      />
 
       {active ? (
         <>

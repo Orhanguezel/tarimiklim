@@ -138,7 +138,9 @@
             "value": "-2°"
           }
         },
-        "loading": "Veri alınıyor…"
+        "loading": "Veri alınıyor…",
+        "edit": "Konum yanlış mı? Düzelt",
+        "editLowAccuracy": "Konum tahmini (±{km} km). Düzelt"
       },
       "alert": {
         "eyebrow": {

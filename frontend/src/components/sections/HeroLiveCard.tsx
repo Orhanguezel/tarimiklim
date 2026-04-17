@@ -1,10 +1,11 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { fetchCurrentWeather, fetchFrostRiskByCoords } from '@/lib/api';
 import { reverseGeocode } from '@/lib/geocoding';
 import {
+  LOW_ACCURACY_THRESHOLD_M,
   readSaved,
   requestBrowserLocation,
   saveLocation,
@@ -20,6 +21,7 @@ interface Loc {
   name: string;
   subtitle?: string;
   source: SavedLocation['source'];
+  accuracy?: number;
 }
 
 const FALLBACK: Loc = {
@@ -38,6 +40,8 @@ function formatCoord(lat: number, lon: number): string {
 
 export function HeroLiveCard() {
   const t = useTranslations('premium.hero');
+  const locale = useLocale();
+  const editHref = `/${locale}/don-uyarisi?edit=1`;
   const [loc, setLoc] = useState<Loc | null>(null);
   const [current, setCurrent] = useState<CurrentWeather | null>(null);
   const [frost, setFrost] = useState<FrostRiskResponse | null>(null);
@@ -61,16 +65,22 @@ export function HeroLiveCard() {
     initRef.current = true;
     (async () => {
       const saved = readSaved();
-      if (saved) {
+      const savedIsUsable =
+        !!saved &&
+        (saved.source !== 'geolocation' ||
+          (typeof saved.accuracy === 'number' &&
+            saved.accuracy <= LOW_ACCURACY_THRESHOLD_M));
+      if (saved && savedIsUsable) {
         setLoc({
           lat: saved.lat,
           lon: saved.lon,
           name: saved.name,
           source: saved.source,
+          accuracy: saved.accuracy,
         });
         return;
       }
-      const geo = await requestBrowserLocation(8000);
+      const geo = await requestBrowserLocation(15000);
       if (geo.status === 'granted' && geo.lat != null && geo.lon != null) {
         const meta = await resolveSubtitle(geo.lat, geo.lon);
         const next: Loc = {
@@ -79,9 +89,16 @@ export function HeroLiveCard() {
           name: meta?.name || t('currentArea'),
           subtitle: meta?.subtitle,
           source: 'geolocation',
+          accuracy: geo.accuracy,
         };
         setLoc(next);
-        saveLocation({ lat: next.lat, lon: next.lon, name: next.name, source: 'geolocation' });
+        saveLocation({
+          lat: next.lat,
+          lon: next.lon,
+          name: next.name,
+          source: 'geolocation',
+          accuracy: geo.accuracy,
+        });
         return;
       }
       setLoc(FALLBACK);
@@ -128,6 +145,10 @@ export function HeroLiveCard() {
 
   const locName = loc?.name ?? '—';
   const locSub = loc?.subtitle ?? (loc ? formatCoord(loc.lat, loc.lon) : '');
+  const isLowAccuracy =
+    loc?.source === 'geolocation' &&
+    typeof loc.accuracy === 'number' &&
+    loc.accuracy > 5_000;
 
   const alertTitle =
     alertTier === 'critical'
@@ -167,6 +188,14 @@ export function HeroLiveCard() {
             </div>
           ))}
         </div>
+        <a href={editHref} className="weather-card-edit">
+          {isLowAccuracy
+            ? t('card.editLowAccuracy', {
+                km: Math.round((loc?.accuracy ?? 0) / 1000),
+              })
+            : t('card.edit')}
+          <span aria-hidden="true"> →</span>
+        </a>
       </article>
       <article className="weather-alert-card" data-tier={alertTier}>
         <div className="weather-alert-eyebrow">{t(`alert.eyebrow.${alertTier}`)}</div>
