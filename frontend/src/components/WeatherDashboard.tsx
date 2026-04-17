@@ -37,7 +37,8 @@ function dedupeForecastDays(list: ForecastDay[]): ForecastDay[] {
     const dayKey = rawDate.length >= 10 ? rawDate.slice(0, 10) : rawDate;
     if (!dayKey || seen.has(dayKey)) continue;
     seen.add(dayKey);
-    out.push(f);
+    // Normalize f to always have a valid date for component keys
+    out.push({ ...f, date: rawDate });
   }
   return out;
 }
@@ -219,9 +220,9 @@ export function WeatherDashboard() {
           gap: '0.75rem',
         }}
       >
-        {days.map((d) => {
-          const dk = String(d.date).slice(0, 10) || d.date;
-          return <ForecastCard key={dk} day={d} labels={labels} />;
+        {days.map((d, i) => {
+          const dk = (d.date && d.date.length >= 10) ? d.date.slice(0, 10) : d.date || `day-${i}`;
+          return <ForecastCard key={`${dk}-${i}`} day={d} labels={labels} />;
         })}
       </div>
       <HourlyForecastTable slots={hourlySlots} loading={hourlyLoading} labels={hourlyLabels} />

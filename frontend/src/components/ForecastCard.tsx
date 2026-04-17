@@ -1,12 +1,6 @@
 'use client';
 
-export type ForecastDay = {
-  date: string;
-  tempMin: number;
-  tempMax: number;
-  frostRisk: number;
-  condition: string;
-};
+import type { ForecastDay } from '@/types/weather';
 
 type Props = {
   day: ForecastDay;
