@@ -43,8 +43,8 @@ export async function generateMetadata({
     fetchSiteMedia(locale),
   ]);
 
-  const ogImage = media.logo ?? '/brand/og-image.svg';
-  const favicon = media.favicon ?? '/brand/favicon.svg';
+  const ogImage = media.logo;
+  const favicon = media.favicon;
   const appleTouch = media.appleTouchIcon ?? favicon;
 
   return {
@@ -59,23 +59,15 @@ export async function generateMetadata({
       siteName: 'TarımİKlim',
       locale,
       type: 'website',
-      images: [
-        {
-          url: ogImage,
-          width: 1200,
-          height: 630,
-          alt: 'TarımİKlim',
-        },
-      ],
+      ...(ogImage
+        ? { images: [{ url: ogImage, width: 1200, height: 630, alt: 'TarımİKlim' }] }
+        : {}),
     },
     twitter: {
       card: 'summary_large_image',
-      images: [ogImage],
+      ...(ogImage ? { images: [ogImage] } : {}),
     },
-    icons: {
-      icon: favicon,
-      apple: appleTouch,
-    },
+    ...(favicon ? { icons: { icon: favicon, apple: appleTouch ?? favicon } } : {}),
   };
 }
 
