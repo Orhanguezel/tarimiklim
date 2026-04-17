@@ -2,28 +2,31 @@
 
 import type { ForecastDay } from '@/types/weather';
 
-type Props = {
+interface Props {
   day: ForecastDay;
   labels: { tempMin: string; tempMax: string; frostRisk: string };
-};
+}
+
+function riskTier(score: number): 'ok' | 'warn' | 'alert' | 'critical' {
+  if (score >= 70) return 'critical';
+  if (score >= 40) return 'alert';
+  if (score >= 15) return 'warn';
+  return 'ok';
+}
 
 export function ForecastCard({ day, labels }: Props) {
   const dayKey = day.date.length >= 10 ? day.date.slice(0, 10) : day.date;
+  const tier = riskTier(day.frostRisk);
   return (
-    <article
-      style={{
-        padding: '0.75rem',
-        borderRadius: 10,
-        background: 'var(--color-surface, #f4f4f5)',
-        border: '1px solid var(--color-border, #e4e4e7)',
-      }}
-    >
-      <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>{dayKey}</div>
-      <div style={{ fontWeight: 600, marginTop: 4 }}>
-        {labels.tempMin}: {day.tempMin.toFixed(1)}° · {labels.tempMax}: {day.tempMax.toFixed(1)}°
+    <article className="forecast-card" data-tier={tier}>
+      <div className="forecast-card-date">{dayKey}</div>
+      <div className="forecast-card-temps">
+        <span className="forecast-card-temps-min">{day.tempMin.toFixed(1)}°</span>
+        {' / '}
+        <span className="forecast-card-temps-max">{day.tempMax.toFixed(1)}°</span>
       </div>
-      <div style={{ fontSize: '0.85rem', marginTop: 4 }}>{day.condition}</div>
-      <div style={{ fontSize: '0.8rem', marginTop: 6, color: '#b45309' }}>
+      <div className="forecast-card-cond">{day.condition}</div>
+      <div className="forecast-card-risk">
         {labels.frostRisk}: {day.frostRisk}
       </div>
     </article>

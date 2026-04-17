@@ -4,6 +4,7 @@ import { WeatherDashboard } from '@/components/WeatherDashboard';
 import { AlertBar } from '@/components/sections/AlertBar';
 import { SiteNav } from '@/components/sections/SiteNav';
 import { SiteFooter } from '@/components/sections/SiteFooter';
+import { fetchSiteMedia } from '@/lib/site-settings';
 
 export async function generateMetadata({
   params,
@@ -21,14 +22,15 @@ export async function generateMetadata({
 
 export default async function PanelPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const media = await fetchSiteMedia(locale);
   return (
     <main className="premium-shell">
       <AlertBar />
-      <SiteNav locale={locale} />
-      <section className="container-wide container-section">
+      <SiteNav locale={locale} logoUrl={media.logo} />
+      <section className="panel-shell">
         <WeatherDashboard />
       </section>
-      <SiteFooter />
+      <SiteFooter logoUrl={media.logo} />
     </main>
   );
 }

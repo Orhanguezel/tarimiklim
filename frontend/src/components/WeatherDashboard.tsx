@@ -152,9 +152,12 @@ export function WeatherDashboard() {
 
       {active ? (
         <>
-          <h2 className="weather-dashboard-title">
-            {t('sectionTitle', { place: active.name })}
-          </h2>
+          <header className="weather-dashboard-head">
+            <span className="weather-dashboard-eyebrow">{td('selectLocation')}</span>
+            <h2 className="weather-dashboard-title">
+              {t('sectionTitle', { place: active.name })}
+            </h2>
+          </header>
           {err ? (
             <div className="weather-dashboard-error">
               <p>{err}</p>
@@ -176,7 +179,7 @@ export function WeatherDashboard() {
                     : td('bannerMedium', { max: String(frostLevel.max) })
                 }
               />
-              <div className="weather-dashboard-grid">
+              <div className="forecast-grid">
                 {days.map((d, i) => (
                   <ForecastCard
                     key={`forecast-card-${d.date || 'idx'}-${i}`}

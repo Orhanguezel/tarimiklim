@@ -1,11 +1,10 @@
 'use client';
 
-import type { CSSProperties } from 'react';
-import type { HourlySlot } from '@/lib/api';
+import type { HourlySlot } from '@/types/weather';
 
 const OWM_ICON = (icon: string) => `https://openweathermap.org/img/wn/${icon}@2x.png`;
 
-type Labels = {
+interface Labels {
   title: string;
   hadise: string;
   sicaklik: string;
@@ -20,160 +19,113 @@ type Labels = {
   uygunDegil: string;
   loading: string;
   footnote: string;
-};
+}
 
-type Props = {
+interface Props {
   slots: HourlySlot[];
   loading: boolean;
   labels: Labels;
-};
+}
+
+function frostTier(score: number): 'low' | 'medium' | 'high' {
+  if (score >= 70) return 'high';
+  if (score >= 30) return 'medium';
+  return 'low';
+}
 
 export function HourlyForecastTable({ slots, loading, labels }: Props) {
   if (loading) {
     return (
-      <section style={{ marginTop: '1.5rem' }}>
-        <h3 style={{ fontSize: '1.1rem', marginBottom: '0.75rem', color: 'var(--color-text)' }}>{labels.title}</h3>
-        <p style={{ color: 'var(--color-text-secondary)', margin: 0 }}>{labels.loading}</p>
+      <section className="hourly-block">
+        <div className="hourly-head">
+          <h3 className="hourly-title">{labels.title}</h3>
+        </div>
+        <p className="hourly-footnote">{labels.loading}</p>
       </section>
     );
   }
-
   if (!slots.length) return null;
 
-  const cell: CSSProperties = {
-    border: '1px solid #e2e8f0',
-    padding: '0.35rem 0.5rem',
-    textAlign: 'center',
-    fontSize: '0.8rem',
-    verticalAlign: 'middle',
-    minWidth: 72,
-    background: '#fff',
-  };
-  const labelCell: React.CSSProperties = {
-    ...cell,
-    textAlign: 'left',
-    fontWeight: 600,
-    background: '#f8fafc',
-    position: 'sticky',
-    left: 0,
-    zIndex: 1,
-    minWidth: 120,
-  };
-  const windRowBg = { ...cell, background: '#fffbeb' };
-  const footCell: React.CSSProperties = { ...cell, background: '#f1f5f9', fontSize: '0.75rem' };
-  const footLabel: React.CSSProperties = { ...labelCell, background: '#e2e8f0' };
-
   return (
-    <section style={{ marginTop: '1.5rem' }}>
-      <h3 style={{ fontSize: '1.1rem', marginBottom: '0.75rem', color: 'var(--color-text)' }}>{labels.title}</h3>
-      <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', border: '1px solid #e2e8f0', borderRadius: 8 }}>
-        <table style={{ borderCollapse: 'collapse', width: '100%', minWidth: slots.length * 76 + 130 }}>
+    <section className="hourly-block">
+      <div className="hourly-head">
+        <h3 className="hourly-title">{labels.title}</h3>
+        <span className="hourly-footnote">{labels.footnote}</span>
+      </div>
+      <div className="hourly-scroll">
+        <table className="hourly-table">
           <tbody>
-            <tr>
-              <td style={labelCell}>{labels.hadise}</td>
+            <tr data-kind="cond">
+              <td className="hourly-row-label">{labels.hadise}</td>
               {slots.map((s, i) => (
-                <td key={`row-hadise-cell-${i}-${s.dt || i}`} style={cell}>
-                  {s.icon ? (
-                    <img src={OWM_ICON(s.icon)} alt="" width={36} height={36} style={{ display: 'block', margin: '0 auto' }} />
-                  ) : (
-                    '—'
-                  )}
+                <td key={`h-cond-${i}-${s.dt || i}`}>
+                  {s.icon ? <img src={OWM_ICON(s.icon)} alt="" width={36} height={36} /> : '—'}
                 </td>
               ))}
             </tr>
-            <tr>
-              <td style={labelCell}>{labels.sicaklik}</td>
+            <tr data-kind="temp">
+              <td className="hourly-row-label">{labels.sicaklik}</td>
               {slots.map((s, i) => (
-                <td key={`row-sicak-cell-${i}-${s.dt || i}`} style={cell}>
-                  {s.temp}°
+                <td key={`h-temp-${i}-${s.dt || i}`}>{s.temp}°</td>
+              ))}
+            </tr>
+            <tr data-kind="wind">
+              <td className="hourly-row-label">{labels.ruzgar}</td>
+              {slots.map((s, i) => (
+                <td key={`h-wind-${i}-${s.dt || i}`} title={`${s.windDir} ${s.windSpeedKmh} km/h`}>
+                  <span style={{ display: 'inline-block', transform: `rotate(${s.windDeg + 180}deg)` }}>↑</span>{' '}
+                  <small>{s.windDir}</small>
                 </td>
               ))}
             </tr>
-            <tr>
-              <td style={{ ...labelCell, background: '#fef9c3' }}>{labels.ruzgar}</td>
+            <tr data-kind="rain">
+              <td className="hourly-row-label">{labels.yagis}</td>
               {slots.map((s, i) => (
-                <td key={`row-ruzgar-cell-${i}-${s.dt || i}`} style={windRowBg}>
-                  <span
-                    title={`${s.windDir} ${s.windSpeedKmh} km/h`}
-                    style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}
-                  >
-                    <span
-                      style={{
-                        display: 'inline-block',
-                        transform: `rotate(${s.windDeg + 180}deg)`,
-                        fontSize: '1rem',
-                        lineHeight: 1,
-                      }}
-                    >
-                      ↑
-                    </span>
-                    <span style={{ fontSize: '0.65rem', color: '#64748b' }}>{s.windDir}</span>
-                  </span>
-                </td>
+                <td key={`h-rain-${i}-${s.dt || i}`}>{s.precipitationLabel}</td>
               ))}
             </tr>
-            <tr>
-              <td style={labelCell}>{labels.yagis}</td>
+            <tr data-kind="frost">
+              <td className="hourly-row-label">{labels.ziraiDon}</td>
               {slots.map((s, i) => (
-                <td key={`row-yagis-cell-${i}-${s.dt || i}`} style={cell}>
-                  {s.precipitationLabel}
-                </td>
-              ))}
-            </tr>
-            <tr>
-              <td style={labelCell}>{labels.ziraiDon}</td>
-              {slots.map((s, i) => (
-                <td key={`row-don-cell-${i}-${s.dt || i}`} style={cell}>
+                <td key={`h-frost-${i}-${s.dt || i}`} data-frost={frostTier(s.frostScore)}>
                   {s.frostShort}
                 </td>
               ))}
             </tr>
-            <tr>
-              <td style={labelCell}>{labels.ilaclama}</td>
+            <tr data-kind="spray">
+              <td className="hourly-row-label">{labels.ilaclama}</td>
               {slots.map((s, i) => (
-                <td key={`row-ilac-cell-${i}-${s.dt || i}`} style={cell}>
-                  <span
-                    title={s.sprayOk ? labels.uygun : labels.uygunDegil}
-                    style={{
-                      fontSize: '1.1rem',
-                      fontWeight: 700,
-                      color: s.sprayOk ? '#16a34a' : '#dc2626',
-                    }}
-                    aria-label={s.sprayOk ? labels.uygun : labels.uygunDegil}
-                  >
-                    {s.sprayOk ? '✓' : '✗'}
-                  </span>
+                <td
+                  key={`h-spray-${i}-${s.dt || i}`}
+                  title={s.sprayOk ? labels.uygun : labels.uygunDegil}
+                  aria-label={s.sprayOk ? labels.uygun : labels.uygunDegil}
+                  style={{ color: s.sprayOk ? 'var(--moss)' : 'var(--danger)', fontWeight: 700 }}
+                >
+                  {s.sprayOk ? '✓' : '✗'}
                 </td>
               ))}
             </tr>
-            <tr>
-              <td style={labelCell}>{labels.sicaklikStresi}</td>
+            <tr data-kind="stress">
+              <td className="hourly-row-label">{labels.sicaklikStresi}</td>
               {slots.map((s, i) => (
-                <td key={`row-stres-cell-${i}-${s.dt || i}`} style={cell}>
-                  {s.tempStressLabel}
-                </td>
+                <td key={`h-stress-${i}-${s.dt || i}`}>{s.tempStressLabel}</td>
               ))}
             </tr>
-            <tr>
-              <td style={footLabel}>{labels.saat}</td>
+            <tr data-kind="foot">
+              <td className="hourly-row-label">{labels.saat}</td>
               {slots.map((s, i) => (
-                <td key={`row-saat-cell-${i}-${s.dt || i}`} style={footCell}>
-                  {s.timeRangeLabel}
-                </td>
+                <td key={`h-hour-${i}-${s.dt || i}`}>{s.timeRangeLabel}</td>
               ))}
             </tr>
-            <tr>
-              <td style={footLabel}>{labels.gun}</td>
+            <tr data-kind="foot">
+              <td className="hourly-row-label">{labels.gun}</td>
               {slots.map((s, i) => (
-                <td key={`row-gun-cell-${i}-${s.dt || i}`} style={footCell}>
-                  {s.weekdayShort}
-                </td>
+                <td key={`h-day-${i}-${s.dt || i}`}>{s.weekdayShort}</td>
               ))}
             </tr>
           </tbody>
         </table>
       </div>
-      <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginTop: '0.5rem' }}>{labels.footnote}</p>
     </section>
   );
 }
