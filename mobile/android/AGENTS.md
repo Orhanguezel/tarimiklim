@@ -1,4 +1,17 @@
-# Android Uygulama — Hava Durumu & Don Uyarisi
+> **⚠️ DEPRECATED (2026-04-17)**
+>
+> Native Kotlin yolu **askıya alındı**. Yeni mobil uygulama **Expo (React Native)**
+> tabanlı geliştiriliyor — tek kod, iOS + Android birlikte.
+>
+> Güncel proje: [`mobile/app/`](../app/) · Strateji: [`mobile/MOBILE-STRATEGY.md`](../MOBILE-STRATEGY.md)
+>
+> Bu doküman yıl 3+'ta native migration tetiklenirse başvuru kaynağı olarak
+> saklanıyor. Tetikleyiciler: MAU > 1M, Android Auto ihtiyacı, ML Kit native
+> model, Wear OS widget.
+>
+> ---
+
+# Android Uygulama (DEPRECATED) — Hava Durumu & Don Uyarisi
 
 ## Stack
 - Kotlin 2.0+, Jetpack Compose, MVVM + Hilt, min SDK 26

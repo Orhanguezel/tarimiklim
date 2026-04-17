@@ -1,4 +1,17 @@
-# iOS Uygulama — Hava Durumu & Don Uyarisi
+> **⚠️ DEPRECATED (2026-04-17)**
+>
+> Native Swift yolu **askıya alındı**. Yeni mobil uygulama **Expo (React Native)**
+> tabanlı geliştiriliyor — tek kod, iOS + Android birlikte.
+>
+> Güncel proje: [`mobile/app/`](../app/) · Strateji: [`mobile/MOBILE-STRATEGY.md`](../MOBILE-STRATEGY.md)
+>
+> Bu doküman yıl 3+'ta native migration tetiklenirse başvuru kaynağı olarak
+> saklanıyor. Tetikleyiciler: MAU > 1M, Apple Watch/CarPlay ihtiyacı, CoreML
+> native model.
+>
+> ---
+
+# iOS Uygulama (DEPRECATED) — Hava Durumu & Don Uyarisi
 
 ## Stack
 - Swift 6+, SwiftUI, MVVM, min iOS 17
