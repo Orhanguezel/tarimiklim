@@ -1303,6 +1303,29 @@ img, svg, video { display: block; max-width: 100%; }
   color: var(--paper);
   opacity: 0.65;
 }
+.site-footer-credit {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(241, 235, 221, 0.08);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--paper);
+  opacity: 0.45;
+  text-align: right;
+}
+.site-footer-credit a {
+  color: var(--paper);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(241, 235, 221, 0.3);
+  padding-bottom: 1px;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+.site-footer-credit a:hover {
+  color: var(--wheat);
+  border-color: var(--wheat);
+}
 .site-footer-legal {
   display: flex;
   gap: 28px;

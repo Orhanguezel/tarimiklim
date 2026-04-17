@@ -8,7 +8,7 @@
     "description": "Bolgeniz icin 7 gunluk hava tahmini ve don riski uyarisi",
     "preview": {
       "loading": "Hava verisi yukleniyor...",
-      "sectionTitle": "{place} — 7 gunluk onizleme",
+      "sectionTitle": "{place} — 7 gunluk önizleme",
       "errorNetwork": "API'ye baglanilamadi: {message}",
       "errorApi": "Sunucu yaniti: {status}",
       "hint": "Backend calisiyor mu? Beklenen taban adres: {url}"
@@ -81,13 +81,13 @@
     "nav": {
       "menu": "Menu",
       "close": "Kapat",
-      "cta": "Panel'e giris",
+      "cta": "Panel'e Giriş",
       "links": {
-        "panel": "Canli Panel",
-        "modules": "Moduller",
+        "panel": "Canlı Panel",
+        "modules": "Modüller",
         "api": "API & Widget",
         "ekosistem": "Ekosistem",
-        "docs": "Dokumantasyon"
+        "docs": "Dokümantasyon"
       }
     },
     "hero": {
@@ -99,7 +99,7 @@
       },
       "copy": "7 gunluk tahmin, dort faktorlu don riski algoritmasi ve parsel bazli sulama planlamasi — OpenWeatherMap, Open-Meteo ve yerel istasyon verileri uzerinde calisan dayanikli bir servis katmani. Sera SaaS'tan Ziraat Haber'e kadar ekosistemin tum uygulamalarini besler.",
       "actions": {
-        "primary": "Canli Panel'i ac",
+        "primary": "Canlı Paneli Aç",
         "secondary": "API dokumantasyonu",
         "tertiaryPrefix": "veya",
         "tertiary": "30 saniyelik demo izle ↗"
@@ -121,7 +121,7 @@
       "card": {
         "location": "Konya · Cumra",
         "coordinates": "37.5731° N, 32.7734° E · 1013 m",
-        "live": "Canli",
+        "live": "Canlı",
         "temp": "8°C",
         "condition": "Parcali bulutlu · gece acik, sabah radyasyon donu olasi",
         "metrics": {
@@ -170,7 +170,7 @@
       }
     },
     "dashboard": {
-      "label": "Canli Panel · Ciftci Gorunumu",
+      "label": "Canlı Panel · Ciftci Gorunumu",
       "title": {
         "prefix": "Sekiz ilden",
         "emphasis": "su anki durum."
@@ -269,7 +269,7 @@
       "cityCardAria": "{city} için detaylı paneli aç"
     },
     "pillars": {
-      "label": "Cekirdek Moduller",
+      "label": "Cekirdek Modüller",
       "title": {
         "line1": "Uc servis.",
         "line2": "Bir altyapi."
@@ -427,7 +427,7 @@
       }
     },
     "ecosystem": {
-      "label": "Ekosistem Modulleri",
+      "label": "Ekosistem Modülleri",
       "title": {
         "prefix": "TarimIKlim'i",
         "emphasis": "kim kullaniyor?"
@@ -436,7 +436,7 @@
       "items": {
         "bereketfide": {
           "label": "Tarla Yonetimi",
-          "status": "Canli",
+          "status": "Canlı",
           "statusTone": "live",
           "name": "Bereketfide",
           "copy": "Acik tarla ciftcisi icin parsel, ekim ve hasat takibi. Widget ile TarimIKlim tahminini ana ekranda gosterir.",
@@ -444,7 +444,7 @@
         },
         "vistaseed": {
           "label": "Tohum & Fidan",
-          "status": "Canli",
+          "status": "Canlı",
           "statusTone": "live",
           "name": "VistaSeed",
           "copy": "Bolge bazli tohum onerisi. TarimIKlim'in iklim profilini urun seciminde kullanir.",
@@ -452,7 +452,7 @@
         },
         "sera": {
           "label": "Sera SaaS",
-          "status": "Canli",
+          "status": "Canlı",
           "statusTone": "live",
           "name": "Sera Kontrol",
           "copy": "Sera ortam kontrolu; dis hava verisini TarimIKlim'den, ic ortami sensorlerden alir.",
@@ -470,7 +470,7 @@
           "label": "Pazar",
           "status": "Yakinda",
           "statusTone": "wip",
-          "name": "Hal Fiyatlari",
+          "name": "Hal Fiyatları",
           "copy": "Sebze-meyve toptan fiyat takibi. Hasat tahmini icin TarimIKlim verim modelini kullanacak.",
           "meta": "API · planlama"
         },
@@ -515,11 +515,11 @@
       }
     },
     "footer": {
-      "tagline": "Ciftcinin gecesini bilen, sabahina hazirlayan servis.",
-      "copy": "Vista Tarim Teknolojileri A.S. tarafindan gelistirilmektedir. Turkiye merkezli; EU ve MENA bolgesi icin coklu dil destegi planlanmaktadir.",
+      "tagline": "Çiftçinin gecesini bilen, sabahına hazırlayan servis.",
+      "copy": "Tarvista Tarım Teknolojileri A.Ş. tarafından geliştirilmektedir. Türkiye merkezli; AB ve MENA bölgesi için çoklu dil desteği planlanmaktadır.",
       "contact": {
-        "company": "Vista Tarim Teknolojileri A.S.",
-        "city": "Ankara · Turkiye",
+        "company": "Tarvista Tarım Teknolojileri A.Ş.",
+        "city": "Antalya · Türkiye",
         "email": "destek@tarimiklim.com",
         "social": "@tarimiklim"
       },
@@ -528,7 +528,7 @@
           "title": "Urun",
           "items": {
             "panel": {
-              "label": "Canli Panel",
+              "label": "Canlı Panel",
               "href": "#panel"
             },
             "frost": {
@@ -536,15 +536,15 @@
               "href": "#modules"
             },
             "irrigation": {
-              "label": "Sulama Plani",
+              "label": "Sulama Planı",
               "href": "#modules"
             },
             "forecast": {
-              "label": "7 Gunluk Tahmin",
+              "label": "7 Günlük Tahmin",
               "href": "#api"
             },
             "alerts": {
-              "label": "Uyari Sistemi",
+              "label": "Uyarı Sistemi",
               "href": "#api"
             },
             "widgets": {
@@ -554,10 +554,10 @@
           }
         },
         "developer": {
-          "title": "Gelistirici",
+          "title": "Geliştirici",
           "items": {
             "api": {
-              "label": "API Referansi",
+              "label": "API Referansı",
               "href": "#api"
             },
             "sdk": {
@@ -573,7 +573,7 @@
               "href": "#docs"
             },
             "status": {
-              "label": "Durum Sayfasi",
+              "label": "Durum Sayfası",
               "href": "#top"
             },
             "changelog": {
@@ -602,7 +602,7 @@
               "href": "#ekosistem"
             },
             "hal": {
-              "label": "Hal Fiyatlari",
+              "label": "Hal Fiyatları",
               "href": "#ekosistem"
             },
             "yield": {
@@ -612,10 +612,10 @@
           }
         },
         "company": {
-          "title": "Sirket",
+          "title": "Şirket",
           "items": {
             "about": {
-              "label": "Hakkimizda",
+              "label": "Hakkımızda",
               "href": "#top"
             },
             "blog": {
@@ -627,7 +627,7 @@
               "href": "#docs"
             },
             "press": {
-              "label": "Basin",
+              "label": "Basın",
               "href": "#docs"
             },
             "privacy": {
@@ -642,15 +642,18 @@
         }
       },
       "bottom": {
-        "copyright": "© 2026 Vista Tarim Teknolojileri A.S. · Tum haklari saklidir.",
+        "copyright": "© 2026 Tarvista Tarım Teknolojileri A.Ş. · Tüm hakları saklıdır.",
         "privacy": "Gizlilik",
         "privacyHref": "#docs",
-        "terms": "Sartlar",
+        "terms": "Şartlar",
         "termsHref": "#docs",
-        "cookies": "Cerezler",
+        "cookies": "Çerezler",
         "cookiesHref": "#docs",
-        "security": "Guvenlik",
-        "securityHref": "#docs"
+        "security": "Güvenlik",
+        "securityHref": "#docs",
+        "creditLabel": "Tasarım & geliştirme",
+        "creditBy": "GWD",
+        "creditUrl": "https://guezelwebdesign.com"
       }
     }
   }

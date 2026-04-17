@@ -519,7 +519,7 @@
       "copy": "Built by Vista Agriculture Technologies. Based in Turkiye with multi-language support planned for the EU and MENA regions.",
       "contact": {
         "company": "Vista Agriculture Technologies",
-        "city": "Ankara · Turkiye",
+        "city": "Antalya · Türkiye",
         "email": "destek@tarimiklim.com",
         "social": "@tarimiklim"
       },
@@ -650,7 +650,10 @@
         "cookies": "Cookies",
         "cookiesHref": "#docs",
         "security": "Security",
-        "securityHref": "#docs"
+        "securityHref": "#docs",
+        "creditLabel": "Design & development",
+        "creditBy": "GWD",
+        "creditUrl": "https://guezelwebdesign.com"
       }
     }
   }
