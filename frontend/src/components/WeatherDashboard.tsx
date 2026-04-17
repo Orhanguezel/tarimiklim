@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { api, fetchHourlyForecast, fetchLocations, fetchWeather, type HourlySlot } from '@/lib/api';
-import { ForecastCard, type ForecastDay } from '@/components/ForecastCard';
+import { api, fetchHourlyForecast, fetchLocations, fetchWeather } from '@/lib/api';
+import type { ForecastDay, HourlySlot, WeatherLocation } from '@/types/weather';
+import { ForecastCard } from '@/components/ForecastCard';
 import { FrostAlertBanner } from '@/components/FrostAlertBanner';
 import { HourlyForecastTable } from '@/components/HourlyForecastTable';
 import { LocationSelector, type LocationOption } from '@/components/LocationSelector';
@@ -15,37 +16,30 @@ const DEFAULT_LOC: LocationOption = {
   lon: 28.9784,
 };
 
-function mapLocations(raw: unknown): LocationOption[] {
-  const items = (raw as { items?: Record<string, unknown>[] })?.items ?? [];
+function mapLocations(items: WeatherLocation[]): LocationOption[] {
   const out: LocationOption[] = [];
   for (const it of items) {
-    const id = String(it.id ?? it.slug ?? `${it.latitude}-${it.longitude}`);
+    const id = it.slug || it.id || `${it.latitude}-${it.longitude}`;
     const lat = Number(it.latitude);
     const lon = Number(it.longitude);
     if (Number.isNaN(lat) || Number.isNaN(lon)) continue;
-    const label = String(it.name ?? it.city ?? id);
+    const label = it.city || it.name || id;
     out.push({ id, label, lat, lon });
   }
   return out.length ? out : [DEFAULT_LOC];
 }
 
-function dedupeForecastDays(list: Record<string, unknown>[]): ForecastDay[] {
+function dedupeForecastDays(list: ForecastDay[]): ForecastDay[] {
   const seen = new Set<string>();
-  const mapped: ForecastDay[] = [];
+  const out: ForecastDay[] = [];
   for (const f of list) {
-    const rawDate = String(f.date ?? f.forecastDate ?? '');
+    const rawDate = f.date || f.forecastDate || '';
     const dayKey = rawDate.length >= 10 ? rawDate.slice(0, 10) : rawDate;
     if (!dayKey || seen.has(dayKey)) continue;
     seen.add(dayKey);
-    mapped.push({
-      date: rawDate,
-      tempMin: Number(f.tempMin),
-      tempMax: Number(f.tempMax),
-      frostRisk: Number(f.frostRisk ?? 0),
-      condition: String(f.condition ?? ''),
-    });
+    out.push(f);
   }
-  return mapped;
+  return out;
 }
 
 export function WeatherDashboard() {
@@ -96,9 +90,9 @@ export function WeatherDashboard() {
     setErr(null);
     (async () => {
       try {
-        const raw = await fetchWeather(active.lat, active.lon, 7);
-        const list = raw?.forecasts ?? [];
-        const mapped = dedupeForecastDays(list as unknown as Record<string, unknown>[]);
+        const res = await fetchWeather(active.lat, active.lon, 7);
+        const list = res?.forecasts ?? [];
+        const mapped = dedupeForecastDays(list);
         if (!cancelled) setDays(mapped);
       } catch (e) {
         if (!cancelled) {
