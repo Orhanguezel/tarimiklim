@@ -262,7 +262,9 @@
         "alert": "HIGH",
         "warn": "MEDIUM",
         "ok": "LOW"
-      }
+      },
+      "openDetail": "Open details",
+      "cityCardAria": "Open detailed panel for {city}"
     },
     "pillars": {
       "label": "Core Modules",

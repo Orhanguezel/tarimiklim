@@ -262,7 +262,9 @@
         "alert": "YUKSEK",
         "warn": "ORTA",
         "ok": "DUSUK"
-      }
+      },
+      "openDetail": "Detayları aç",
+      "cityCardAria": "{city} için detaylı paneli aç"
     },
     "pillars": {
       "label": "Cekirdek Moduller",

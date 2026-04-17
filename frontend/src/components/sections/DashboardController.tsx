@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
-import { fetchFrostRisk, fetchCurrentWeather } from '@/lib/api';
-import type { CurrentWeather, FrostRiskResponse } from '@/types/weather';
+import { useTranslations, useLocale } from 'next-intl';
+import { fetchCurrentWeather, fetchFrostRiskByCoords } from '@/lib/api';
 
 const TABS = ['now', '6h', '24h', '7d'] as const;
 type Tab = (typeof TABS)[number];
@@ -20,20 +19,19 @@ type CityKey =
 
 interface CitySpec {
   key: CityKey;
-  slug?: string;
   lat: number;
   lon: number;
 }
 
 const CITIES: CitySpec[] = [
-  { key: 'konya',     slug: 'konya',    lat: 37.8713, lon: 32.4846 },
-  { key: 'kayseri',                     lat: 38.7225, lon: 35.4875 },
-  { key: 'antalya',   slug: 'antalya',  lat: 36.8968, lon: 30.7133 },
-  { key: 'bursa',     slug: 'bursa',    lat: 40.1826, lon: 29.0663 },
-  { key: 'erzurum',                     lat: 39.9054, lon: 41.2611 },
-  { key: 'izmir',     slug: 'izmir',    lat: 38.4189, lon: 27.1287 },
-  { key: 'ankara',    slug: 'ankara',   lat: 39.9207, lon: 32.8540 },
-  { key: 'sanliurfa',                   lat: 37.1671, lon: 38.7939 },
+  { key: 'konya', lat: 37.8713, lon: 32.4846 },
+  { key: 'kayseri', lat: 38.7225, lon: 35.4875 },
+  { key: 'antalya', lat: 36.8968, lon: 30.7133 },
+  { key: 'bursa', lat: 40.1826, lon: 29.0663 },
+  { key: 'erzurum', lat: 39.9054, lon: 41.2611 },
+  { key: 'izmir', lat: 38.4189, lon: 27.1287 },
+  { key: 'ankara', lat: 39.9207, lon: 32.8540 },
+  { key: 'sanliurfa', lat: 37.1671, lon: 38.7939 },
 ];
 
 interface LiveCity {
@@ -53,37 +51,36 @@ function riskTone(score?: number): 'critical' | 'alert' | 'warn' | 'ok' {
 
 export function DashboardController() {
   const t = useTranslations('premium.dashboard');
+  const locale = useLocale();
   const [activeTab, setActiveTab] = useState<Tab>('now');
   const [liveData, setLiveData] = useState<Map<CityKey, LiveCity>>(new Map());
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function loadAll() {
+    let cancelled = false;
+    (async () => {
       const results = await Promise.all(
-        CITIES.map(async (spec) => {
-          try {
-            const [frost, current] = await Promise.allSettled([
-              spec.slug ? fetchFrostRisk(spec.slug) : Promise.reject('no-slug'),
-              fetchCurrentWeather(spec.lat, spec.lon),
-            ]);
-
-            return {
-              key: spec.key,
-              temp: current.status === 'fulfilled' ? current.value.temp : undefined,
-              condition: current.status === 'fulfilled' ? current.value.condition : undefined,
-              frostScore: frost.status === 'fulfilled' ? frost.value.frostRisk : undefined,
-            };
-          } catch {
-            return { key: spec.key };
-          }
-        })
+        CITIES.map(async (spec): Promise<LiveCity> => {
+          const [frost, current] = await Promise.allSettled([
+            fetchFrostRiskByCoords(spec.lat, spec.lon),
+            fetchCurrentWeather(spec.lat, spec.lon),
+          ]);
+          return {
+            key: spec.key,
+            temp: current.status === 'fulfilled' ? current.value.temp : undefined,
+            condition: current.status === 'fulfilled' ? current.value.condition : undefined,
+            frostScore: frost.status === 'fulfilled' ? frost.value.frostRisk : undefined,
+          };
+        }),
       );
-      setLiveData(new Map(results.map((r) => [r.key, r])));
-      setIsLoading(false);
-    }
-
-    loadAll();
+      if (!cancelled) setLiveData(new Map(results.map((r) => [r.key, r])));
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  const panelHref = (spec: CitySpec, name: string) =>
+    `/${locale}/don-uyarisi?lat=${spec.lat}&lon=${spec.lon}&name=${encodeURIComponent(name)}`;
 
   return (
     <>
@@ -109,36 +106,44 @@ export function DashboardController() {
         </div>
       </div>
 
-      <div className="city-grid" data-loading={isLoading}>
-        {CITIES.map(({ key }) => {
-          const data = liveData.get(key);
+      <div className="city-grid">
+        {CITIES.map((spec) => {
+          const data = liveData.get(spec.key);
           const tone = riskTone(data?.frostScore);
-          
+          const name = t(`cities.${spec.key}.name`);
+
           return (
-            <article key={key} className="city-card" data-risk={tone}>
-              <div className="city-name">{t(`cities.${key}.name`)}</div>
-              <div className="city-region">{t(`cities.${key}.region`)}</div>
+            <a
+              key={spec.key}
+              href={panelHref(spec, name)}
+              className="city-card"
+              data-risk={tone}
+              aria-label={t('cityCardAria', { city: name })}
+            >
+              <div className="city-name">{name}</div>
+              <div className="city-region">{t(`cities.${spec.key}.region`)}</div>
               <div className="city-temp">
-                {typeof data?.temp === 'number' ? `${Math.round(data.temp)}°` : '--'}
+                {typeof data?.temp === 'number' ? `${Math.round(data.temp)}°` : '—'}
               </div>
               <div className="city-condition">
-                {data?.condition || t(`cities.${key}.condition`)}
+                {data?.condition || t(`cities.${spec.key}.condition`)}
               </div>
               <div className="city-bar">
-                <div 
-                  className="city-bar-fill" 
-                  style={{ width: `${data?.frostScore ?? 0}%` }} 
+                <div
+                  className="city-bar-fill"
+                  style={{ width: `${data?.frostScore ?? 0}%` }}
                 />
               </div>
               <div className="city-risk-row">
                 <span className="city-risk-label">{t('riskLabel')}</span>
                 <strong className="city-risk-value">
-                  {typeof data?.frostScore === 'number' 
+                  {typeof data?.frostScore === 'number'
                     ? t('riskValueLive', { tone: t(`risk.${tone}`), score: data.frostScore })
-                    : t(`cities.${key}.riskValue`)}
+                    : t(`cities.${spec.key}.riskValue`)}
                 </strong>
               </div>
-            </article>
+              <span className="city-card-cta" aria-hidden="true">{t('openDetail')} →</span>
+            </a>
           );
         })}
       </div>

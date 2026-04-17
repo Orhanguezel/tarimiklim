@@ -1,13 +1,15 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { useSearchParams } from 'next/navigation';
 import { api, fetchHourlyForecast, fetchWeather } from '@/lib/api';
 import type { ForecastDay, HourlySlot } from '@/types/weather';
 import { ForecastCard } from '@/components/ForecastCard';
 import { FrostAlertBanner } from '@/components/FrostAlertBanner';
 import { HourlyForecastTable } from '@/components/HourlyForecastTable';
 import { LocationSearch, type SelectedLocation } from '@/components/LocationSearch';
+import { saveLocation } from '@/lib/user-location';
 
 function dedupeForecastDays(list: ForecastDay[]): ForecastDay[] {
   const seen = new Set<string>();
@@ -39,6 +41,8 @@ export function WeatherDashboard() {
   const td = useTranslations('home.dashboard');
   const th = useTranslations('home.hourly');
   const tw = useTranslations('weather');
+  const searchParams = useSearchParams();
+  const urlInitRef = useRef(false);
   const [active, setActive] = useState<SelectedLocation | null>(null);
   const [days, setDays] = useState<ForecastDay[]>([]);
   const [hourlySlots, setHourlySlots] = useState<HourlySlot[]>([]);
@@ -49,6 +53,18 @@ export function WeatherDashboard() {
   const handleLocationChange = useCallback((loc: SelectedLocation) => {
     setActive(loc);
   }, []);
+
+  useEffect(() => {
+    if (urlInitRef.current) return;
+    const lat = Number(searchParams.get('lat'));
+    const lon = Number(searchParams.get('lon'));
+    const name = searchParams.get('name');
+    if (!Number.isFinite(lat) || !Number.isFinite(lon) || !name) return;
+    urlInitRef.current = true;
+    const loc: SelectedLocation = { lat, lon, name, source: 'search' };
+    setActive(loc);
+    saveLocation({ lat, lon, name, source: 'search' });
+  }, [searchParams]);
 
   useEffect(() => {
     if (!active) return;

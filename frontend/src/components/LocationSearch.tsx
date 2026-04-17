@@ -96,6 +96,11 @@ export function LocationSearch({ value, onChange }: Props) {
 
   useEffect(() => {
     if (initRef.current) return;
+    // Parent zaten bir değer verdiyse (URL query'den geldi örn.) init'i atla.
+    if (value) {
+      initRef.current = true;
+      return;
+    }
     initRef.current = true;
     const saved = readSaved();
     if (saved) {
@@ -107,7 +112,7 @@ export function LocationSearch({ value, onChange }: Props) {
     } else {
       onChange(DEFAULT_FALLBACK);
     }
-  }, [onChange, useBrowserLocation]);
+  }, [onChange, useBrowserLocation, value]);
 
   useEffect(() => {
     const q = query.trim();
