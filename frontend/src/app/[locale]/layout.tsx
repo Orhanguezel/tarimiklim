@@ -2,20 +2,21 @@ import type { ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
-import { Fraunces, Inter_Tight, JetBrains_Mono } from 'next/font/google';
+import { Space_Grotesk, Inter, JetBrains_Mono } from 'next/font/google';
+
+import { fetchSiteMedia } from '@/lib/site-settings';
 
 import '../../styles/globals.css';
 
 /* ── Self-hosted fonts via next/font ─────────────────────────── */
-/* Fraunces: variable weight font — 'variable' weight required for axes */
-const fraunces = Fraunces({
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   variable: '--font-display',
   display: 'swap',
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['400', '500', '600', '700'],
 });
 
-const interTight = Inter_Tight({
+const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
@@ -29,7 +30,7 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ['400', '500', '600'],
 });
 
-const fontVars = [fraunces.variable, interTight.variable, jetbrainsMono.variable].join(' ');
+const fontVars = [spaceGrotesk.variable, inter.variable, jetbrainsMono.variable].join(' ');
 
 export async function generateMetadata({
   params,
@@ -37,7 +38,15 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'meta' });
+  const [t, media] = await Promise.all([
+    getTranslations({ locale, namespace: 'meta' }),
+    fetchSiteMedia(locale),
+  ]);
+
+  const ogImage = media.logo ?? '/brand/og-image.svg';
+  const favicon = media.favicon ?? '/brand/favicon.svg';
+  const appleTouch = media.appleTouchIcon ?? favicon;
+
   return {
     title: { default: t('title'), template: `%s | ${t('title')}` },
     description: t('description'),
@@ -52,7 +61,7 @@ export async function generateMetadata({
       type: 'website',
       images: [
         {
-          url: '/brand/og-image.svg',
+          url: ogImage,
           width: 1200,
           height: 630,
           alt: 'TarımİKlim',
@@ -61,11 +70,11 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      images: ['/brand/og-image.svg'],
+      images: [ogImage],
     },
     icons: {
-      icon: '/brand/favicon.svg',
-      apple: '/brand/favicon.svg',
+      icon: favicon,
+      apple: appleTouch,
     },
   };
 }

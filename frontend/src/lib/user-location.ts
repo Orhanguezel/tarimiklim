@@ -8,8 +8,11 @@ export interface SavedLocation {
   lon: number;
   name: string;
   source: 'geolocation' | 'search' | 'province' | 'manual';
+  accuracy?: number;
   savedAt: number;
 }
+
+export const LOW_ACCURACY_THRESHOLD_M = 10_000;
 
 const KEY = 'tarimiklim.location.v1';
 
@@ -60,7 +63,7 @@ export interface GeolocationResult {
   errorMessage?: string;
 }
 
-export function requestBrowserLocation(timeoutMs = 8000): Promise<GeolocationResult> {
+export function requestBrowserLocation(timeoutMs = 15000): Promise<GeolocationResult> {
   return new Promise((resolve) => {
     if (typeof window === 'undefined' || !('geolocation' in navigator)) {
       resolve({ status: 'unavailable' });
@@ -82,7 +85,7 @@ export function requestBrowserLocation(timeoutMs = 8000): Promise<GeolocationRes
           errorMessage: err.message,
         });
       },
-      { enableHighAccuracy: false, timeout: timeoutMs, maximumAge: 5 * 60 * 1000 },
+      { enableHighAccuracy: true, timeout: timeoutMs, maximumAge: 0 },
     );
   });
 }

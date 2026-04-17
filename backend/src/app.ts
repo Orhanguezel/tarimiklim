@@ -1,7 +1,10 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import cors from '@fastify/cors';
 import jwt from '@fastify/jwt';
 import cookie from '@fastify/cookie';
 import multipart from '@fastify/multipart';
+import fastifyStatic from '@fastify/static';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
@@ -97,6 +100,15 @@ export async function createApp() {
   await app.register(multipart, {
     throwFileSizeLimit: true,
     limits: { fileSize: 20 * 1024 * 1024 },
+  });
+
+  const uploadsRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'uploads');
+  await app.register(fastifyStatic, {
+    root: uploadsRoot,
+    prefix: '/uploads/',
+    decorateReply: false,
+    cacheControl: true,
+    maxAge: '7d',
   });
 
   await app.register(

@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-brand: #3b82f6;
+  --color-bg: #f8fafc;
+  --color-bg-alt: #ffffff;
+  --color-text: #0f172a;
+  --color-text-secondary: #64748b;
+  --color-border: #e2e8f0;
+  --color-sidebar: #1e293b;
+  --color-sidebar-text: #cbd5e1;
+}
+
+* { box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: var(--color-bg); color: var(--color-text); }

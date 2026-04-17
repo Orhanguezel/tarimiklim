@@ -51,8 +51,8 @@
   /* ── Tipografi — Font family değişkenleri ────────────────── */
   /* Gerçek font değerleri layout.tsx'te next/font ile inject edilir.
      Buradaki değerler sadece fallback. */
-  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
-  --font-sans:    "Inter Tight", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: "Space Grotesk", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono:    "JetBrains Mono", ui-monospace, "Cascadia Code", monospace;
 
   /* Alias — component'ler bu kısa adları kullanır */

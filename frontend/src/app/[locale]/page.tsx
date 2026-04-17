@@ -13,6 +13,7 @@ import { FinalCta } from '@/components/sections/FinalCta';
 import { SiteFooter } from '@/components/sections/SiteFooter';
 import { buildWeatherForecastJsonLd } from '@/lib/weather-jsonld';
 import { buildCombinedJsonLd } from '@/lib/site-jsonld';
+import { fetchSiteMedia } from '@/lib/site-settings';
 
 export async function generateMetadata({
   params,
@@ -46,9 +47,10 @@ export default async function HomePage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const [weatherLd, siteLd] = await Promise.all([
+  const [weatherLd, siteLd, media] = await Promise.all([
     buildWeatherForecastJsonLd(),
     Promise.resolve(buildCombinedJsonLd(locale)),
+    fetchSiteMedia(locale),
   ]);
 
   return (
@@ -66,7 +68,7 @@ export default async function HomePage({
 
       {/* FAZ 2 — Statik bölümler */}
       <AlertBar />
-      <SiteNav locale={locale} />
+      <SiteNav locale={locale} logoUrl={media.logo} />
 
       <main id="top">
         {/* FAZ 3 — Etkileşimli bölümler */}
@@ -91,7 +93,7 @@ export default async function HomePage({
         <FinalCta />
       </main>
 
-      <SiteFooter />
+      <SiteFooter logoUrl={media.logo} />
     </>
   );
 }

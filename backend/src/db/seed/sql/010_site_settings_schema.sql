@@ -13,4 +13,7 @@ CREATE TABLE IF NOT EXISTS site_settings (
 
 INSERT IGNORE INTO site_settings (id, `key`, locale, value) VALUES
   ('a0000001-0000-4000-8000-000000000001', 'app_locales', '*', '["tr","en"]'),
-  ('a0000002-0000-4000-8000-000000000001', 'default_locale', '*', 'tr');
+  ('a0000002-0000-4000-8000-000000000001', 'default_locale', '*', 'tr'),
+  ('a0000010-0000-4000-8000-000000000001', 'site_logo', '*', '"/uploads/logo.png"'),
+  ('a0000011-0000-4000-8000-000000000001', 'site_favicon', '*', '"/uploads/favicon.png"'),
+  ('a0000012-0000-4000-8000-000000000001', 'site_apple_touch_icon', '*', '"/uploads/appletouch.png"');

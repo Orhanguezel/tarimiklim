@@ -37,3 +37,6 @@ build_log.txt
 
 # Runtime uploads
 backend/uploads/
+
+# Syncthing conflicts
+*.sync-conflict-*
