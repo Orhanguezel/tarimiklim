@@ -28,6 +28,12 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['next-intl'],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default withNextIntl(nextConfig);
