@@ -6,7 +6,7 @@ import { repoGetAllActiveLocations } from '@/modules/locations/repository.js';
 
 /** Aktif konumlar icin 7 gunluk tahmini API'den cekip DB'ye yazar. */
 export async function runFetchForecastJob(app: FastifyInstance) {
-  const db = app.db;
+  const db = (app as any).db;
   const locs = await repoGetAllActiveLocations(db);
   const now = new Date();
   for (const loc of locs) {
