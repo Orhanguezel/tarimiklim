@@ -4,14 +4,14 @@ interface Props {
   searchParams: Promise<{ location?: string; api?: string }>;
 }
 
-export default async function VistaseedWidgetPage({ searchParams }: Props) {
+export default async function HaldefiyatWidgetPage({ searchParams }: Props) {
   const { location = 'auto', api } = await searchParams;
 
   return (
     <main style={{ padding: '0.5rem', background: 'transparent' }}>
       <WeatherWidget
         location={location}
-        brand="vistaseed"
+        brand="haldefiyat"
         apiBase={api}
       />
     </main>

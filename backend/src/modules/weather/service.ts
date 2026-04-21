@@ -164,14 +164,30 @@ export async function getFrostRisk(
 
 export async function getWidgetData(
   db: MySql2Database,
-  locationSlug: string,
+  params: { location?: string; lat?: number; lon?: number },
   redis?: ForecastCacheRedis | null,
 ) {
-  const loc = await repoGetLocationBySlug(db, locationSlug);
-  if (!loc) throw Object.assign(new Error('location_not_found'), { statusCode: 404 });
+  let lat: number;
+  let lon: number;
+  let loc: any;
 
-  const lat = parseFloat(String(loc.latitude));
-  const lon = parseFloat(String(loc.longitude));
+  if (params.location) {
+    loc = await repoGetLocationBySlug(db, params.location);
+    if (!loc) throw Object.assign(new Error('location_not_found'), { statusCode: 404 });
+    lat = parseFloat(String(loc.latitude));
+    lon = parseFloat(String(loc.longitude));
+  } else {
+    lat = params.lat!;
+    lon = params.lon!;
+    // En yakindaki lokasyon ismini bulmaya calis (opsiyonel)
+    loc = (await repoGetLocationByCoords(db, lat, lon, 0.5)) || {
+      name: `${lat.toFixed(2)}, ${lon.toFixed(2)}`,
+      city: 'Konum',
+      latitude: lat,
+      longitude: lon,
+    };
+  }
+
   const [current, forecastResult] = await Promise.all([
     getCurrentWeather(lat, lon),
     getForecast(db, lat, lon, 3, redis),

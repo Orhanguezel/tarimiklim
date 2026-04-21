@@ -3,13 +3,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
-import { api, fetchHourlyForecast, fetchWeather } from '@/lib/api';
+import { api, fetchHourlyForecast, fetchWeather, fetchLocationBySlug } from '@/lib/api';
 import type { ForecastDay, HourlySlot } from '@/types/weather';
 import { ForecastCard } from '@/components/ForecastCard';
 import { FrostAlertBanner } from '@/components/FrostAlertBanner';
 import { HourlyForecastTable } from '@/components/HourlyForecastTable';
 import { LocationSearch, type SelectedLocation } from '@/components/LocationSearch';
-import { saveLocation } from '@/lib/user-location';
+import { saveLocation, readSaved, requestBrowserLocation } from '@/lib/user-location';
 
 function dedupeForecastDays(list: ForecastDay[]): ForecastDay[] {
   const seen = new Set<string>();
@@ -56,14 +56,48 @@ export function WeatherDashboard() {
 
   useEffect(() => {
     if (urlInitRef.current) return;
-    const lat = Number(searchParams.get('lat'));
-    const lon = Number(searchParams.get('lon'));
-    const name = searchParams.get('name');
-    if (!Number.isFinite(lat) || !Number.isFinite(lon) || !name) return;
-    urlInitRef.current = true;
-    const loc: SelectedLocation = { lat, lon, name, source: 'search' };
-    setActive(loc);
-    saveLocation({ lat, lon, name, source: 'search' });
+
+    const latParam = searchParams.get('lat');
+    const lonParam = searchParams.get('lon');
+    const nameParam = searchParams.get('name');
+    const cityParam = searchParams.get('city') || searchParams.get('location');
+
+    if (latParam && lonParam && nameParam) {
+      const lat = Number(latParam);
+      const lon = Number(lonParam);
+      if (Number.isFinite(lat) && Number.isFinite(lon)) {
+        urlInitRef.current = true;
+        const loc: SelectedLocation = { lat, lon, name: nameParam, source: 'search' };
+        setActive(loc);
+        saveLocation({ lat, lon, name: nameParam, source: 'search' });
+        return;
+      }
+    }
+
+    if (cityParam) {
+      urlInitRef.current = true;
+      fetchLocationBySlug(cityParam)
+        .then((loc) => {
+          const selected: SelectedLocation = {
+            lat: Number(loc.latitude),
+            lon: Number(loc.longitude),
+            name: loc.name,
+            source: 'search',
+            subtitle: loc.city,
+          };
+          setActive(selected);
+          saveLocation({
+            lat: Number(loc.latitude),
+            lon: Number(loc.longitude),
+            name: loc.name,
+            source: 'search',
+          });
+        })
+        .catch(() => {
+          // If city fetch fails, let it fallback to geolocation/saved
+          urlInitRef.current = false;
+        });
+    }
   }, [searchParams]);
 
   useEffect(() => {

@@ -48,13 +48,22 @@ export async function fetchFrostRiskByCoords(
   return data.data;
 }
 
-export async function fetchWidgetData(location: string): Promise<WidgetDataResponse> {
-  const { data } = await api.get('/weather/widget-data', { params: { location } });
+export async function fetchWidgetData(
+  location?: string,
+  lat?: number,
+  lon?: number,
+): Promise<WidgetDataResponse> {
+  const { data } = await api.get('/weather/widget-data', { params: { location, lat, lon } });
   return data.data;
 }
 
 export async function fetchLocations(): Promise<WeatherLocation[]> {
   const { data } = await api.get('/locations', { params: { active: true, limit: 100 } });
+  return data.data;
+}
+
+export async function fetchLocationBySlug(slug: string): Promise<WeatherLocation> {
+  const { data } = await api.get(`/locations/${slug}`);
   return data.data;
 }
 

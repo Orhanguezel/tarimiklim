@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import { fetchWidgetData } from '@/lib/api';
 import type { WidgetDataResponse } from '@/types/weather';
+import { requestBrowserLocation } from '@/lib/user-location';
 
-export type Brand = 'bereketfide' | 'vistaseed';
+export type Brand = 'bereketfide' | 'vistaseed' | 'haldefiyat';
 
 interface BrandTokens {
   bg: string;
@@ -35,6 +36,15 @@ const BRAND: Record<Brand, BrandTokens> = {
     primary: '#006838',
     badge: '#0a2b1e',
   },
+  haldefiyat: {
+    bg: '#f0f4f8',
+    card: '#ffffff',
+    border: '#d0dae5',
+    text: '#1a2b3c',
+    textMuted: '#5a6b7c',
+    primary: '#2c5282',
+    badge: '#2c5282',
+  },
 };
 
 function frostColor(score: number) {
@@ -60,7 +70,7 @@ function shortDate(dateStr: string) {
 }
 
 interface Props {
-  location: string;
+  location?: string;
   brand: Brand;
   apiBase?: string;
 }
@@ -72,13 +82,42 @@ export function WeatherWidget({ location, brand, apiBase }: Props) {
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
     if (apiBase) {
       process.env.NEXT_PUBLIC_API_URL = apiBase;
     }
-    fetchWidgetData(location)
-      .then((d) => setData(d))
-      .catch(() => setError(true))
-      .finally(() => setLoading(false));
+
+    async function load() {
+      setLoading(true);
+      setError(false);
+      try {
+        let lat: number | undefined;
+        let lon: number | undefined;
+        let locSlug = location;
+
+        if (!location || location === 'auto') {
+          const res = await requestBrowserLocation();
+          if (res.status === 'granted') {
+            lat = res.lat;
+            lon = res.lon;
+            locSlug = undefined;
+          } else {
+            // Fallback to a default if geo denied
+            locSlug = 'antalya';
+          }
+        }
+
+        const d = await fetchWidgetData(locSlug, lat, lon);
+        if (!cancelled) setData(d);
+      } catch (err) {
+        if (!cancelled) setError(true);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    void load();
+    return () => { cancelled = true; };
   }, [location, apiBase]);
 
   const containerStyle: React.CSSProperties = {

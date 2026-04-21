@@ -69,7 +69,7 @@ export async function getRainForecastHandler(req: FastifyRequest, reply: Fastify
 export async function getWidgetDataHandler(req: FastifyRequest, reply: FastifyReply) {
   try {
     const query = widgetQuerySchema.parse(req.query);
-    const data = await getWidgetData((req.server as any).db, query.location, (req.server as any).redis);
+    const data = await getWidgetData((req.server as any).db, query, (req.server as any).redis);
     return reply.send({ success: true, data });
   } catch (err) {
     return handleRouteError(reply, req, err, 'weather.widgetData');

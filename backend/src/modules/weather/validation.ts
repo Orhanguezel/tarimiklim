@@ -31,7 +31,11 @@ export const rainForecastQuerySchema = z.object({
 });
 
 export const widgetQuerySchema = z.object({
-  location: z.string().min(1),
+  location: z.string().min(1).optional(),
+  lat: z.coerce.number().min(-90).max(90).optional(),
+  lon: z.coerce.number().min(-180).max(180).optional(),
+}).refine((d) => d.location || (d.lat !== undefined && d.lon !== undefined), {
+  message: 'location veya lat+lon gerekli',
 });
 
 export type ForecastQuery = z.infer<typeof forecastQuerySchema>;
