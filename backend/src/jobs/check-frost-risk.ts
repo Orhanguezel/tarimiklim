@@ -4,7 +4,7 @@ import { repoGetAllActiveLocations } from '@/modules/locations/repository.js';
 
 /** Aktif konumlar icin don riski kontrolu ve bildirim. */
 export async function runCheckFrostRiskJob(app: FastifyInstance) {
-  const db = app.db;
+  const db = (app as any).db;
   const locs = await repoGetAllActiveLocations(db);
   let sent = 0;
   for (const loc of locs) {
