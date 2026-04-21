@@ -5,6 +5,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "baseUrl": ".",
+    "noEmitOnError": false,
     "paths": {
       "@/*": ["src/*"],
       "@agro/shared-backend/*": ["../../../packages/shared-backend/dist/*"],
