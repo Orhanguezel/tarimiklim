@@ -5,13 +5,13 @@ import {
   repoCreateAlertRule,
   repoGetAlertRulesByUser,
   repoDeleteAlertRule,
+  repoListAllAlertRulesWithUsers,
 } from './repository.js';
 import {
   createAlertRuleSchema,
   listAlertsQuerySchema,
   listAlertRulesQuerySchema,
 } from './validation.js';
-import { repoListAllAlertRules } from './repository.js';
 
 export async function adminListAlertsHandler(req: FastifyRequest, reply: FastifyReply) {
   try {
@@ -38,7 +38,7 @@ export async function adminListAlertRulesHandler(req: FastifyRequest, reply: Fas
     const query = listAlertRulesQuerySchema.parse(req.query);
     const db = (req.server as any).db;
     if (query.all) {
-      const rules = await repoListAllAlertRules(db, 500);
+      const rules = await repoListAllAlertRulesWithUsers(db, 500);
       return reply.send({ success: true, data: rules });
     }
     if (!query.userId) {

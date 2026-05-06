@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 
 import { registerAuth } from '@agro/shared-backend/modules/auth/router';
+import { registerUserAdmin } from '@agro/shared-backend/modules/auth';
 import { registerStorage } from '@agro/shared-backend/modules/storage/router';
 import { registerContacts } from '@agro/shared-backend/modules/contact/router';
 import { registerNewsletter } from '@agro/shared-backend/modules/newsletter/router';
@@ -10,6 +11,9 @@ import { registerNotifications } from '@agro/shared-backend/modules/notification
 import { registerTelegram } from '@agro/shared-backend/modules/telegram/router';
 import { registerTheme } from '@agro/shared-backend/modules/theme/router';
 import { registerHealth } from '@agro/shared-backend/modules/health/router';
+import { registerProfiles } from '@agro/shared-backend/modules/profiles';
+import { registerMenuItems, registerMenuItemsAdmin } from '@agro/shared-backend/modules/menuItems';
+import { registerUserRoles } from '@agro/shared-backend/modules/userRoles';
 
 import { registerStorageAdmin } from '@agro/shared-backend/modules/storage/admin.routes';
 import { registerContactsAdmin } from '@agro/shared-backend/modules/contact/admin.routes';
@@ -31,28 +35,28 @@ export async function registerSharedPublic(api: FastifyInstance) {
   await api.register(registerHealth);
   await api.register(registerAuth);
   await api.register(registerStorage);
+  await api.register(registerProfiles);
   await api.register(registerContacts);
   await api.register(registerNewsletter);
   await api.register(registerSiteSettings);
   await api.register(registerCustomPages);
+  await api.register(registerMenuItems);
+  await api.register(registerUserRoles);
   await api.register(registerNotifications);
   await api.register(registerTelegram);
   await api.register(registerTheme);
 }
 
 export async function registerSharedAdmin(api: FastifyInstance) {
-  await api.register(
-    async (i) => {
-      await i.register(registerStorageAdmin);
-      await i.register(registerContactsAdmin);
-      await i.register(registerNewsletterAdmin);
-      await i.register(registerSiteSettingsAdmin);
-      await i.register(registerCustomPagesAdmin);
-      await i.register(registerAuditAdmin);
-      await i.register(registerEmailTemplatesAdmin);
-      await i.register(registerTelegramAdmin);
-      await i.register(registerThemeAdmin);
-    },
-    { prefix: '/admin' },
-  );
+  await api.register(registerUserAdmin);
+  await api.register(registerMenuItemsAdmin);
+  await api.register(registerStorageAdmin);
+  await api.register(registerContactsAdmin);
+  await api.register(registerNewsletterAdmin);
+  await api.register(registerSiteSettingsAdmin);
+  await api.register(registerCustomPagesAdmin);
+  await api.register(registerAuditAdmin);
+  await api.register(registerEmailTemplatesAdmin);
+  await api.register(registerTelegramAdmin);
+  await api.register(registerThemeAdmin);
 }

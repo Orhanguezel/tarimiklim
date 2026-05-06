@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash VARCHAR(255) NOT NULL,
   full_name VARCHAR(255),
   phone VARCHAR(50),
+  ecosystem_id CHAR(36) NULL,
   is_active TINYINT NOT NULL DEFAULT 1,
   email_verified TINYINT NOT NULL DEFAULT 0,
   reset_token VARCHAR(255),
@@ -13,7 +14,8 @@ CREATE TABLE IF NOT EXISTS users (
   rules_accepted_at DATETIME(3),
   last_sign_in_at DATETIME(3),
   PRIMARY KEY (id),
-  UNIQUE KEY users_email_unique (email)
+  UNIQUE KEY users_email_unique (email),
+  KEY users_ecosystem_id_idx (ecosystem_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS user_roles (
@@ -48,6 +50,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   full_name TEXT,
   phone VARCHAR(64),
   avatar_url TEXT,
+  telegram_chat_id VARCHAR(50) DEFAULT NULL,
   address_line1 VARCHAR(255),
   address_line2 VARCHAR(255),
   city VARCHAR(128),

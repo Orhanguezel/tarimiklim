@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS weather_alerts (
   id VARCHAR(36) NOT NULL,
+  user_id VARCHAR(36) DEFAULT NULL,
   location_id VARCHAR(36) NOT NULL,
   alert_type VARCHAR(20) NOT NULL,
   severity VARCHAR(20) NOT NULL,
@@ -13,6 +14,7 @@ CREATE TABLE IF NOT EXISTS weather_alerts (
   recipients INT DEFAULT 0,
   created_at DATETIME DEFAULT NOW(),
   PRIMARY KEY (id),
+  KEY idx_user_location_type_date (user_id, location_id, alert_type, forecast_date),
   KEY idx_location_type (location_id, alert_type),
   KEY idx_date (forecast_date),
   KEY idx_severity (severity)

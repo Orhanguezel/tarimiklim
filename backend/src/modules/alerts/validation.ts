@@ -8,6 +8,34 @@ export const createAlertRuleSchema = z.object({
   isActive: z.boolean().default(true),
 });
 
+export const createUserAlertRuleSchema = z
+  .object({
+    locationId: z.string().uuid().optional(),
+    location_id: z.string().uuid().optional(),
+    alertType: z.enum(['frost', 'heavy_rain', 'storm', 'heat', 'humidity']).optional(),
+    alert_type: z.enum(['frost', 'heavy_rain', 'storm', 'heat', 'humidity']).optional(),
+    threshold: z.union([z.string(), z.number()]).transform((v) => String(v)),
+    channel: z.enum(['telegram', 'push', 'email']),
+  })
+  .transform((input) => ({
+    locationId: input.locationId ?? input.location_id,
+    alertType: input.alertType ?? input.alert_type,
+    threshold: input.threshold,
+    channel: input.channel,
+  }))
+  .refine((input) => Boolean(input.locationId), { message: 'location_id_required', path: ['location_id'] })
+  .refine((input) => Boolean(input.alertType), { message: 'alert_type_required', path: ['alert_type'] });
+
+export const telegramChatIdSchema = z.object({
+  chat_id: z.string().trim().max(50).nullable().optional(),
+  chatId: z.string().trim().max(50).nullable().optional(),
+}).transform((input) => ({ chatId: input.chatId ?? input.chat_id ?? null }));
+
+export const updateUserAlertRuleSchema = z.object({
+  is_active: z.boolean().optional(),
+  isActive: z.boolean().optional(),
+}).transform((input) => ({ isActive: input.isActive ?? input.is_active }));
+
 export const listAlertsQuerySchema = z.object({
   locationId: z.string().uuid().optional(),
   alertType: z.string().optional(),
@@ -21,3 +49,4 @@ export const listAlertRulesQuerySchema = z.object({
 });
 
 export type CreateAlertRuleInput = z.infer<typeof createAlertRuleSchema>;
+export type CreateUserAlertRuleInput = z.infer<typeof createUserAlertRuleSchema>;

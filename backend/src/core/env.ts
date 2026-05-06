@@ -24,11 +24,18 @@ export const env = {
 
   JWT_SECRET: get('JWT_SECRET', 'dev-secret'),
   COOKIE_SECRET: getOptional('COOKIE_SECRET', 'dev-cookie-secret'),
-  AUTH_ADMIN_EMAILS: getOptional('AUTH_ADMIN_EMAILS', ''),
+  AUTH_ADMIN_EMAILS: getOptional('AUTH_ADMIN_EMAILS', 'orhanguzell@gmail.com'),
 
   CORS_ORIGIN: getOptional(
     'CORS_ORIGIN',
-    'http://localhost:3088,http://localhost:3048,http://127.0.0.1:3088,http://127.0.0.1:3048',
+    [
+      'http://localhost:3088',
+      'http://localhost:3048',
+      'http://localhost:3096',
+      'http://127.0.0.1:3088',
+      'http://127.0.0.1:3048',
+      'http://127.0.0.1:3096',
+    ].join(','),
   ),
 
   STORAGE_DRIVER: getOptional('STORAGE_DRIVER', 'local') as 'local' | 'cloudinary',
@@ -56,6 +63,7 @@ export const env = {
   FIREBASE_PROJECT_ID: getOptional('FIREBASE_PROJECT_ID'),
   FIREBASE_PRIVATE_KEY: getOptional('FIREBASE_PRIVATE_KEY'),
   FIREBASE_CLIENT_EMAIL: getOptional('FIREBASE_CLIENT_EMAIL'),
+  FIREBASE_SERVICE_ACCOUNT_PATH: getOptional('FIREBASE_SERVICE_ACCOUNT_PATH'),
   /** Virgulle ayrilmis FCM cihaz tokenlari (don uyarisi push) */
   FCM_DEVICE_TOKENS: getOptional('FCM_DEVICE_TOKENS'),
   /** Virgulle ayrilmis e-posta alicilari (frost uyarisi) */

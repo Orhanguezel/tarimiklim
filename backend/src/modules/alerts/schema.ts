@@ -5,6 +5,7 @@ export const weatherAlerts = mysqlTable(
   'weather_alerts',
   {
     id: varchar('id', { length: 36 }).primaryKey(),
+    userId: varchar('user_id', { length: 36 }),
     locationId: varchar('location_id', { length: 36 }).notNull(),
     alertType: varchar('alert_type', { length: 20 }).notNull(), // frost|heavy_rain|storm|heat|humidity
     severity: varchar('severity', { length: 20 }).notNull(),    // info|warning|critical
@@ -19,6 +20,7 @@ export const weatherAlerts = mysqlTable(
     createdAt: datetime('created_at').default(sql`NOW()`),
   },
   (t) => ({
+    userLocationTypeDateIdx: index('idx_user_location_type_date').on(t.userId, t.locationId, t.alertType, t.forecastDate),
     locationTypeIdx: index('idx_location_type').on(t.locationId, t.alertType),
     dateIdx: index('idx_date').on(t.forecastDate),
     severityIdx: index('idx_severity').on(t.severity),

@@ -1,7 +1,8 @@
-# Şirket Kurulum Planı — GWD Teknoloji Ltd. Şti.
+# Şirket Kurulum Planı — GZL Teknoloji ve Hizmet Ltd. Şti.
 
 **Hazırlanma:** 2026-04-18
-**Hedef:** Eşin adına tek ortaklı Ltd. şirket kurulumu — Tarvista ekosisteminin yazılım hizmetleri için
+**Güncelleme:** 2026-05-05 — İsim GZL Teknoloji ve Hizmet olarak değiştirildi, temizlik faaliyeti eklendi, kardeş finansman düzeni belgelendi
+**Hedef:** Eşin adına tek ortaklı Ltd. şirket kurulumu — yazılım + temizlik hizmetleri
 **Süre:** 3-4 hafta (kuruluştan ilk havaleye kadar)
 
 ---
@@ -10,13 +11,13 @@
 
 Bu Ltd. şirketin **iki hedefi** var:
 
-1. **Gelir kanalı** — Tarvista A.Ş. ekosisteminin (tarimiklim, bereketfide, vistaseeds ve 20+ site) yazılım geliştirme ve operasyon hizmetlerini aylık hizmet bedeli karşılığı sağlayacak B2B yazılım şirketi. Ayrıca kendi markası altında IoT/elektronik/bağımsız SaaS ürünleri satışı.
+1. **Gelir kanalı** — Tarvista A.Ş. ekosisteminin (tarimiklim, bereketfide, vistaseeds ve 20+ site) yazılım geliştirme ve operasyon hizmetlerini aylık hizmet bedeli karşılığı sağlayacak B2B yazılım şirketi. Ayrıca temizlik hizmetleri ve kendi markası altında IoT/elektronik/bağımsız SaaS ürünleri satışı.
 2. **Aile birleşimi desteği** — eşin Türkiye'de kendi geliri + şirketi olması, Almanya'ya vize/oturum başvurularında finansal bağımsızlık ve dönüş bağı kanıtı olarak kullanılacak
 
 **Şirket sahibi:** Eş, tek ortak (%100 pay sahibi + müdür)
 **Yapı:** Tek ortaklı Limited Şirket (Türk TTK 573)
 **Konum:** Bursa / Gemlik
-**Faaliyet:** Yazılım geliştirme, bilgisayar danışmanlığı, veri işleme, reklam, elektronik ürün satışı
+**Faaliyet:** Yazılım geliştirme, bilgisayar danışmanlığı, veri işleme, reklam, elektronik ürün satışı, bina temizlik hizmetleri
 
 ### Tarvista Hakkında
 
@@ -33,20 +34,18 @@ Bu ölçek müzakerelerde hatırlanmalı — Tarvista'nın hukuk departmanı var
 
 ## 2. Şirket İsmi
 
-### Alternatifler
-
-**Karar (2026-04-18):** **GWD Teknoloji Ltd. Şti.**
+**Karar (2026-05-05, güncel):** **GZL Teknoloji ve Hizmet Ltd. Şti.**
 
 **Sebepleri:**
-- GWD = Guezel Web Design — Orhan'ın mevcut marka kimliği, tarimiklim commit'lerinde zaten kullanılıyor ("GWD kredisi" vb.)
-- Sürekliliği koruyor — 10+ yıllık marka altyapısı Ltd.'ye taşınır
-- "Güzel" soyadı hem eşte hem Orhan'da — muvazaa argümanına karşı "aile işi" doğal savunma
-- Marka tescil başvurusu kolay (TURKPATENT, başka "GWD Teknoloji" muhtemelen yok)
-- Yurtdışı müşteri için de uluslararası görünüm (İngilizce harf dizgisi)
+- GZL = Güzel soyadının kısaltması — hem eşin hem Orhan'ın soyadı, aile kimliği
+- "Ve Hizmet" eki temizlik + yazılım + diğer hizmet kollarını tek çatı altında topluyor
+- İki ayrı şirket kurma maliyeti ve karmaşasından kaçınmak için tek şirket, çift faaliyet alanı
+- Muvazaa argümanına karşı "aile işi" doğal savunma devam ediyor
 
 **Resmi uzun ad (avukat + müşavir netleştirecek):**
-- `GWD Teknoloji Bilişim Limited Şirketi` veya
-- `GWD Teknoloji Yazılım ve Bilişim Limited Şirketi`
+- `GZL Teknoloji ve Hizmet Limited Şirketi`
+
+**Eski isim notu:** 2026-04-18'de GZL Teknoloji ve Hizmet olarak planlanmıştı. 2026-05-05'te GZL Teknoloji ve Hizmet olarak revize edildi. Şirket henüz kurulmadığından tüm belgeler bu yeni isimle devam eder.
 
 ---
 
@@ -61,6 +60,8 @@ Bu ölçek müzakerelerde hatırlanmalı — Tarvista'nın hukuk departmanı var
 
 ### NACE Kodları
 
+#### Yazılım / Teknoloji Kolonu
+
 | Kod | Faaliyet | Amaç |
 |-----|----------|------|
 | **62.01.01** | Bilgisayar programlama faaliyetleri | ANA — SaaS geliştirme, ekosistem yazılım |
@@ -72,11 +73,85 @@ Bu ölçek müzakerelerde hatırlanmalı — Tarvista'nın hukuk departmanı var
 | 47.41.02 | Bilgisayar, yazılım perakende | Kendi bağımsız SaaS ürün satışı |
 | 26.51 | Ölçme, kontrol, test ekipmanları imalatı | IoT cihaz üretim/montaj (ileride) |
 
+#### Temizlik Hizmetleri Kolonu (2026-05-05 eklendi)
+
+| Kod | Faaliyet | Amaç |
+|-----|----------|------|
+| **81.21** | Binalarda genel temizlik faaliyetleri | ANA temizlik — ev, ofis, daire genel temizlik |
+| 81.22 | Binalarda uzman temizlik faaliyetleri | Endüstriyel, inşaat sonrası temizlik |
+| 81.29 | Diğer temizlik faaliyetleri | Cam, baca, özel temizlik |
+
 **Not:** Tarım ürünleri (tohum, fide) NACE kodları bu şirkette **değil** — onlar Tarvista'nın alt markaları (Bereketfide, VistaSeeds) üzerinden satılmaya devam edecek.
 
 ---
 
-## 4. Gelir Paylaşımı ve Akışı
+## 4. Kardeşin Rolü ve Finansman Düzeni
+
+**Durum (2026-05-05):** Orhan'ın kardeşi şirketin kuruluş aşamasında aylık işletme masraflarını (mali müşavir, Bağ-Kur, KEP, muhasebe yazılımı vb.) karşılayacak. Kardeş ortak değil — eş tek ortak ve müdür olmaya devam ediyor.
+
+### Neden Belgelenmeli
+
+Şirket hesabına gelen veya şirket adına ödenen para "nereden geliyor?" sorusuna cevap veremezsek:
+- Vergi dairesi bunu beyan edilmemiş gelir sayabilir
+- Kardeş ileride "para koydum, hak iddia ediyorum" diyebilir
+- Muhasebede açıklanamayan gider/gelir soru işareti oluşturur
+
+### Yapılacak — Borç Senedi (Öncelikli)
+
+Kardeş para aktardıkça veya masraf ödedikçe bir **borç senedi** (elden veya noter onaylı) düzenlenecek:
+
+```
+Taraflar : [Kardeşin Adı Soyadı] (alacaklı) ↔ GZL Teknoloji ve Hizmet Ltd. Şti. / [Eşin Adı] (borçlu)
+Miktar   : Aylık ödenen tutar (kümülatif takip)
+Koşul    : Şirket gelir elde ettiğinde geri ödeme başlar
+Faiz     : Tarafların tercihine göre (aile içi, sıfır faiz de geçerli)
+```
+
+**Notere götürülmesi önerilir** — el yazısı borç senedi de hukuken geçerli ama noter senedi icra takibine doğrudan konu olabilir.
+
+### Kardeşin Operasyonel Rolü — KARARLANDI (2026-05-05)
+
+**Kardeş şirkette SGK 4A çalışan olacak.** Temizlik işini sahada yürütüyor; şirket müşteriye fatura keser, ödemeyi şirket tahsil eder, vergiyi şirket öder, kardeş maaş alır.
+
+**Para akışı:**
+```
+Müşteri → Temizlik hizmeti alır
+        → GZL Teknoloji ve Hizmet'e ödeme yapar
+        → Şirket KDV + kurumlar vergisi beyan eder
+        → Kardeşe maaş ödenir (brüt maaş - gelir vergisi stopajı - çalışan SGK payı)
+```
+
+**SGK 4A Çalışan Maliyeti (dikkat):**
+Kardeşi çalışan göstermek aylık ek maliyet doğurur:
+
+| Kalem | Tutar (asgari ücret üzerinden) |
+|-------|-------------------------------|
+| Brüt maaş | ~₺38.000 (2026 asgari ücret) |
+| İşveren SGK payı (%20,5) | ~₺7.800 |
+| **Şirkete toplam maliyet** | **~₺45.800/ay** |
+| Çalışanın eline geçen net | ~₺32.000 |
+
+→ Bu düzen **gelir geldikten sonra** başlatılır. İlk ücretli temizlik işi alınmadan SGK kaydı yapılmaz.
+
+### SGK Kaydı Ne Zaman Yapılır
+
+- Şirket kurulur → ilk temizlik müşterisi bulunur → ilk iş günü SGK çalışan girişi yapılır
+- Mali müşavir işe giriş bildirgesini verir (iş günü başlamadan önce bildirilmesi zorunlu — aksi hâlde idari para cezası)
+- Kardeşi çalışan olarak eklemeden temizlik işi yaptırılamaz (kayıt dışı çalıştırma cezası ağır)
+
+### Kuruluş Döneminde Finansman
+
+Bu dönemde (şirket kurulmuş ama henüz temizlik geliri yok) kardeşin aylık masrafları karşılaması **ödünç** olarak kaydedilir. SGK kaydı ve maaş sadece iş başladığında başlar.
+
+### Mali Müşavire Söylenecek
+
+İki ayrı konu:
+1. "Kuruluş aşamasında bir aile ferdi aylık işletme masraflarını ödünç karşılıyor. Alınan borçlar olarak kaydedelim."
+2. "İlk temizlik işimiz geldiğinde kardeşi SGK 4A çalışan olarak ekleyeceğiz. Ne zaman bildirim yapalım?"
+
+---
+
+## 5. Gelir Paylaşımı ve Akışı
 
 ### Revenue Share Matrisi (%100 / %0 clean split)
 
@@ -102,7 +177,7 @@ Müşteri (çiftçi, kooperatif, B2B firma) → kart ödemesi
         ▼                               ▼
    Ürün satışı (tohum, fide)     Yazılım/abonelik/reklam/
    %100 Tarvista IBAN            platform komisyonu
-                                 %100 GWD Teknoloji IBAN
+                                 %100 GZL Teknoloji ve Hizmet IBAN
                                  (ALT ÜYE İŞYERİ / sub-merchant)
                                        │
                                        ▼
@@ -161,11 +236,11 @@ Vergi denetçisi bakınca "niye Tarvista aracı, hiç komisyon almıyor?" diye s
 
 ### Aşama 4 — Sözleşmeler (Hafta 3-4)
 Avukat ile:
-- **Tarvista ↔ GWD Teknoloji** Yazılım Hizmet Sözleşmesi
+- **Tarvista ↔ GZL Teknoloji ve Hizmet** Yazılım Hizmet Sözleşmesi
   - Hizmet kapsamı, aylık bedel formülü, ödeme takvimi, fikri mülkiyet, fesih, rekabet yasağı
 - **Revenue Share Protokolü**
   - Site bazında gelir kategorileri ve paylaşım oranları
-- **(Opsiyonel) Orhan ↔ GWD Teknoloji** Yüklenici Geliştirici Sözleşmesi
+- **(Opsiyonel) Orhan ↔ GZL Teknoloji ve Hizmet** Yüklenici Geliştirici Sözleşmesi
   - Muvazaa koruması
 - Tarvista tarafı imza
 - Noter onayı (opsiyonel — icra takip hakkı verir)
@@ -173,7 +248,7 @@ Avukat ile:
 **Maliyet:** ~₺5-10k avukat tek seferlik
 
 ### Aşama 5 — İlk Operasyon (Hafta 4+)
-- GWD Teknoloji → Tarvista'ya ilk hizmet faturası (geçmiş ay için)
+- GZL Teknoloji ve Hizmet → Tarvista'ya ilk hizmet faturası (geçmiş ay için)
 - Tarvista havalesi
 - İlk KDV beyanı (ay sonu)
 - Bağ-Kur durumu netleşir (SSK aktifse çakışma beyanı, değilse yeni Bağ-Kur)
@@ -220,14 +295,14 @@ Bu Ltd., eşin Almanya'ya taşınma sürecinde şu noktalarda destekler:
 ## 8. Orhan'ın Paralel Yapabilecekleri (Almanya'dan)
 
 ### Bu hafta:
-- Şirket ismi kararı (GWD Teknoloji Bilişim veya başka)
+- Şirket ismi kararı (GZL Teknoloji ve Hizmet Bilişim veya başka)
 - Eş ile mali müşavir online tanışma toplantısı
-- Sosyal medya hesapları hazırlık (LinkedIn GWD Teknoloji sayfası, Twitter vb.) — şirket kurulunca hemen açılabilsin
+- Sosyal medya hesapları hazırlık (LinkedIn GZL Teknoloji ve Hizmet sayfası, Twitter vb.) — şirket kurulunca hemen açılabilsin
 
 ### Paralel teknik işler (Orhan tarafı):
 - `docs/billing-implementation-plan.md` — Tarvista site'lerine entegrasyon planı
-- `docs/MONETIZATION-STRATEGY.md` revizyonu — Tarvista P&L + GWD Teknoloji P&L ayrı tutulacak
-- Kod repo'larında **yeni GitHub organization** — "gwd-teknoloji" gibi, ileride kod transferleri buraya yapılır (ama Tarvista'nın site kodları Tarvista repo'sunda kalacak, GWD Teknoloji'ın ayrı ticari ürünleri olursa oraya)
+- `docs/MONETIZATION-STRATEGY.md` revizyonu — Tarvista P&L + GZL Teknoloji ve Hizmet P&L ayrı tutulacak
+- Kod repo'larında **yeni GitHub organization** — "gwd-teknoloji" gibi, ileride kod transferleri buraya yapılır (ama Tarvista'nın site kodları Tarvista repo'sunda kalacak, GZL Teknoloji ve Hizmet'ın ayrı ticari ürünleri olursa oraya)
 
 ---
 

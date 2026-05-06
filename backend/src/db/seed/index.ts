@@ -8,8 +8,8 @@ import { env } from '@/core/env.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'admin@hava-durumu.local';
-const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD ?? 'HavaDurumuDev2026!';
+const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'orhanguzell@gmail.com';
+const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD ?? 'admin123';
 const ADMIN_ID = process.env.SEED_ADMIN_ID ?? '00000000-0000-4000-8000-000000000099';
 
 function assertSafeToDrop(dbName: string) {
@@ -43,13 +43,13 @@ async function runFile(conn: mysql.Connection, filePath: string, adminVars: Reco
 
   let sql = fs.readFileSync(filePath, 'utf8');
 
-  // Session degiskenlerini inject et — SQL dosyalari @ADMIN_* degiskenlerini kullanir
+  // Once collation: MySQL 8 varsayilan utf8mb4_0900_ai_ci; sema utf8mb4_unicode_ci — aksi halde WHERE id = @ADMIN_ID 1267 verir
   const header = [
+    `SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci;`,
+    `SET time_zone = '+00:00';`,
     `SET @ADMIN_ID := '${sqlEscape(adminVars.id)}';`,
     `SET @ADMIN_EMAIL := '${sqlEscape(adminVars.email)}';`,
     `SET @ADMIN_PASSWORD_HASH := '${sqlEscape(adminVars.passwordHash)}';`,
-    `SET NAMES utf8mb4;`,
-    `SET time_zone = '+00:00';`,
   ].join('\n');
 
   sql = `${header}\n${sql}`;

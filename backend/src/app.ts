@@ -16,6 +16,8 @@ import redisPlugin from '@agro/shared-backend/plugins/redis';
 import { registerErrorHandlers } from '@agro/shared-backend/core/error';
 import { loggerConfig } from '@agro/shared-backend/core/logger';
 import { localeMiddleware } from '@agro/shared-backend/middleware/locale';
+import { requireAuth } from '@agro/shared-backend/middleware/auth';
+import { requireAdmin } from '@agro/shared-backend/middleware/roles';
 
 import { env } from '@/core/env.js';
 import {
@@ -128,10 +130,18 @@ export async function createApp() {
 
       await api.register(
         async (v1) => {
-          await registerSharedAdmin(v1);
-          await registerProjectAdmin(v1);
           await registerSharedPublic(v1);
           await registerProjectPublic(v1);
+
+          await v1.register(
+            async (adminScope) => {
+              adminScope.addHook('onRequest', requireAuth);
+              adminScope.addHook('onRequest', requireAdmin);
+              await registerSharedAdmin(adminScope);
+              await registerProjectAdmin(adminScope);
+            },
+            { prefix: '/admin' },
+          );
         },
         { prefix: '/v1' },
       );

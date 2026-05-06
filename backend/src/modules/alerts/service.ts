@@ -4,12 +4,12 @@ import {
   repoMarkAlertSent,
   repoAlertSentRecently,
   repoGetAlerts,
-  repoGetAlertRulesByLocation,
+  repoGetSubscribedUsersForLocation,
+  type SubscribedAlertUser,
 } from './repository.js';
 import { repoGetLocationById } from '@/modules/locations/repository.js';
 import { repoGetFrostForecastsAboveThreshold } from '@/modules/weather/repository.js';
 import { telegramNotify } from '@agro/shared-backend/modules/telegram';
-import { sendFcmFrostAlert } from './fcm.js';
 import { sendFrostAlertEmail } from './email-delivery.js';
 
 export type AlertChannel = 'telegram' | 'push' | 'email';
@@ -26,47 +26,25 @@ function parseFrostThreshold(raw: string, fallback: number): number {
   return Number.isFinite(n) ? n : fallback;
 }
 
-/** Aktif frost kurallarindan esik + kanal listesi; kural yoksa varsayilan 30 + telegram. */
-function frostTargetsFromRules(
-  dbRules: Awaited<ReturnType<typeof repoGetAlertRulesByLocation>>,
-): { threshold: number; channels: AlertChannel[] }[] {
-  const frostRules = dbRules.filter((r) => r.alertType === 'frost' && r.isActive === 1);
-  if (!frostRules.length) {
-    return [{ threshold: 30, channels: ['telegram'] }];
-  }
-  const byThreshold = new Map<number, Set<AlertChannel>>();
-  for (const r of frostRules) {
-    const t = parseFrostThreshold(r.threshold, 30);
-    const ch = r.channel as AlertChannel;
-    if (ch !== 'telegram' && ch !== 'push' && ch !== 'email') continue;
-    if (!byThreshold.has(t)) byThreshold.set(t, new Set());
-    byThreshold.get(t)!.add(ch);
-  }
-  if (!byThreshold.size) {
-    return [{ threshold: 30, channels: ['telegram'] }];
-  }
-  return [...byThreshold.entries()].map(([threshold, set]) => ({ threshold, channels: [...set] }));
-}
-
 export async function checkAndSendFrostAlerts(db: MySql2Database, locationId: string): Promise<FrostCheckResult> {
-  const alreadySent = await repoAlertSentRecently(db, locationId, 'frost');
-  if (alreadySent) return { sent: false, reason: 'spam_prevention' };
+  const subscribers = await repoGetSubscribedUsersForLocation(db, locationId, 'frost');
+  const targets = subscribers
+    .map((user) => ({
+      user,
+      threshold: parseFrostThreshold(user.threshold, 30),
+      channel: user.channel as AlertChannel,
+    }))
+    .filter((target) => target.channel === 'telegram' || target.channel === 'email');
 
-  const rules = await repoGetAlertRulesByLocation(db, locationId);
-  const targets = frostTargetsFromRules(rules);
+  if (!targets.length) return { sent: false, reason: 'no_subscribers' };
+
   const minTh = Math.min(...targets.map((t) => t.threshold));
   const highRiskForecasts = await repoGetFrostForecastsAboveThreshold(db, locationId, minTh);
   if (!highRiskForecasts.length) return { sent: false, reason: 'no_risk' };
 
   const maxRisk = Math.max(...highRiskForecasts.map((f) => f.frostRisk ?? 0));
-  const channelsSet = new Set<AlertChannel>();
-  for (const { threshold, channels } of targets) {
-    if (maxRisk >= threshold) {
-      for (const c of channels) channelsSet.add(c);
-    }
-  }
-  const channels = [...channelsSet];
-  if (!channels.length) return { sent: false, reason: 'no_risk' };
+  const matchedTargets = targets.filter((target) => maxRisk >= target.threshold);
+  if (!matchedTargets.length) return { sent: false, reason: 'no_risk' };
 
   const severity = getSeverity(maxRisk);
   const location = await repoGetLocationById(db, locationId);
@@ -76,36 +54,26 @@ export async function checkAndSendFrostAlerts(db: MySql2Database, locationId: st
   const title = `${severity === 'critical' ? '🚨' : '⚠️'} Don Uyarisi — ${location.name}`;
   const message = buildFrostMessage(location.name, worstDay, severity);
 
-  const alert = await repoCreateAlert(db, {
-    locationId,
-    alertType: 'frost',
-    severity,
-    title,
-    message,
-    threshold: String(Math.min(...targets.filter((t) => maxRisk >= t.threshold).map((t) => t.threshold))),
-    actualValue: String(worstDay.tempMin),
-    forecastDate: worstDay.forecastDate,
-    sentAt: null,
-    channels,
-    recipients: 0,
-  });
-
   let recipients = 0;
-  if (channels.includes('telegram')) {
-    if (await sendTelegramAlert(title, message)) recipients += 1;
-  }
-  if (channels.includes('push')) {
-    recipients += await sendFcmFrostAlert(title, message.slice(0, 500));
-  }
-  if (channels.includes('email')) {
-    recipients += await sendFrostAlertEmail(title, message);
+  let firstAlertId: string | undefined;
+
+  for (const target of matchedTargets) {
+    const recipientCount = await sendFrostAlertToSubscriber(db, {
+      subscriber: target.user,
+      threshold: target.threshold,
+      channel: target.channel,
+      locationId,
+      severity,
+      title,
+      message,
+      tempMin: String(worstDay.tempMin),
+      forecastDate: worstDay.forecastDate,
+    });
+    recipients += recipientCount.recipients;
+    firstAlertId ??= recipientCount.alertId;
   }
 
-  if (recipients > 0) {
-    await repoMarkAlertSent(db, alert.id, recipients);
-  }
-
-  return { sent: recipients > 0, alertId: alert.id, reason: recipients > 0 ? undefined : 'delivery_failed' };
+  return { sent: recipients > 0, alertId: firstAlertId, reason: recipients > 0 ? undefined : 'delivery_failed' };
 }
 
 export async function listAlerts(db: MySql2Database, params: { locationId?: string; alertType?: string; page: number; limit: number }) {
@@ -136,11 +104,62 @@ function buildFrostMessage(locationName: string, forecast: any, severity: AlertS
   ].join('\n');
 }
 
-async function sendTelegramAlert(title: string, message: string): Promise<boolean> {
+async function sendTelegramAlertToChat(title: string, message: string, chatId?: string): Promise<boolean> {
   try {
-    await telegramNotify({ title, message });
+    await telegramNotify({ title, message, chatId });
     return true;
   } catch {
     return false;
   }
+}
+
+async function sendFrostAlertToSubscriber(
+  db: MySql2Database,
+  input: {
+    subscriber: SubscribedAlertUser;
+    threshold: number;
+    channel: AlertChannel;
+    locationId: string;
+    severity: AlertSeverity;
+    title: string;
+    message: string;
+    tempMin: string;
+    forecastDate: Date;
+  },
+): Promise<{ recipients: number; alertId?: string }> {
+  const alreadySent = await repoAlertSentRecently(
+    db,
+    input.locationId,
+    'frost',
+    input.subscriber.userId,
+    input.forecastDate,
+  );
+  if (alreadySent) return { recipients: 0 };
+
+  const channels = [input.channel];
+  const alert = await repoCreateAlert(db, {
+    userId: input.subscriber.userId,
+    locationId: input.locationId,
+    alertType: 'frost',
+    severity: input.severity,
+    title: input.title,
+    message: input.message,
+    threshold: String(input.threshold),
+    actualValue: input.tempMin,
+    forecastDate: input.forecastDate,
+    sentAt: null,
+    channels,
+    recipients: 0,
+  });
+
+  let recipients = 0;
+  if (input.channel === 'telegram' && input.subscriber.telegramChatId) {
+    if (await sendTelegramAlertToChat(input.title, input.message, input.subscriber.telegramChatId)) recipients = 1;
+  }
+  if (input.channel === 'email' && input.subscriber.email) {
+    recipients = await sendFrostAlertEmail(input.title, input.message, input.subscriber.email);
+  }
+
+  if (recipients > 0) await repoMarkAlertSent(db, alert.id, recipients);
+  return { recipients, alertId: alert.id };
 }

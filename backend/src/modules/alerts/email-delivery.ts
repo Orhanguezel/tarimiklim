@@ -1,8 +1,8 @@
 import nodemailer from 'nodemailer';
 import { env } from '@/core/env.js';
 
-export async function sendFrostAlertEmail(subject: string, text: string): Promise<number> {
-  const to = String(env.ALERT_EMAIL_TO ?? '')
+export async function sendFrostAlertEmail(subject: string, text: string, recipient?: string | null): Promise<number> {
+  const to = String(recipient ?? env.ALERT_EMAIL_TO ?? '')
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean);

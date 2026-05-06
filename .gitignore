@@ -38,5 +38,8 @@ build_log.txt
 # Runtime uploads
 backend/uploads/
 
+# Local secrets
+backend/secrets/
+
 # Syncthing conflicts
 *.sync-conflict-*

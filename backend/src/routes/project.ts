@@ -8,6 +8,7 @@ import { registerAlerts } from '@/modules/alerts/router.js';
 import { registerWeatherAdmin } from '@/modules/weather/admin.routes.js';
 import { registerLocationsAdmin } from '@/modules/locations/admin.routes.js';
 import { registerAlertsAdmin } from '@/modules/alerts/admin.routes.js';
+import { registerAdminPanelStubs } from '@/modules/adminPanelStubs/router.js';
 
 export async function registerProjectPublic(api: FastifyInstance) {
   await api.register(registerWeather);
@@ -17,12 +18,8 @@ export async function registerProjectPublic(api: FastifyInstance) {
 }
 
 export async function registerProjectAdmin(api: FastifyInstance) {
-  await api.register(
-    async (i) => {
-      await i.register(registerWeatherAdmin);
-      await i.register(registerLocationsAdmin);
-      await i.register(registerAlertsAdmin);
-    },
-    { prefix: '/admin' },
-  );
+  await api.register(registerWeatherAdmin);
+  await api.register(registerLocationsAdmin);
+  await api.register(registerAlertsAdmin);
+  await api.register(registerAdminPanelStubs);
 }

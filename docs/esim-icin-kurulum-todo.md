@@ -1,19 +1,23 @@
 # Şirket Kurulum — Adım Adım Yapılacaklar
 
-**Bu belge senin için hazırlandı.** Bursa Gemlik'te GWD Teknoloji Bilişim Ltd. Şti.'nin (veya Orhan'ın seçeceği ismin) kurulumunu yürütürken elinin altında tutabileceğin pratik bir kılavuz. Sıkışırsan Orhan'a sor — kritik kararlarda ikinizin birlikte onaylaması gereken noktaları işaretledim.
+**Bu belge senin için hazırlandı.** Bursa Gemlik'te GZL Teknoloji ve Hizmet Ltd. Şti.'nin kurulumunu yürütürken elinin altında tutabileceğin pratik bir kılavuz. Sıkışırsan Orhan'a sor — kritik kararlarda ikinizin birlikte onaylaması gereken noktaları işaretledim.
 
 **Tahmini süre:** 3-4 hafta kuruluştan ilk havaleye kadar
 **Şirket türü:** Tek ortaklı Limited Şirket — sen %100 ortak ve müdürsün
 **Konum:** Bursa/Gemlik
+**Güncelleme:** 2026-05-05 — İsim GZL Teknoloji ve Hizmet olarak değiştirildi, temizlik faaliyeti eklendi
 
 ---
 
 ## Başlamadan önce bil
 
 - Bu şirket senin adına — bütün yasal sorumluluk sende. Ama operasyonda Orhan'la birlikte çalışacağız.
-- Şirket amacı: Tarvista ekosistemi için yazılım geliştirme hizmeti satmak. Müşterimiz Tarvista A.Ş. ve ekosistem şirketleri.
+- Şirket amacı: **İki faaliyet kolu** — (1) Tarvista ekosistemi için yazılım geliştirme hizmeti + (2) temizlik hizmetleri. Müşterimiz Tarvista A.Ş. ve bireysel/kurumsal temizlik müşterileri.
 - Şirket kurulduktan sonra Tarvista ile yazılı sözleşme imzalayacağız. Ödemeler aylık havale olarak gelecek.
 - Senin gerçekten yazılımcı olman ve kod üretmen bu yapının savunulabilirliği için çok önemli — eskiden olduğu gibi devam.
+- **Kardeş konusu — iki ayrı rol:**
+  - **Kuruluş finansmanı:** Aylık işletme masraflarını ödünç karşılıyor. Borç senedi düzenliyoruz, mali müşavire "alınan borçlar" kaydı.
+  - **Temizlik işçisi:** İlk ücretli temizlik işi geldiğinde şirkete **SGK 4A çalışan** olarak eklenecek. O gün gelmeden SGK kaydı yapılmaz. Kayıt yapılmadan iş yaptırılmaz.
 
 **Önemli:** Hukuki yazışmalar, banka işlemleri, Iyzico başvuruları — hepsi senin adına ve imzanla olacak. Senin e-posta adresin kullanılacak kurumsal iletişim için. Orhan arka planda destek veriyor ama ön yüzde sen varsın.
 
@@ -87,9 +91,11 @@ Ayrı kişi, mali müşavirle karıştırma. Sözleşme yazacak, kuruluşta huku
 
 ### 4. Şirket İsmi
 
-**Karar verildi: GWD Teknoloji Ltd. Şti.**
+**Karar verildi: GZL Teknoloji ve Hizmet Ltd. Şti.**
 
-Resmi uzun ad müşavir + avukatla netleştirilecek — muhtemelen `GWD Teknoloji Bilişim Limited Şirketi` veya `GWD Teknoloji Yazılım ve Bilişim Limited Şirketi`. Mali müşavirinle ticaret sicilinde aynı isimde başka firma var mı kontrol et. Varsa küçük varyasyon eklenir.
+GZL = Güzel soyadının kısaltması. "Ve Hizmet" eki hem yazılım hem temizlik faaliyetini kapsıyor.
+
+Resmi uzun ad: `GZL Teknoloji ve Hizmet Limited Şirketi`. Mali müşavirinle ticaret sicilinde aynı isimde başka firma var mı kontrol et. Varsa küçük varyasyon eklenir.
 
 **Karar verildiğinde:**
 
@@ -102,6 +108,7 @@ Mali müşavir bu adımları seninle yürütecek:
 
 - [ ] **İşyeri adresi belirleme:** Ev adresini kullanıyorsak, tapu durumunu kontrol et — "mesken" olarak kayıtlı ev için "işyeri olarak kullanım" bildirimi yapılır. Site/apartman yönetimi izin veriyor mu bak (bazı sitelerde ticari faaliyet yasak, ana sözleşmede yaz). Alternatif: sanal ofis (aylık ₺1-1.5k, Gemlik'te yerel ofis veya Bursa merkezde Regus/MyOffice şubeleri). Gemlik'te ticaret odası ve vergi dairesine yakın olması pratik.
 - [ ] **Ana sözleşme hazırlığı:** Mali müşavir taslak yapar. Şu NACE kodlarının hepsi yer almalı:
+  - **Yazılım / Teknoloji:**
   - 62.01.01 — Bilgisayar programlama (ANA)
   - 62.02 — Bilgisayar danışmanlığı
   - 63.11 — Veri işleme, barındırma
@@ -110,6 +117,10 @@ Mali müşavir bu adımları seninle yürütecek:
   - 47.91.13 — İnternet üzerinden elektronik perakende (online sensör satışı için)
   - 47.41.02 — Bilgisayar, yazılım perakende (bağımsız SaaS ürün satışı için)
   - 26.51 — Ölçme, kontrol, test ekipmanları imalatı (ileride IoT cihaz üretimi için)
+  - **Temizlik Hizmetleri:**
+  - 81.21 — Binalarda genel temizlik faaliyetleri (ANA)
+  - 81.22 — Binalarda uzman temizlik faaliyetleri
+  - 81.29 — Diğer temizlik faaliyetleri
 - [ ] **Sermaye:** ₺50.000 taahhüt. İlk yatırım zorunlu değil (24 ay içinde ödenebilir). Banka hesabı açılınca ilk %25 (₺12.500) yatırılır, kalanı sonra.
 - [ ] **E-imza başvurusu:** Kuruluşta gerekir. Türkkep, E-Güven gibi sağlayıcılar (~₺300-500/yıl).
 - [ ] **Ticaret sicili tescili** — mali müşavir yapar
@@ -183,16 +194,16 @@ Tarvista'nın Iyzico hesabında **alt üye işyeri** olarak eklenileceğiz. Bu, 
 
 Avukatınla üç belge hazırlanacak:
 
-#### a) Tarvista ↔ GWD Teknoloji — Yazılım Hizmet Sözleşmesi
+#### a) Tarvista ↔ GZL Teknoloji ve Hizmet — Yazılım Hizmet Sözleşmesi
 
 Ana maddeler:
 
 - **Hizmet kapsamı:** Yazılım geliştirme, operasyon, bakım, güncelleme, destek, platform işletmesi
 - **Gelir modeli:** %100/%0 clean split (aşağıdaki matris)
 - **Ödeme yöntemi:** Iyzico alt üye işyeri (sub-merchant) — otomatik split, manuel havale yok
-- **Fatura:** GWD Teknoloji kendi satış faturalarını keser, Tarvista kendi satış faturalarını keser
+- **Fatura:** GZL Teknoloji ve Hizmet kendi satış faturalarını keser, Tarvista kendi satış faturalarını keser
 - **Fikri mülkiyet:** Geliştirilen kod, sözleşme süresince Tarvista kullanım hakkına sahip. Sözleşme feshinde kullanım hakkı devam eder ama yeni geliştirme durur.
-- **Rekabet yasağı:** GWD Teknoloji, Tarvista'nın doğrudan rakibine aynı hizmeti veremez (2 yıl süreli, yazılım tarım sektörü tanımı net yazılmalı)
+- **Rekabet yasağı:** GZL Teknoloji ve Hizmet, Tarvista'nın doğrudan rakibine aynı hizmeti veremez (2 yıl süreli, yazılım tarım sektörü tanımı net yazılmalı)
 - **Fesih:** 3 ay önceden yazılı bildirim, devir süreci
 
 #### b) Revenue Share Protokolü (%100 / %0 clean split)
@@ -201,16 +212,16 @@ Yazılım Hizmet Sözleşmesinin eki. Net gelir kategorileri:
 
 | Gelir Tipi | Kim tahsil eder | Pay |
 | ---------- | --------------- | --- |
-| Yazılım / SaaS abonelik / API / widget / reklam / **platform komisyonu** | Iyzico sub-merchant → GWD Teknoloji IBAN | **%100 GWD Teknoloji** |
+| Yazılım / SaaS abonelik / API / widget / reklam / **platform komisyonu** | Iyzico sub-merchant → GZL Teknoloji ve Hizmet IBAN | **%100 GZL Teknoloji ve Hizmet** |
 | Tarım ürünü (tohum, fide) — Tarvista/Bereketfide/VistaSeeds | Iyzico ana merchant → Tarvista IBAN | **%100 Tarvista** |
-| GWD Teknoloji'ın kendi kanalından IoT/elektronik/bağımsız SaaS | GWD Teknoloji doğrudan | **%100 GWD Teknoloji** |
-| GWD Teknoloji'ın ürünü Tarvista site'sinde satılırsa | Tarvista tahsil, GWD Teknoloji'a aktarır | **%100 GWD Teknoloji** |
+| GZL Teknoloji ve Hizmet'ın kendi kanalından IoT/elektronik/bağımsız SaaS | GZL Teknoloji ve Hizmet doğrudan | **%100 GZL Teknoloji ve Hizmet** |
+| GZL Teknoloji ve Hizmet'ın ürünü Tarvista site'sinde satılırsa | Tarvista tahsil, GZL Teknoloji ve Hizmet'a aktarır | **%100 GZL Teknoloji ve Hizmet** |
 
-**İki taraf iki alan. Paylaşma yok.** Tarvista kendi tarım ürünlerinin %100'ünü, GWD Teknoloji tüm dijital (yazılım + platform + kendi ürünlerinin) %100'ünü alır. Tarvista dijital gelirlerde pay almıyor — çünkü çekirdek işi değil ve bu yapı Tarvista tarafından baştan kabul edildi.
+**İki taraf iki alan. Paylaşma yok.** Tarvista kendi tarım ürünlerinin %100'ünü, GZL Teknoloji ve Hizmet tüm dijital (yazılım + platform + kendi ürünlerinin) %100'ünü alır. Tarvista dijital gelirlerde pay almıyor — çünkü çekirdek işi değil ve bu yapı Tarvista tarafından baştan kabul edildi.
 
-#### c) (Opsiyonel) Orhan ↔ GWD Teknoloji — Yüklenici Geliştirici Sözleşmesi
+#### c) (Opsiyonel) Orhan ↔ GZL Teknoloji ve Hizmet — Yüklenici Geliştirici Sözleşmesi
 
-Bu muvazaa koruması için. Orhan Almanya'dan "serbest geliştirici" olarak GWD Teknoloji'a hizmet satıyor görünür. Saatlik veya aylık ücret belirlenir (önce Orhan'la konuş).
+Bu muvazaa koruması için. Orhan Almanya'dan "serbest geliştirici" olarak GZL Teknoloji ve Hizmet'a hizmet satıyor görünür. Saatlik veya aylık ücret belirlenir (önce Orhan'la konuş).
 
 Bu opsiyonel — avukat "gerekli mi" diye sorarsa hukuki durumu (Orhan'ın Almanya'da, Türkiye'deki borç alacaklıları) kendisi değerlendirsin. Detaylı borç/iltica konusunu **sadece avukata** anlat, üçüncü kişiyle paylaşma.
 
@@ -227,7 +238,7 @@ Bu opsiyonel — avukat "gerekli mi" diye sorarsa hukuki durumu (Orhan'ın Alman
 ### 11. İlk Hizmet Faturası + Havale
 
 - Önceki ay için Tarvista'ya fatura kes (mali müşavir düzenler)
-- Tarvista havale yapar → GWD Teknoloji IBAN'ına gelir
+- Tarvista havale yapar → GZL Teknoloji ve Hizmet IBAN'ına gelir
 - Mali müşavir gelir kaydı yapar
 - Ay sonu: KDV beyanı hazırlanır
 
@@ -347,6 +358,6 @@ Başarılar — ilk havale Gemlik'in yolunda.
 
 ---
 
-**Belge sahibi:** GWD Teknoloji Bilişim Ltd. Şti. (kuruluş aşamasında)
+**Belge sahibi:** GZL Teknoloji ve Hizmet Bilişim Ltd. Şti. (kuruluş aşamasında)
 **Hazırlanma:** 2026-04-18
 **Versiyon:** v1 (değişiklik olursa Orhan güncelleyecek)
