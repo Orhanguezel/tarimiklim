@@ -1,11 +1,11 @@
-// /var/www/goldmoodastro/admin_panel/ecosystem.config.cjs
+// /var/www/tarimiklim/admin_panel/ecosystem.config.cjs
 module.exports = {
   apps: [
     {
-      name: 'goldmoodastro-admin',
-      cwd: '/var/www/goldmoodastro/admin_panel',
+      name: 'tarimiklim-admin',
+      cwd: '/var/www/tarimiklim/admin_panel',
       script: '/home/orhan/.bun/bin/bun',
-      args: 'run start -- -p 3094 -H 127.0.0.1',
+      args: 'run start -- -p 3096 -H 127.0.0.1',
       exec_mode: 'fork',
       instances: 1,
       watch: false,
@@ -18,12 +18,12 @@ module.exports = {
       listen_timeout: 10000,
       env: {
         NODE_ENV: 'production',
-        PORT: '3094',
+        PORT: '3096',
         HOSTNAME: '127.0.0.1',
         NEXT_TELEMETRY_DISABLED: '1',
       },
-      out_file: '/home/orhan/.pm2/logs/goldmoodastro-admin.out.log',
-      error_file: '/home/orhan/.pm2/logs/goldmoodastro-admin.err.log',
+      out_file: '/home/orhan/.pm2/logs/tarimiklim-admin.out.log',
+      error_file: '/home/orhan/.pm2/logs/tarimiklim-admin.err.log',
       combine_logs: true,
       time: true,
     },
