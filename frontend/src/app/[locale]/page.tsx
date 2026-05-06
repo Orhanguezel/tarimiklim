@@ -14,6 +14,8 @@ import { SiteFooter } from '@/components/sections/SiteFooter';
 import { buildWeatherForecastJsonLd } from '@/lib/weather-jsonld';
 import { buildCombinedJsonLd } from '@/lib/site-jsonld';
 import { fetchSiteMedia } from '@/lib/site-settings';
+import { fetchPageSeo, mergePageMetadata } from '@/lib/page-seo';
+import { getPublicSiteUrl } from '@/lib/public-brand';
 
 export async function generateMetadata({
   params,
@@ -22,8 +24,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'home' });
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3088';
-  return {
+  const base = getPublicSiteUrl();
+  const baseMeta: Metadata = {
     title: t('title'),
     description: t('description'),
     openGraph: {
@@ -39,6 +41,8 @@ export async function generateMetadata({
       description: t('description'),
     },
   };
+  const seo = await fetchPageSeo('home', locale);
+  return mergePageMetadata(baseMeta, seo, locale);
 }
 
 export default async function HomePage({

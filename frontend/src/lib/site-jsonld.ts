@@ -1,58 +1,73 @@
-const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://tarimiklim.com';
+import { getOrganizationDefaults, getPublicAppName, getPublicSiteUrl, getServiceDefaults } from '@/lib/public-brand';
+
+const SITE = () => getPublicSiteUrl();
+
+function optionalParentOrg(name: string | undefined) {
+  const n = String(name || '').trim();
+  if (!n) return undefined;
+  return { '@type': 'Organization' as const, name: n };
+}
 
 export function organizationJsonLd(): Record<string, unknown> {
-  return {
+  const app = getPublicAppName();
+  const org = getOrganizationDefaults();
+  const base = SITE();
+  const logoPath = String(org.logoPath || '/brand/og-image.svg').replace(/^\//, '');
+  const sameAs = Array.isArray(org.sameAs) ? org.sameAs.filter((u) => String(u).trim()) : [];
+  const parent = optionalParentOrg(org.parentOrganizationName);
+
+  const out: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'TarımİKlim',
-    alternateName: 'Tarım İklim',
-    url: SITE,
-    logo: `${SITE}/brand/og-image.svg`,
-    description:
-      'Türkiye çiftçisi için 7 günlük hava tahmini, don riski erken uyarı ve sulama planlama servisi. Vista tarım teknolojisi ekosisteminin Katman 4 veri altyapısı.',
-    email: 'destek@tarimiklim.com',
-    foundingDate: '2026',
+    name: app,
+    url: base,
+    logo: `${base}/${logoPath}`,
+    description: org.description || undefined,
     areaServed: { '@type': 'Country', name: 'Türkiye' },
     address: {
       '@type': 'PostalAddress',
-      addressCountry: 'TR',
-      addressLocality: 'Ankara',
+      addressCountry: org.addressCountry || 'TR',
+      ...(org.addressLocality ? { addressLocality: org.addressLocality } : {}),
     },
-    parentOrganization: {
-      '@type': 'Organization',
-      name: 'Vista İnşaat Tarım Teknolojileri A.Ş.',
-    },
-    sameAs: [
-      'https://github.com/Orhanguezel/tarimiklim',
-      'https://bereketfide.com',
-      'https://vistaseeds.com.tr',
-    ],
   };
+
+  const email = String(org.email || '').trim();
+  if (email) out.email = email;
+  const fd = String(org.foundingDate || '').trim();
+  if (fd) out.foundingDate = fd;
+  if (sameAs.length) out.sameAs = sameAs;
+  if (parent) out.parentOrganization = parent;
+
+  return out;
 }
 
 export function websiteJsonLd(locale: string): Record<string, unknown> {
+  const app = getPublicAppName();
+  const base = SITE();
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'TarımİKlim',
-    url: `${SITE}/${locale}`,
+    name: app,
+    url: `${base}/${locale}`,
     inLanguage: locale === 'tr' ? 'tr-TR' : 'en-US',
     potentialAction: {
       '@type': 'SearchAction',
-      target: `${SITE}/${locale}/don-uyarisi?location={search_term_string}`,
+      target: `${base}/${locale}/don-uyarisi?location={search_term_string}`,
       'query-input': 'required name=search_term_string',
     },
-    publisher: { '@type': 'Organization', name: 'TarımİKlim' },
+    publisher: { '@type': 'Organization', name: app },
   };
 }
 
 export function serviceJsonLd(): Record<string, unknown> {
+  const app = getPublicAppName();
+  const svc = getServiceDefaults();
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: 'TarımİKlim API',
-    serviceType: 'Weather forecasting API for agriculture',
-    provider: { '@type': 'Organization', name: 'TarımİKlim' },
+    name: svc.apiPublicName || `${app} API`,
+    serviceType: svc.serviceTypeEn || 'Weather API',
+    provider: { '@type': 'Organization', name: app },
     areaServed: { '@type': 'Country', name: 'Türkiye' },
     offers: [
       {
@@ -60,7 +75,7 @@ export function serviceJsonLd(): Record<string, unknown> {
         name: 'Developer',
         price: '0',
         priceCurrency: 'TRY',
-        description: 'Ücretsiz tier: 100k istek/ay, tüm endpoint erişimi',
+        description: svc.developerOfferDescription || '',
       },
     ],
     hasOfferCatalog: {

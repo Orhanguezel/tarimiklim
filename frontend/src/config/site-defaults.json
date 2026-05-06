@@ -1,0 +1,42 @@
+{
+  "brand": {
+    "appName": "Tarım İklim",
+    "wordMarkLine1": "{{appName}}",
+    "wordMarkLine2": "",
+    "copyrightHolder": "{{appName}}",
+    "defaultLogoAlt": "{{appName}}"
+  },
+  "site": {
+    "originFallback": "http://localhost:3088"
+  },
+  "seo": {
+    "localeDescriptionFallback": {
+      "tr": "Türkiye için hava tahmini ve don riski erken uyarı servisi.",
+      "en": "Weather forecast and frost-risk early warning for Turkey."
+    },
+    "htmlMetaDescriptionByLocale": {
+      "tr": "7 günlük tahmin, don riski ve tarımsal hava verisi.",
+      "en": "7-day forecast, frost risk and agricultural weather data."
+    }
+  },
+  "organization": {
+    "description": "Bölgesel hava tahmini, don riski uyarisi ve sulama planlama verisi sunan servis.",
+    "email": "",
+    "foundingDate": "",
+    "addressCountry": "TR",
+    "addressLocality": "",
+    "logoPath": "/brand/og-image.svg",
+    "parentOrganizationName": "",
+    "sameAs": []
+  },
+  "service": {
+    "apiPublicName": "Hava API",
+    "serviceTypeEn": "Agricultural weather and frost-risk data API",
+    "developerOfferDescription": "Ücretsiz geliştirici katmanı (örnek metin — üretimde güncelleyin)."
+  },
+  "manifest": {
+    "name": "{{appName}}",
+    "shortName": "{{appName}}",
+    "description": "{{appName}} — hava ve don riski."
+  }
+}

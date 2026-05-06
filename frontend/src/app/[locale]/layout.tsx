@@ -5,6 +5,8 @@ import type { Metadata } from 'next';
 import { Space_Grotesk, Inter, JetBrains_Mono } from 'next/font/google';
 
 import { fetchSiteMedia } from '@/lib/site-settings';
+import { getDefaultLogoAlt, getOpenGraphSiteName, getPublicSiteUrl } from '@/lib/public-brand';
+import { fetchPageSeo, mergePageMetadata } from '@/lib/page-seo';
 
 import '../../styles/globals.css';
 
@@ -38,6 +40,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const site = getPublicSiteUrl();
   const [t, media] = await Promise.all([
     getTranslations({ locale, namespace: 'meta' }),
     fetchSiteMedia(locale),
@@ -47,20 +50,20 @@ export async function generateMetadata({
   const favicon = media.favicon;
   const appleTouch = media.appleTouchIcon ?? favicon;
 
-  return {
+  const baseMeta: Metadata = {
     title: { default: t('title'), template: `%s | ${t('title')}` },
     description: t('description'),
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3088'),
+    metadataBase: new URL(site),
     alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}`,
+      canonical: `${site}/${locale}`,
       languages: { tr: '/tr', en: '/en' },
     },
     openGraph: {
-      siteName: 'TarımİKlim',
+      siteName: getOpenGraphSiteName(),
       locale,
       type: 'website',
       ...(ogImage
-        ? { images: [{ url: ogImage, width: 1200, height: 630, alt: 'TarımİKlim' }] }
+        ? { images: [{ url: ogImage, width: 1200, height: 630, alt: getDefaultLogoAlt() }] }
         : {}),
     },
     twitter: {
@@ -69,6 +72,8 @@ export async function generateMetadata({
     },
     ...(favicon ? { icons: { icon: favicon, apple: appleTouch ?? favicon } } : {}),
   };
+  const seo = await fetchPageSeo('site', locale);
+  return mergePageMetadata(baseMeta, seo, locale);
 }
 
 export default async function LocaleLayout({

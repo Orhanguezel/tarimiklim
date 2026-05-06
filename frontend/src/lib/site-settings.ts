@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:8088/api/v1';
+export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:8088/api/v1';
 
 function backendOrigin(): string {
   try {
