@@ -78,7 +78,7 @@ gh pr create --base main --head feature/premium-landing \
 ```bash
 ssh vps-vistainsaat
 
-cd /var/www/tarimiklim
+cd /var/www/tarim-dijital-ekosistem/projects/tarimiklim
 git fetch origin
 git checkout main
 git pull origin main
@@ -129,7 +129,7 @@ Tarayıcıda manuel:
 
 ```bash
 ssh vps-vistainsaat
-cd /var/www/tarimiklim
+cd /var/www/tarim-dijital-ekosistem/projects/tarimiklim
 git log --oneline main -5               # önceki commit ID'yi al
 git checkout <previous-commit>
 cd frontend && bun run build && pm2 reload tarimiklim-frontend

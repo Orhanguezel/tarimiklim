@@ -65,6 +65,18 @@ bun run build:android      # EAS preview APK
 bun run build:ios          # EAS preview IPA (TestFlight)
 ```
 
+## Push Bildirim Notu
+Mobil push Expo Push Service üzerinden çalışır. Web tarafındaki Firebase VAPID anahtarı mobil için kullanılmaz.
+
+İlk EAS/Firebase credential kurulumunda project id üretmek ve `app.json` içindeki `extra.eas.projectId` alanını doldurmak için:
+
+```bash
+cd mobile/app
+eas init
+```
+
+Gerçek cihazda token alınır; simulator/emulator üzerinde Expo push token beklenmemeli. Kullanıcı giriş yaptıktan sonra mobil uygulamadaki Bildirimler ekranından `AÇ` butonuna basıldığında token backend'e `/api/v1/me/push-tokens` ile kaydedilir.
+
 ## Monetizasyon (FAZ 2'de aktive)
 - Paywall bileşeni UI-ready; store entegrasyonu (Apple StoreKit / Google Play Billing) sonraki sprint
 - iOS: IAP zorunlu (%30 kesinti)

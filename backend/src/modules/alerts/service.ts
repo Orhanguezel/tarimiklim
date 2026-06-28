@@ -3,6 +3,7 @@ import {
   repoCreateAlert,
   repoMarkAlertSent,
   repoAlertSentRecently,
+  repoDeactivatePushTokens,
   repoGetAlerts,
   repoGetSubscribedUsersForLocation,
   type SubscribedAlertUser,
@@ -11,6 +12,7 @@ import { repoGetLocationById } from '@/modules/locations/repository.js';
 import { repoGetFrostForecastsAboveThreshold } from '@/modules/weather/repository.js';
 import { telegramNotify } from '@agro/shared-backend/modules/telegram';
 import { sendFrostAlertEmail } from './email-delivery.js';
+import { sendPushFrostAlert, type PushProvider, type PushSendResult, type PushTokenTarget } from './fcm.js';
 
 export type AlertChannel = 'telegram' | 'push' | 'email';
 export type AlertSeverity = 'info' | 'warning' | 'critical';
@@ -19,6 +21,14 @@ interface FrostCheckResult {
   sent: boolean;
   alertId?: string;
   reason?: string;
+}
+
+type PushAlertSender = (title: string, body: string, targets: PushTokenTarget[]) => Promise<PushSendResult>;
+
+let pushAlertSender: PushAlertSender = sendPushFrostAlert;
+
+export function setPushAlertSenderForTests(sender: PushAlertSender | null): void {
+  pushAlertSender = sender ?? sendPushFrostAlert;
 }
 
 function parseFrostThreshold(raw: string, fallback: number): number {
@@ -34,7 +44,7 @@ export async function checkAndSendFrostAlerts(db: MySql2Database, locationId: st
       threshold: parseFrostThreshold(user.threshold, 30),
       channel: user.channel as AlertChannel,
     }))
-    .filter((target) => target.channel === 'telegram' || target.channel === 'email');
+    .filter((target) => target.channel === 'telegram' || target.channel === 'email' || target.channel === 'push');
 
   if (!targets.length) return { sent: false, reason: 'no_subscribers' };
 
@@ -158,6 +168,14 @@ async function sendFrostAlertToSubscriber(
   }
   if (input.channel === 'email' && input.subscriber.email) {
     recipients = await sendFrostAlertEmail(input.title, input.message, input.subscriber.email);
+  }
+  if (input.channel === 'push') {
+    const pushTargets = input.subscriber.pushTokens
+      .filter((token) => token.provider === 'fcm' || token.provider === 'expo')
+      .map((token) => ({ token: token.token, provider: token.provider as PushProvider }));
+    const result = await pushAlertSender(input.title, input.message, pushTargets);
+    recipients = result.successCount;
+    if (result.invalidTokens.length) await repoDeactivatePushTokens(db, result.invalidTokens);
   }
 
   if (recipients > 0) await repoMarkAlertSent(db, alert.id, recipients);

@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
 import { API_URL } from '@/lib/site-settings';
 import { getPublicSiteUrl } from '@/lib/public-brand';
+import { fetchPageSeoFromApi, mergePageMetadata as mergeSharedMetadata } from '@agro/shared-frontend/seo';
 
 type SeoPayload = {
   title?: string;
   description?: string;
+  og_image?: string;
+  no_index?: boolean;
   robots?: {
     index?: boolean;
     follow?: boolean;
@@ -12,42 +15,85 @@ type SeoPayload = {
 };
 
 export async function fetchPageSeo(pageKey: string, locale: string): Promise<SeoPayload | null> {
-  try {
-    const qs = new URLSearchParams({ locale });
-    const res = await fetch(`${API_URL}/site_settings/page-seo/${encodeURIComponent(pageKey)}?${qs}`, {
-      next: { revalidate: 60, tags: ['page-seo', `page-seo:${pageKey}`] },
-    });
-    if (!res.ok) return null;
-    const data = (await res.json()) as SeoPayload;
-    if (!data || typeof data !== 'object') return null;
-    return data;
-  } catch {
-    return null;
-  }
+  return fetchPageSeoFromApi({ apiUrl: API_URL, pageKey, locale, revalidateSeconds: 60 }) as Promise<SeoPayload | null>;
 }
 
-export function mergePageMetadata(base: Metadata, seo: SeoPayload | null, locale: string): Metadata {
-  if (!seo) return base;
-  const site = getPublicSiteUrl();
-  const title = seo.title?.trim() || base.title;
-  const description = seo.description?.trim() || base.description;
+function normalizePath(path: string, locale: string): string {
+  const withSlash = path.startsWith('/') ? path : `/${path}`;
+  const withoutLocale = withSlash.replace(new RegExp(`^/${locale}(?=/|$)`), '') || '/';
+  return withoutLocale === '/' ? '' : withoutLocale.replace(/\/+$/, '');
+}
 
+function buildAlternates(site: string, locale: string, path: string): NonNullable<Metadata['alternates']> {
+  const cleanPath = normalizePath(path, locale);
   return {
-    ...base,
-    title,
-    description,
-    robots: seo.robots ?? base.robots,
-    openGraph: {
-      ...base.openGraph,
-      title: typeof title === 'string' ? title : undefined,
-      description: typeof description === 'string' ? description : undefined,
-      locale,
-      url: `${site}/${locale}`,
-    },
-    twitter: {
-      ...base.twitter,
-      title: typeof title === 'string' ? title : undefined,
-      description: typeof description === 'string' ? description : undefined,
+    canonical: `${site}/${locale}${cleanPath}`,
+    languages: {
+      tr: `${site}/tr${cleanPath}`,
+      en: `${site}/en${cleanPath}`,
+      'x-default': `${site}/tr${cleanPath}`,
     },
   };
+}
+
+export function mergePageMetadata(base: Metadata, seo: SeoPayload | null, locale: string, path = `/${locale}`): Metadata {
+  const site = getPublicSiteUrl();
+  const alternates = buildAlternates(site, locale, path);
+  const pageUrl = String(alternates.canonical);
+  if (!seo) {
+    return {
+      ...base,
+      alternates: {
+        ...base.alternates,
+        ...alternates,
+      },
+      openGraph: {
+        ...base.openGraph,
+        url: pageUrl,
+        locale,
+      },
+    };
+  }
+
+  const robots =
+    seo.robots ??
+    (typeof seo.no_index === 'boolean'
+      ? { index: !seo.no_index, follow: !seo.no_index }
+      : base.robots);
+
+  // shared-frontend merge handles title/description + OG/Twitter; we layer og_image if present.
+  const merged = mergeSharedMetadata(
+    { ...base, robots },
+    { title: seo.title, description: seo.description },
+    locale,
+    site, // siteUrl param expects site origin
+  );
+
+  const ogImage = seo.og_image?.trim();
+  const withCanonical: Metadata = {
+    ...merged,
+    alternates: {
+      ...merged.alternates,
+      ...alternates,
+    },
+    openGraph: {
+      ...merged.openGraph,
+      url: pageUrl,
+      locale,
+    },
+  };
+
+  return ogImage
+    ? {
+        ...withCanonical,
+        openGraph: {
+          ...withCanonical.openGraph,
+          images: [{ url: ogImage, width: 1200, height: 630 }],
+        },
+        twitter: {
+          ...withCanonical.twitter,
+          images: [ogImage],
+        },
+      }
+    : withCanonical;
 }

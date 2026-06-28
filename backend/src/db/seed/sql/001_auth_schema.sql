@@ -18,6 +18,9 @@ CREATE TABLE IF NOT EXISTS users (
   KEY users_ecosystem_id_idx (ecosystem_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+ALTER TABLE users ADD COLUMN ecosystem_id CHAR(36) NULL AFTER phone;
+ALTER TABLE users ADD KEY users_ecosystem_id_idx (ecosystem_id);
+
 CREATE TABLE IF NOT EXISTS user_roles (
   id CHAR(36) NOT NULL,
   user_id CHAR(36) NOT NULL,

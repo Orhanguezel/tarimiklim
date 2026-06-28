@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { ArrowLeft, Bell, Megaphone, Send, User, Users } from 'lucide-react';
+import { ArrowLeft, Bell, CheckCircle2, Megaphone, Send, Smartphone, User, Users } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -40,12 +40,12 @@ export default function SendPushNotificationPage() {
 
   const handleSend = async () => {
     if (!title.trim() || !body.trim()) {
-      toast.error('Title and message are required.');
+      toast.error('Başlık ve mesaj alanları zorunludur.');
       return;
     }
 
     if (target === 'specific' && !userId.trim()) {
-      toast.error('User ID is required for specific target.');
+      toast.error('Belirli kullanıcı hedefi için kullanıcı ID zorunludur.');
       return;
     }
 
@@ -57,62 +57,115 @@ export default function SendPushNotificationPage() {
         user_id: target === 'specific' ? userId.trim() : undefined,
       }).unwrap();
 
-      toast.success(res.sent_count 
-        ? `${res.sent_count} notifications sent successfully.` 
-        : 'Push notification sent successfully.'
+      if (Number(res.target_count ?? 0) === 0) {
+        toast.error('Gönderim yapılmadı: aktif push tokenı olan kullanıcı bulunamadı.');
+        return;
+      }
+
+      toast.success(
+        `${res.sent_count}/${res.target_count} bildirim gönderildi. Başarısız: ${res.failed_count ?? 0}.`,
       );
       router.back();
     } catch (err: any) {
-      toast.error(err?.data?.error?.message || 'Failed to send notification.');
+      toast.error(err?.data?.error?.message || 'Bildirim gönderilemedi.');
     }
   };
 
   const handleSendCampaign = async () => {
     if (!selectedCampaignSlug) {
-      toast.error('Please select a campaign.');
+      toast.error('Lütfen bir kampanya seçin.');
       return;
     }
 
     try {
       const res = await sendCampaign(selectedCampaignSlug).unwrap();
+      if (Number(res.target_count ?? 0) === 0) {
+        toast.error('Kampanya gönderilmedi: bu hedef segmentte aktif push tokenı yok.');
+        return;
+      }
       toast.success(
-        `${res.sent_count}/${res.target_count} campaign notifications sent. Failed: ${res.failed_count}.`,
+        `${res.sent_count}/${res.target_count} kampanya bildirimi gönderildi. Başarısız: ${res.failed_count}.`,
       );
     } catch (err: any) {
-      toast.error(err?.data?.error?.message || 'Failed to send campaign.');
+      toast.error(err?.data?.error?.message || 'Kampanya gönderilemedi.');
     }
   };
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" onClick={() => router.back()}>
-          <ArrowLeft className="size-5" />
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold">Send Push Notification</h1>
-          <p className="text-sm text-muted-foreground">Send real-time mobile notifications to your users.</p>
+    <div className="space-y-10 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="space-y-3">
+          <Button
+            variant="outline"
+            onClick={() => router.back()}
+            className="h-10 rounded-full border-gm-border-soft px-4 text-[10px] font-bold uppercase tracking-widest text-gm-muted hover:bg-gm-primary/5"
+          >
+            <ArrowLeft className="mr-2 size-4" />
+            Geri Dön
+          </Button>
+          <div className="flex items-center gap-3">
+            <span className="h-px w-8 bg-gm-gold" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gm-gold">
+              Push Bildirimleri
+            </span>
+          </div>
+          <div>
+            <h1 className="font-serif text-4xl text-gm-text">Bildirim Gönder</h1>
+            <p className="mt-2 max-w-2xl font-serif text-sm italic text-gm-muted opacity-75">
+              Kullanıcılara anlık push bildirimi veya önceden hazırlanmış kampanya gönderin.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-3 lg:min-w-[460px]">
+          <div className="rounded-2xl border border-gm-border-soft bg-gm-surface/50 p-4 shadow-lg">
+            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gm-muted">
+              <Megaphone className="size-4 text-gm-gold" />
+              Kampanya
+            </div>
+            <div className="mt-2 text-2xl font-semibold text-gm-text">{campaigns.length}</div>
+          </div>
+          <div className="rounded-2xl border border-gm-border-soft bg-gm-surface/50 p-4 shadow-lg">
+            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gm-muted">
+              <Users className="size-4 text-gm-gold" />
+              Hedef
+            </div>
+            <div className="mt-2 text-2xl font-semibold text-gm-text">
+              {target === 'all' ? 'Tümü' : 'Tekil'}
+            </div>
+          </div>
+          <div className="rounded-2xl border border-gm-border-soft bg-gm-surface/50 p-4 shadow-lg">
+            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gm-muted">
+              <Smartphone className="size-4 text-gm-gold" />
+              Önizleme
+            </div>
+            <div className="mt-2 text-2xl font-semibold text-gm-text">
+              {title.trim() ? 'Hazır' : 'Taslak'}
+            </div>
+          </div>
         </div>
       </div>
 
-      <Card>
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="space-y-6">
+      <Card className="overflow-hidden border-gm-border-soft bg-gm-surface/50 shadow-xl">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Megaphone className="size-4" />
-            Push Campaign
+          <CardTitle className="flex items-center gap-2 font-serif text-xl text-gm-text">
+            <Megaphone className="size-5 text-gm-gold" />
+            Kampanya Gönderimi
           </CardTitle>
-          <CardDescription>Send a preconfigured campaign to its saved audience segment.</CardDescription>
+          <CardDescription>Kayıtlı hedef kitlesi olan hazır bir push kampanyasını gönderin.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="campaign">Campaign</Label>
+            <Label htmlFor="campaign">Kampanya</Label>
             <Select
               value={selectedCampaignSlug}
               onValueChange={setSelectedCampaignSlug}
               disabled={campaignsLoading || campaigns.length === 0}
             >
-              <SelectTrigger id="campaign">
-                <SelectValue placeholder={campaignsLoading ? 'Loading campaigns...' : 'Select campaign'} />
+              <SelectTrigger id="campaign" className="h-12 rounded-xl border-gm-border-soft bg-gm-bg/70">
+                <SelectValue placeholder={campaignsLoading ? 'Kampanyalar yükleniyor...' : 'Kampanya seçin'} />
               </SelectTrigger>
               <SelectContent>
                 {campaigns.map((campaign) => (
@@ -125,84 +178,90 @@ export default function SendPushNotificationPage() {
           </div>
 
           {selectedCampaign ? (
-            <div className="rounded-md border bg-muted/20 p-4 text-sm">
+            <div className="rounded-2xl border border-gm-border-soft bg-gm-bg/60 p-5 text-sm">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-medium">{selectedCampaign.title}</span>
-                <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                <span className="font-medium text-gm-text">{selectedCampaign.title}</span>
+                <span className="rounded-full bg-gm-gold/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-gm-gold">
                   {selectedCampaign.target_segment}
                 </span>
                 {selectedCampaign.deep_link ? (
-                  <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                  <span className="rounded-full bg-gm-surface px-3 py-1 text-[10px] text-gm-muted">
                     {selectedCampaign.deep_link}
                   </span>
                 ) : null}
               </div>
-              <p className="mt-2 text-muted-foreground">{selectedCampaign.body}</p>
+              <p className="mt-3 text-gm-muted">{selectedCampaign.body}</p>
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">No active push campaigns found.</p>
+            <p className="rounded-2xl border border-dashed border-gm-border-soft p-5 text-sm text-gm-muted">
+              Aktif push kampanyası bulunamadı.
+            </p>
           )}
         </CardContent>
-        <CardFooter className="justify-end border-t pt-6">
+        <CardFooter className="justify-end border-t border-gm-border-soft bg-gm-bg/30 pt-6">
           <Button
             onClick={handleSendCampaign}
             disabled={!selectedCampaignSlug || isSendingCampaign}
-            className="bg-amethyst hover:bg-amethyst/90"
+            className="h-11 rounded-full bg-gm-gold px-7 text-[10px] font-bold uppercase tracking-widest text-gm-bg shadow-lg shadow-gm-gold/20 hover:bg-gm-gold-dim"
           >
             <Send className="mr-2 size-4" />
-            {isSendingCampaign ? 'Sending...' : 'Send Campaign'}
+            {isSendingCampaign ? 'Gönderiliyor...' : 'Kampanyayı Gönder'}
           </Button>
         </CardFooter>
       </Card>
 
-      <Card>
+      <Card className="overflow-hidden border-gm-border-soft bg-gm-surface/50 shadow-xl">
         <CardHeader>
-          <CardTitle className="text-base">Notification Content</CardTitle>
-          <CardDescription>This will be displayed as a push notification on the user's device.</CardDescription>
+          <CardTitle className="flex items-center gap-2 font-serif text-xl text-gm-text">
+            <Bell className="size-5 text-gm-gold" />
+            Manuel Bildirim İçeriği
+          </CardTitle>
+          <CardDescription>Bu içerik kullanıcının cihazında push bildirimi olarak görünecek.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
+            <Label htmlFor="title">Başlık</Label>
             <Input 
               id="title" 
-              placeholder="e.g. Special Offer!" 
+              placeholder="Örn. Don riski uyarısı" 
+              className="h-12 rounded-xl border-gm-border-soft bg-gm-bg/70"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="body">Message Body</Label>
+            <Label htmlFor="body">Mesaj</Label>
             <Textarea 
               id="body" 
-              placeholder="e.g. New courses are live — open the app for details." 
-              className="min-h-[100px]"
+              placeholder="Örn. Bu gece seçili konumlarınızda don riski bekleniyor. Detayları panelden inceleyin." 
+              className="min-h-[120px] rounded-xl border-gm-border-soft bg-gm-bg/70"
               value={body}
               onChange={(e) => setBody(e.target.value)}
             />
           </div>
 
-          <div className="space-y-3 pt-4 border-t">
-            <Label>Target Audience</Label>
-            <RadioGroup value={target} onValueChange={(v) => setTarget(v as any)} className="grid grid-cols-2 gap-4">
+          <div className="space-y-3 border-t border-gm-border-soft pt-5">
+            <Label>Hedef Kitle</Label>
+            <RadioGroup value={target} onValueChange={(v) => setTarget(v as 'all' | 'specific')} className="grid gap-4 sm:grid-cols-2">
               <div>
                 <RadioGroupItem value="all" id="target-all" className="peer sr-only" />
                 <Label
                   htmlFor="target-all"
-                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-amethyst [&:has([data-state=checked])]:border-amethyst"
+                  className="flex cursor-pointer flex-col items-center justify-between rounded-2xl border border-gm-border-soft bg-gm-bg/60 p-5 text-gm-muted transition-all hover:border-gm-gold/50 hover:bg-gm-gold/5 peer-data-[state=checked]:border-gm-gold peer-data-[state=checked]:text-gm-text"
                 >
                   <Users className="mb-3 size-6" />
-                  All Users
+                  Tüm Kullanıcılar
                 </Label>
               </div>
               <div>
                 <RadioGroupItem value="specific" id="target-specific" className="peer sr-only" />
                 <Label
                   htmlFor="target-specific"
-                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-amethyst [&:has([data-state=checked])]:border-amethyst"
+                  className="flex cursor-pointer flex-col items-center justify-between rounded-2xl border border-gm-border-soft bg-gm-bg/60 p-5 text-gm-muted transition-all hover:border-gm-gold/50 hover:bg-gm-gold/5 peer-data-[state=checked]:border-gm-gold peer-data-[state=checked]:text-gm-text"
                 >
                   <User className="mb-3 size-6" />
-                  Specific User
+                  Belirli Kullanıcı
                 </Label>
               </div>
             </RadioGroup>
@@ -210,46 +269,67 @@ export default function SendPushNotificationPage() {
 
           {target === 'specific' && (
             <div className="space-y-2 animate-in fade-in slide-in-from-top-2">
-              <Label htmlFor="userId">User ID</Label>
+              <Label htmlFor="userId">Kullanıcı ID</Label>
               <Input 
                 id="userId" 
-                placeholder="Enter user UUID" 
+                placeholder="Kullanıcı UUID değerini girin" 
+                className="h-12 rounded-xl border-gm-border-soft bg-gm-bg/70"
                 value={userId}
                 onChange={(e) => setUserId(e.target.value)}
               />
             </div>
           )}
         </CardContent>
-        <CardFooter className="justify-end border-t pt-6">
-          <Button variant="outline" onClick={() => router.back()} className="mr-2">Cancel</Button>
-          <Button onClick={handleSend} disabled={isLoading} className="bg-amethyst hover:bg-amethyst/90">
+        <CardFooter className="justify-end gap-3 border-t border-gm-border-soft bg-gm-bg/30 pt-6">
+          <Button
+            variant="outline"
+            onClick={() => router.back()}
+            className="h-11 rounded-full border-gm-border-soft px-6 text-[10px] font-bold uppercase tracking-widest"
+          >
+            Vazgeç
+          </Button>
+          <Button
+            onClick={handleSend}
+            disabled={isLoading}
+            className="h-11 rounded-full bg-gm-gold px-7 text-[10px] font-bold uppercase tracking-widest text-gm-bg shadow-lg shadow-gm-gold/20 hover:bg-gm-gold-dim"
+          >
             <Send className="mr-2 size-4" />
-            {isLoading ? 'Sending...' : 'Send Notification'}
+            {isLoading ? 'Gönderiliyor...' : 'Bildirimi Gönder'}
           </Button>
         </CardFooter>
       </Card>
+        </div>
 
-      {/* Preview */}
-      <div className="rounded-xl border bg-card p-6 shadow-sm">
-        <h3 className="mb-4 text-sm font-semibold text-muted-foreground flex items-center gap-2">
-          <Bell className="size-4" /> Device Preview
-        </h3>
-        <div className="mx-auto w-64 rounded-2xl bg-slate-100 p-3 dark:bg-slate-900 border-4 border-slate-200 dark:border-slate-800">
-          <div className="mb-2 h-1 w-8 self-center rounded-full bg-slate-300 dark:bg-slate-700 mx-auto" />
-          <div className="rounded-lg bg-white/80 dark:bg-black/50 p-3 shadow-sm backdrop-blur-md">
+      <aside className="xl:sticky xl:top-24 xl:self-start">
+        <div className="rounded-3xl border border-gm-border-soft bg-gm-surface/50 p-6 shadow-xl">
+          <h3 className="mb-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gm-gold">
+            <Bell className="size-4" /> Cihaz Önizleme
+          </h3>
+          <div className="mx-auto w-72 rounded-[2rem] border-4 border-gm-border-soft bg-gm-bg p-4 shadow-2xl">
+            <div className="mx-auto mb-4 h-1 w-12 rounded-full bg-gm-border-soft" />
+            <div className="rounded-2xl border border-gm-border-soft bg-gm-surface/90 p-4 shadow-lg backdrop-blur-md">
             <div className="flex items-center gap-2 mb-1">
-              <div className="size-4 rounded bg-amethyst" />
-              <span className="text-[10px] font-bold truncate max-w-[140px]">
+              <div className="flex size-5 items-center justify-center rounded bg-gm-gold/15 text-gm-gold">
+                <CheckCircle2 className="size-3" />
+              </div>
+              <span className="max-w-[160px] truncate text-[10px] font-bold text-gm-text">
                 {getAdminAppName().toUpperCase()}
               </span>
-              <span className="ml-auto text-[8px] text-muted-foreground">now</span>
+              <span className="ml-auto text-[8px] text-gm-muted">şimdi</span>
             </div>
-            <p className="text-[11px] font-bold line-clamp-1">{title || 'Notification Title'}</p>
-            <p className="text-[10px] text-muted-foreground line-clamp-2 leading-tight">
-              {body || 'Your notification message will appear here...'}
+            <p className="line-clamp-1 text-[12px] font-bold text-gm-text">{title || 'Bildirim başlığı'}</p>
+            <p className="line-clamp-3 text-[11px] leading-snug text-gm-muted">
+              {body || 'Bildirim mesajınız burada görünecek...'}
             </p>
+            </div>
+          </div>
+
+          <div className="mt-6 rounded-2xl border border-gm-border-soft bg-gm-bg/50 p-4 text-xs leading-relaxed text-gm-muted">
+            <strong className="block text-gm-text">Gönderim notu</strong>
+            Tüm kullanıcılar seçildiğinde kayıtlı push tokenı olan aktif kullanıcılara gönderim yapılır. Tekil gönderimde kullanıcı UUID değeri kullanılır.
           </div>
         </div>
+      </aside>
       </div>
     </div>
   );

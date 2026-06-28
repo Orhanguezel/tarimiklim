@@ -6,6 +6,8 @@ const KEYS = {
   onboarded: 'tarimiklim.onboarded.v1',
   subscriptionTier: 'tarimiklim.tier.v1',
   pushToken: 'tarimiklim.pushToken.v1',
+  pushDeviceId: 'tarimiklim.pushDeviceId.v1',
+  accessToken: 'tarimiklim.accessToken.v1',
   language: 'tarimiklim.lang.v1',
 } as const;
 
@@ -63,6 +65,27 @@ export const storage = {
 
   async setPushToken(token: string): Promise<void> {
     await AsyncStorage.setItem(KEYS.pushToken, token);
+  },
+
+  async getPushDeviceId(): Promise<string> {
+    const existing = await AsyncStorage.getItem(KEYS.pushDeviceId);
+    if (existing) return existing;
+    const randomPart = Math.random().toString(36).slice(2);
+    const id = `mobile-${Date.now().toString(36)}-${randomPart}`;
+    await AsyncStorage.setItem(KEYS.pushDeviceId, id);
+    return id;
+  },
+
+  async getAccessToken(): Promise<string | null> {
+    return AsyncStorage.getItem(KEYS.accessToken);
+  },
+
+  async setAccessToken(token: string): Promise<void> {
+    await AsyncStorage.setItem(KEYS.accessToken, token);
+  },
+
+  async clearAccessToken(): Promise<void> {
+    await AsyncStorage.removeItem(KEYS.accessToken);
   },
 
   async getLanguage(): Promise<'tr' | 'en'> {

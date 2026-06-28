@@ -1,5 +1,11 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { randomUUID } from 'node:crypto';
+import { sql } from 'drizzle-orm';
+import { sendPushFrostAlert, type PushProvider, type PushTokenTarget } from '@/modules/alerts/fcm.js';
+
+type PushTargetWithUser = PushTokenTarget & {
+  userId: string;
+};
 
 function asStr(v: unknown): string {
   return String(v ?? '').trim();
@@ -188,6 +194,193 @@ function ok(reply: FastifyReply, body: Record<string, unknown> = {}) {
   return reply.send({ success: true, ...body });
 }
 
+function rowsFromExecute<T>(result: unknown): T[] {
+  if (Array.isArray(result) && Array.isArray(result[0])) return result[0] as T[];
+  if (Array.isArray(result)) return result as T[];
+  return [];
+}
+
+function isActive(v: unknown) {
+  return v === true || v === 1 || v === '1' || v === 'true';
+}
+
+function pushTargetWhere(segment: string) {
+  if (segment === 'inactive_7d') {
+    return sql`u.is_active = 1 AND (u.last_sign_in_at IS NULL OR u.last_sign_in_at < DATE_SUB(NOW(), INTERVAL 7 DAY))`;
+  }
+  return sql`u.is_active = 1`;
+}
+
+async function listPushCampaigns(req: FastifyRequest, reply: FastifyReply) {
+  const db = (req.server as any).db;
+  const result = await db.execute(sql`
+    SELECT id, slug, title, body, target_segment, deep_link, is_active, created_at, updated_at
+    FROM push_campaigns
+    ORDER BY display_order ASC, created_at ASC
+  `);
+  const rows = rowsFromExecute<Record<string, unknown>>(result).map((row) => ({
+    id: String(row.id ?? ''),
+    slug: String(row.slug ?? ''),
+    title: String(row.title ?? ''),
+    body: String(row.body ?? ''),
+    target_segment: String(row.target_segment ?? 'all'),
+    deep_link: row.deep_link ? String(row.deep_link) : null,
+    is_active: isActive(row.is_active),
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+  }));
+  return reply.send(rows);
+}
+
+async function listPushTargets(db: any, segment: string): Promise<PushTargetWithUser[]> {
+  const result = await db.execute(sql`
+    SELECT upt.user_id, upt.token, upt.provider
+    FROM user_push_tokens upt
+    INNER JOIN users u ON u.id = upt.user_id
+    WHERE upt.is_active = 1
+      AND ${pushTargetWhere(segment)}
+  `);
+  return rowsFromExecute<Record<string, unknown>>(result)
+    .map((row) => ({
+      userId: String(row.user_id ?? '').trim(),
+      token: String(row.token ?? '').trim(),
+      provider: String(row.provider ?? 'fcm').trim() as PushProvider,
+    }))
+    .filter((target) => target.userId && target.token && (target.provider === 'fcm' || target.provider === 'expo'));
+}
+
+async function deactivateInvalidPushTokens(db: any, tokens: string[]) {
+  if (!tokens.length) return;
+  await db.execute(sql`
+    UPDATE user_push_tokens
+    SET is_active = 0, updated_at = NOW()
+    WHERE token IN (${sql.join(tokens, sql`, `)})
+  `);
+}
+
+async function createInboxNotifications(db: any, input: {
+  userIds: string[];
+  title: string;
+  message: string;
+  type?: string;
+}) {
+  const uniqueUserIds = Array.from(new Set(input.userIds.map((id) => id.trim()).filter(Boolean)));
+  if (!uniqueUserIds.length) return 0;
+
+  await Promise.all(
+    uniqueUserIds.map((userId) =>
+      db.execute(sql`
+        INSERT INTO notifications (id, user_id, title, message, type, is_read, created_at)
+        VALUES (${randomUUID()}, ${userId}, ${input.title}, ${input.message}, ${input.type ?? 'push'}, 0, NOW(3))
+      `),
+    ),
+  );
+  return uniqueUserIds.length;
+}
+
+async function sendManualPush(req: FastifyRequest, reply: FastifyReply) {
+  const body = (req.body ?? {}) as Record<string, unknown>;
+  const title = asStr(body.title);
+  const message = asStr(body.body);
+  const userId = asStr(body.user_id);
+  if (!title || !message) {
+    return reply.status(400).send({ error: { message: 'title_body_required' } });
+  }
+
+  const db = (req.server as any).db;
+  const result = userId
+    ? await db.execute(sql`
+        SELECT user_id, token, provider
+        FROM user_push_tokens
+        WHERE is_active = 1 AND user_id = ${userId}
+      `)
+    : await db.execute(sql`
+        SELECT upt.user_id, upt.token, upt.provider
+        FROM user_push_tokens upt
+        INNER JOIN users u ON u.id = upt.user_id
+        WHERE upt.is_active = 1 AND u.is_active = 1
+      `);
+
+  const targets = rowsFromExecute<Record<string, unknown>>(result)
+    .map((row) => ({
+      userId: String(row.user_id ?? '').trim(),
+      token: String(row.token ?? '').trim(),
+      provider: String(row.provider ?? 'fcm').trim() as PushProvider,
+    }))
+    .filter((target) => target.userId && target.token && (target.provider === 'fcm' || target.provider === 'expo'));
+
+  const sent = await sendPushFrostAlert(title, message, targets);
+  await deactivateInvalidPushTokens(db, sent.invalidTokens);
+  const inboxCount = targets.length
+    ? await createInboxNotifications(db, {
+        userIds: targets.map((target) => target.userId),
+        title,
+        message,
+        type: 'push',
+      })
+    : 0;
+  if (!targets.length) {
+    req.log.warn({ userId: userId || null }, 'manual_push_no_active_targets');
+  } else {
+    req.log.info(
+      { targetCount: targets.length, sentCount: sent.successCount, failedCount: Math.max(0, targets.length - sent.successCount), inboxCount },
+      'manual_push_send_result',
+    );
+  }
+  return reply.send({
+    success: true,
+    target_count: targets.length,
+    sent_count: sent.successCount,
+    failed_count: Math.max(0, targets.length - sent.successCount),
+    inbox_count: inboxCount,
+  });
+}
+
+async function sendPushCampaign(req: FastifyRequest, reply: FastifyReply) {
+  const { slug } = req.params as { slug: string };
+  const db = (req.server as any).db;
+  const campaignRows = rowsFromExecute<Record<string, unknown>>(await db.execute(sql`
+    SELECT id, slug, title, body, target_segment, deep_link, is_active
+    FROM push_campaigns
+    WHERE slug = ${slug}
+    LIMIT 1
+  `));
+  const campaign = campaignRows[0];
+  if (!campaign) return reply.status(404).send({ error: { message: 'campaign_not_found' } });
+  if (!isActive(campaign.is_active)) return reply.status(400).send({ error: { message: 'campaign_inactive' } });
+
+  const segment = String(campaign.target_segment ?? 'all');
+  const targets = await listPushTargets(db, segment);
+  const sent = await sendPushFrostAlert(String(campaign.title ?? ''), String(campaign.body ?? ''), targets);
+  await deactivateInvalidPushTokens(db, sent.invalidTokens);
+  const inboxCount = targets.length
+    ? await createInboxNotifications(db, {
+        userIds: targets.map((target) => target.userId),
+        title: String(campaign.title ?? ''),
+        message: String(campaign.body ?? ''),
+        type: 'push_campaign',
+      })
+    : 0;
+  if (!targets.length) {
+    req.log.warn({ slug, segment }, 'push_campaign_no_active_targets');
+  } else {
+    req.log.info(
+      { slug, segment, targetCount: targets.length, sentCount: sent.successCount, failedCount: Math.max(0, targets.length - sent.successCount), inboxCount },
+      'push_campaign_send_result',
+    );
+  }
+
+  return reply.send({
+    success: true,
+    campaign_slug: String(campaign.slug ?? slug),
+    target_segment: segment,
+    target_count: targets.length,
+    sent_count: sent.successCount,
+    failed_count: Math.max(0, targets.length - sent.successCount),
+    inbox_count: inboxCount,
+  });
+}
+
 /** Vista tarzı admin panelde olmayan modüller için güvenli boş cevaplar (404 gürültüsünü keser). */
 export async function registerAdminPanelStubs(adminApi: FastifyInstance) {
   adminApi.get('/dashboard/analytics', dashboardAnalyticsStub);
@@ -282,6 +475,8 @@ export async function registerAdminPanelStubs(adminApi: FastifyInstance) {
   adminApi.get('/campaigns', async (_req, reply) => reply.send([]));
   adminApi.get('/reviews', async (_req, reply) => reply.send([]));
   adminApi.get('/announcements', async (_req, reply) => reply.send([]));
+  adminApi.get('/push/campaigns', listPushCampaigns);
+  adminApi.post('/push/campaigns/:slug/send', sendPushCampaign);
 
   adminApi.get('/resources', async (_req, reply) => reply.send([]));
   adminApi.get('/resources/:id', async (req, reply) => {
@@ -333,26 +528,6 @@ export async function registerAdminPanelStubs(adminApi: FastifyInstance) {
   adminApi.post('/wallet_deposits/:id/reject', async (_req, reply) => ok(reply));
 
   adminApi.patch('/wallet_transactions/:id/status', async (_req, reply) => ok(reply));
-
-  adminApi.get('/home/sections', async (_req, reply) => reply.send([]));
-  adminApi.get('/home/sections/:id', async (req, reply) => {
-    const { id } = req.params as { id: string };
-    const now = isoNow();
-    return reply.send({
-      id,
-      slug: 'stub',
-      label: 'Stub',
-      component_key: 'stub',
-      order_index: 0,
-      is_active: 1,
-      config: null,
-      created_at: now,
-      updated_at: now,
-    });
-  });
-  adminApi.post('/home/sections', async (_req, reply) => reply.send({ id: randomUUID() }));
-  adminApi.patch('/home/sections/:id', async (_req, reply) => reply.send({ id: randomUUID() }));
-  adminApi.post('/home/sections/reorder', async (_req, reply) => ok(reply));
 
   adminApi.get('/reports/kpi', async (_req, reply) => reply.send([]));
   adminApi.get('/reports/users-performance', async (_req, reply) => reply.send([]));
@@ -447,11 +622,9 @@ export async function registerAdminPanelStubs(adminApi: FastifyInstance) {
     '/sliders',
     '/popups',
     '/faqs',
-    '/footer_sections',
     '/projects',
     '/offers',
     '/availability',
-    '/push/campaigns',
     '/pricing/plans',
     '/skill-counters',
     '/skill-logos',
@@ -461,6 +634,6 @@ export async function registerAdminPanelStubs(adminApi: FastifyInstance) {
     adminApi.get(p, async (_req, reply) => reply.send([]));
   }
 
-  adminApi.post('/push/send', async (_req, reply) => ok(reply));
+  adminApi.post('/push/send', sendManualPush);
   adminApi.get('/livekit/status', async (_req, reply) => reply.send({ ok: false, disabled: true }));
 }

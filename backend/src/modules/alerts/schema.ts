@@ -1,4 +1,4 @@
-import { mysqlTable, varchar, tinyint, datetime, date, text, json, int, index } from 'drizzle-orm/mysql-core';
+import { mysqlTable, varchar, tinyint, datetime, date, text, json, int, index, uniqueIndex } from 'drizzle-orm/mysql-core';
 import { sql } from 'drizzle-orm';
 
 export const weatherAlerts = mysqlTable(
@@ -47,7 +47,31 @@ export const alertRules = mysqlTable(
   }),
 );
 
+export const userPushTokens = mysqlTable(
+  'user_push_tokens',
+  {
+    id: varchar('id', { length: 36 }).primaryKey(),
+    userId: varchar('user_id', { length: 36 }).notNull(),
+    token: varchar('token', { length: 512 }).notNull(),
+    provider: varchar('provider', { length: 20 }).notNull(), // fcm|expo
+    platform: varchar('platform', { length: 20 }).notNull(), // ios|android|web|unknown
+    deviceId: varchar('device_id', { length: 128 }),
+    isActive: tinyint('is_active').default(1),
+    lastSeenAt: datetime('last_seen_at').default(sql`NOW()`),
+    createdAt: datetime('created_at').default(sql`NOW()`),
+    updatedAt: datetime('updated_at').default(sql`NOW() ON UPDATE NOW()`),
+  },
+  (t) => ({
+    userTokenUnique: uniqueIndex('uq_user_push_token').on(t.userId, t.token),
+    userIdx: index('idx_user_push_tokens_user').on(t.userId),
+    activeIdx: index('idx_user_push_tokens_active').on(t.isActive),
+    providerIdx: index('idx_user_push_tokens_provider').on(t.provider),
+  }),
+);
+
 export type WeatherAlert = typeof weatherAlerts.$inferSelect;
 export type NewWeatherAlert = typeof weatherAlerts.$inferInsert;
 export type AlertRule = typeof alertRules.$inferSelect;
 export type NewAlertRule = typeof alertRules.$inferInsert;
+export type UserPushToken = typeof userPushTokens.$inferSelect;
+export type NewUserPushToken = typeof userPushTokens.$inferInsert;

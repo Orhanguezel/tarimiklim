@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
-import { fetchCurrentWeather, fetchFrostRiskByCoords } from '@/lib/api';
+import { fetchCurrentWeather, fetchHourlyForecast, fetchWeather } from '@/lib/api';
 
 const TABS = ['now', '6h', '24h', '7d'] as const;
 type Tab = (typeof TABS)[number];
@@ -49,6 +49,13 @@ function riskTone(score?: number): 'critical' | 'alert' | 'warn' | 'ok' {
   return 'ok';
 }
 
+function tabSlots(tab: Tab): number {
+  if (tab === 'now') return 4;
+  if (tab === '6h') return 2; // 2 * 3h slots
+  if (tab === '24h') return 8; // 8 * 3h slots
+  return 0;
+}
+
 export function DashboardController() {
   const t = useTranslations('premium.dashboard');
   const locale = useLocale();
@@ -58,26 +65,47 @@ export function DashboardController() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      const slots = tabSlots(activeTab);
       const results = await Promise.all(
         CITIES.map(async (spec): Promise<LiveCity> => {
-          const [frost, current] = await Promise.allSettled([
-            fetchFrostRiskByCoords(spec.lat, spec.lon),
+          if (activeTab === '7d') {
+            const [forecast, current] = await Promise.allSettled([
+              fetchWeather(spec.lat, spec.lon, 7),
+              fetchCurrentWeather(spec.lat, spec.lon),
+            ]);
+            const days = forecast.status === 'fulfilled' ? (forecast.value?.forecasts ?? []) : [];
+            const max = days.length ? Math.max(...days.map((d) => Number(d.frostRisk ?? 0))) : undefined;
+            return {
+              key: spec.key,
+              temp: current.status === 'fulfilled' ? current.value.temp : undefined,
+              condition: current.status === 'fulfilled' ? current.value.condition : undefined,
+              frostScore: typeof max === 'number' && Number.isFinite(max) ? max : undefined,
+            };
+          }
+
+          // now/6h/24h: use backend's computed hourly frost scores (3-hour slots).
+          const [hourly, current] = await Promise.allSettled([
+            fetchHourlyForecast(spec.lat, spec.lon, Math.max(4, slots)),
             fetchCurrentWeather(spec.lat, spec.lon),
           ]);
+          const h = hourly.status === 'fulfilled' ? (hourly.value?.hourly ?? []) : [];
+          const max = h.length ? Math.max(...h.map((s) => Number(s.frostScore ?? 0))) : undefined;
+          const first = h[0];
           return {
             key: spec.key,
-            temp: current.status === 'fulfilled' ? current.value.temp : undefined,
-            condition: current.status === 'fulfilled' ? current.value.condition : undefined,
-            frostScore: frost.status === 'fulfilled' ? frost.value.frostRisk : undefined,
+            temp: current.status === 'fulfilled' ? current.value.temp : first?.temp,
+            condition: current.status === 'fulfilled' ? current.value.condition : first?.condition,
+            frostScore: typeof max === 'number' && Number.isFinite(max) ? max : undefined,
           };
         }),
       );
+
       if (!cancelled) setLiveData(new Map(results.map((r) => [r.key, r])));
     })();
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [activeTab]);
 
   const panelHref = (spec: CitySpec, name: string) =>
     `/${locale}/don-uyarisi?lat=${spec.lat}&lon=${spec.lon}&name=${encodeURIComponent(name)}`;

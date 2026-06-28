@@ -118,7 +118,7 @@ export default function AlertSubscriptionsClient() {
         </div>
         <h1 className="font-serif text-4xl text-gm-text">Uyarı abonelikleri</h1>
         <p className="text-gm-muted text-sm font-serif italic max-w-xl">
-          Kendi şehir ve kanal tercihlerinizi yönetin. Telegram için profil sayfasındaki Chat ID alanı dolu olmalı.
+          Kendi şehir ve kanal tercihlerinizi yönetin. Telegram için profil sayfasındaki Chat ID alanı, push için mobil cihaz tokenı kayıtlı olmalı.
         </p>
       </div>
 
@@ -144,7 +144,13 @@ export default function AlertSubscriptionsClient() {
                     <TableCell>{alertTypeLabels[row.alertType] ?? row.alertType}</TableCell>
                     <TableCell>{row.threshold}</TableCell>
                     <TableCell>
-                      {row.channel === "email" ? "E-posta" : row.channel === "telegram" ? "Telegram" : row.channel}
+                      {row.channel === "email"
+                        ? "E-posta"
+                        : row.channel === "telegram"
+                          ? "Telegram"
+                          : row.channel === "push"
+                            ? "Push"
+                            : row.channel}
                     </TableCell>
                     <TableCell>
                       <Switch
@@ -238,6 +244,7 @@ export default function AlertSubscriptionsClient() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="telegram">Telegram</SelectItem>
+                <SelectItem value="push">Push</SelectItem>
                 <SelectItem value="email">E-posta</SelectItem>
               </SelectContent>
             </Select>

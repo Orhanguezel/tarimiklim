@@ -1,21 +1,14 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import { AlertBar } from '@/components/sections/AlertBar';
-import { SiteNav } from '@/components/sections/SiteNav';
-import { HeroSection } from '@/components/sections/HeroSection';
-import { Ticker } from '@/components/sections/Ticker';
-import { DashboardSection } from '@/components/sections/DashboardSection';
-import { PillarsSection } from '@/components/sections/PillarsSection';
-import { ApiWidgetSection } from '@/components/sections/ApiWidgetSection';
-import { StatsStrip } from '@/components/sections/StatsStrip';
-import { EcosystemGrid } from '@/components/sections/EcosystemGrid';
-import { FinalCta } from '@/components/sections/FinalCta';
-import { SiteFooter } from '@/components/sections/SiteFooter';
+import { DynamicHomeSections } from '@/components/sections/DynamicHomeSections';
 import { buildWeatherForecastJsonLd } from '@/lib/weather-jsonld';
 import { buildCombinedJsonLd } from '@/lib/site-jsonld';
 import { fetchSiteMedia } from '@/lib/site-settings';
 import { fetchPageSeo, mergePageMetadata } from '@/lib/page-seo';
 import { getPublicSiteUrl } from '@/lib/public-brand';
+import { SectionScroll } from '@/components/SectionScroll';
+import { fetchHomeSections } from '@/lib/home-sections';
+import { fetchNavigation } from '@/lib/navigation';
 
 export async function generateMetadata({
   params,
@@ -42,7 +35,7 @@ export async function generateMetadata({
     },
   };
   const seo = await fetchPageSeo('home', locale);
-  return mergePageMetadata(baseMeta, seo, locale);
+  return mergePageMetadata(baseMeta, seo, locale, `/${locale}`);
 }
 
 export default async function HomePage({
@@ -51,14 +44,17 @@ export default async function HomePage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const [weatherLd, siteLd, media] = await Promise.all([
+  const [weatherLd, siteLd, media, homeSections, navigation] = await Promise.all([
     buildWeatherForecastJsonLd(),
     Promise.resolve(buildCombinedJsonLd(locale)),
     fetchSiteMedia(locale),
+    fetchHomeSections(),
+    fetchNavigation(locale),
   ]);
 
   return (
     <>
+      <SectionScroll />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd) }}
@@ -70,34 +66,9 @@ export default async function HomePage({
         />
       ) : null}
 
-      {/* FAZ 2 — Statik bölümler */}
-      <AlertBar />
-      <SiteNav locale={locale} logoUrl={media.logo} />
-
       <main id="top">
-        {/* FAZ 3 — Etkileşimli bölümler */}
-        <HeroSection />
-        <Ticker />
-
-        {/* Dashboard — dark band */}
-        <section className="dashboard-band">
-          <DashboardSection />
-        </section>
-
-        {/* FAZ 2 — Statik bölümler */}
-        <PillarsSection />
-        <ApiWidgetSection />
-
-        {/* Stats — dark band */}
-        <section className="stats-band">
-          <StatsStrip />
-        </section>
-
-        <EcosystemGrid />
-        <FinalCta />
+        <DynamicHomeSections sections={homeSections} locale={locale} />
       </main>
-
-      <SiteFooter logoUrl={media.logo} />
     </>
   );
 }

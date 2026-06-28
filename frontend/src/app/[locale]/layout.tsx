@@ -1,38 +1,21 @@
 import type { ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import type { Metadata } from 'next';
-import { Space_Grotesk, Inter, JetBrains_Mono } from 'next/font/google';
 
-import { fetchSiteMedia } from '@/lib/site-settings';
+import { fetchSetting, fetchSiteMedia } from '@/lib/site-settings';
+import { fetchNavigation } from '@/lib/navigation';
+import { SiteNav } from '@/components/sections/SiteNav';
+import { SiteFooter } from '@/components/sections/SiteFooter';
+import { AlertBar } from '@/components/sections/AlertBar';
 import { getDefaultLogoAlt, getOpenGraphSiteName, getPublicSiteUrl } from '@/lib/public-brand';
 import { fetchPageSeo, mergePageMetadata } from '@/lib/page-seo';
-
-import '../../styles/globals.css';
-
-/* ── Self-hosted fonts via next/font ─────────────────────────── */
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-display',
-  display: 'swap',
-  weight: ['400', '500', '600', '700'],
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-  weight: ['300', '400', '500', '600', '700'],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-mono',
-  display: 'swap',
-  weight: ['400', '500', '600'],
-});
-
-const fontVars = [spaceGrotesk.variable, inter.variable, jetbrainsMono.variable].join(' ');
+import {
+  buildRuntimeThemeCss,
+  fetchRuntimeCustomCss,
+  fetchRuntimeDesignTokens,
+} from '@/lib/design-tokens-runtime';
 
 export async function generateMetadata({
   params,
@@ -47,7 +30,7 @@ export async function generateMetadata({
   ]);
 
   const ogImage = media.logo;
-  const favicon = media.favicon;
+  const favicon = media.favicon ?? '/icon';
   const appleTouch = media.appleTouchIcon ?? favicon;
 
   const baseMeta: Metadata = {
@@ -70,7 +53,7 @@ export async function generateMetadata({
       card: 'summary_large_image',
       ...(ogImage ? { images: [ogImage] } : {}),
     },
-    ...(favicon ? { icons: { icon: favicon, apple: appleTouch ?? favicon } } : {}),
+    icons: { icon: favicon, apple: appleTouch ?? favicon },
   };
   const seo = await fetchPageSeo('site', locale);
   return mergePageMetadata(baseMeta, seo, locale);
@@ -84,15 +67,34 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const messages = await getMessages();
+  const [messages, tokens, customCss, nav, media, gtmRow, ga4Row] = await Promise.all([
+    getMessages(),
+    fetchRuntimeDesignTokens(),
+    fetchRuntimeCustomCss(),
+    fetchNavigation(locale),
+    fetchSiteMedia(locale),
+    fetchSetting('gtm_container_id', locale, { revalidate: 3600 }),
+    fetchSetting('ga4_measurement_id', locale, { revalidate: 3600 }),
+  ]);
+  const runtimeCss = buildRuntimeThemeCss(tokens);
+  const gtmId = typeof gtmRow?.value === 'string' ? gtmRow.value.trim() : '';
+  const ga4Id = typeof ga4Row?.value === 'string' ? ga4Row.value.trim() : '';
 
   return (
-    <html lang={locale} className={fontVars} suppressHydrationWarning>
-      <body suppressHydrationWarning>
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider messages={messages}>
+      <style id="runtime-design-tokens" dangerouslySetInnerHTML={{ __html: runtimeCss }} />
+      {customCss ? <style id="runtime-custom-css" dangerouslySetInnerHTML={{ __html: customCss }} /> : null}
+      {gtmId ? <GoogleTagManager gtmId={gtmId} /> : ga4Id ? <GoogleAnalytics gaId={ga4Id} /> : null}
+      <AlertBar />
+      <SiteNav locale={locale} logoUrl={media.logo} items={nav.header} />
+      {children}
+      <SiteFooter
+        locale={locale}
+        logoUrl={media.logo}
+        sections={nav.footer.sections}
+        items={nav.footer.items}
+        content={nav.footer.content}
+      />
+    </NextIntlClientProvider>
   );
 }

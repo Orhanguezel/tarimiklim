@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS site_settings (
-  id CHAR(36) NOT NULL,
+  id VARCHAR(64) NOT NULL,
   `key` VARCHAR(100) NOT NULL,
   locale VARCHAR(8) NOT NULL,
   value TEXT NOT NULL,
@@ -11,9 +11,12 @@ CREATE TABLE IF NOT EXISTS site_settings (
   KEY site_settings_locale_idx (locale)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT IGNORE INTO site_settings (id, `key`, locale, value) VALUES
+INSERT INTO site_settings (id, `key`, locale, value) VALUES
   ('a0000001-0000-4000-8000-000000000001', 'app_locales', '*', '["tr","en"]'),
   ('a0000002-0000-4000-8000-000000000001', 'default_locale', '*', 'tr'),
-  ('a0000010-0000-4000-8000-000000000001', 'site_logo', '*', '"/logo/logo.png"'),
-  ('a0000011-0000-4000-8000-000000000001', 'site_favicon', '*', '"/favicon/favicon.png"'),
-  ('a0000012-0000-4000-8000-000000000001', 'site_apple_touch_icon', '*', '"/favicon/apple-touch-icon.png"');
+  ('a0000010-0000-4000-8000-000000000001', 'site_logo', '*', '{"url":"/uploads/logo.png","asset_id":"b1000000-0001-4000-8000-000000000001"}'),
+  ('a0000011-0000-4000-8000-000000000001', 'site_favicon', '*', '{"url":"/uploads/favicon.png","asset_id":"b1000000-0001-4000-8000-000000000002"}'),
+  ('a0000012-0000-4000-8000-000000000001', 'site_apple_touch_icon', '*', '{"url":"/uploads/appletouch.png","asset_id":"b1000000-0001-4000-8000-000000000003"}')
+ON DUPLICATE KEY UPDATE
+  value = VALUES(value),
+  updated_at = CURRENT_TIMESTAMP(3);

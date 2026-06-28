@@ -99,7 +99,7 @@ export function HourlyForecastTable({ slots, loading, labels }: Props) {
                   key={`h-spray-${i}-${s.dt || i}`}
                   title={s.sprayOk ? labels.uygun : labels.uygunDegil}
                   aria-label={s.sprayOk ? labels.uygun : labels.uygunDegil}
-                  style={{ color: s.sprayOk ? 'var(--moss)' : 'var(--danger)', fontWeight: 700 }}
+                  className={`hourly-spray ${s.sprayOk ? 'is-ok' : 'is-bad'}`}
                 >
                   {s.sprayOk ? '✓' : '✗'}
                 </td>

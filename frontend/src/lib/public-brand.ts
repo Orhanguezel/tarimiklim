@@ -1,53 +1,46 @@
 import siteDefaults from '@/config/site-defaults.json';
+import {
+  getPublicAppName as getPublicAppNameBase,
+  getPublicSiteUrl as getPublicSiteUrlBase,
+  getCopyrightHolder as getCopyrightHolderBase,
+  getDefaultLogoAlt as getDefaultLogoAltBase,
+  getOpenGraphSiteName as getOpenGraphSiteNameBase,
+} from '@agro/shared-frontend/brand';
 
-function replaceAppName(template: string, app: string): string {
-  return template.replace(/\{\{appName\}\}/g, app);
-}
-
+// Tarımİklim bu fonksiyonları project-local `site-defaults.json` ile override eder.
 export function getPublicAppName(): string {
-  const fromEnv = process.env.NEXT_PUBLIC_APP_NAME?.trim();
-  if (fromEnv) return fromEnv;
-  const raw = String(siteDefaults.brand.appName || '').trim();
-  return raw || 'App';
+  return getPublicAppNameBase(process.env);
 }
 
 export function getPublicSiteUrl(): string {
-  const raw =
-    process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
-    String(siteDefaults.site.originFallback || '').trim();
-  return raw.replace(/\/+$/, '') || 'http://localhost:3088';
+  return getPublicSiteUrlBase(process.env);
 }
 
 export function getCopyrightHolder(): string {
+  // shared-frontend default json'una değil; env varsa onu kullanır. Burada yerel json ile destekleyelim.
   const fromEnv = process.env.NEXT_PUBLIC_APP_COPYRIGHT?.trim();
-  if (fromEnv) return replaceAppName(fromEnv, getPublicAppName());
+  if (fromEnv) return getCopyrightHolderBase(process.env);
   const raw = String(siteDefaults.brand.copyrightHolder || '').trim();
-  return raw ? replaceAppName(raw, getPublicAppName()) : getPublicAppName();
+  return raw.replace(/\{\{appName\}\}/g, getPublicAppName()) || getPublicAppName();
 }
 
 export function getDefaultLogoAlt(): string {
   const fromEnv = process.env.NEXT_PUBLIC_LOGO_ALT?.trim();
-  if (fromEnv) return fromEnv;
+  if (fromEnv) return getDefaultLogoAltBase(process.env);
   const raw = String(siteDefaults.brand.defaultLogoAlt || '').trim();
-  return raw ? replaceAppName(raw, getPublicAppName()) : getPublicAppName();
+  return raw.replace(/\{\{appName\}\}/g, getPublicAppName()) || getPublicAppName();
 }
 
 export function getOpenGraphSiteName(): string {
-  return (
-    process.env.NEXT_PUBLIC_OG_SITE_NAME?.trim() ||
-    process.env.NEXT_PUBLIC_APP_NAME?.trim() ||
-    getPublicAppName()
-  );
+  return getOpenGraphSiteNameBase(process.env);
 }
 
 export type OrganizationDefaults = typeof siteDefaults.organization;
-
 export function getOrganizationDefaults(): OrganizationDefaults {
   return siteDefaults.organization;
 }
 
 export type ServiceDefaults = typeof siteDefaults.service;
-
 export function getServiceDefaults(): ServiceDefaults {
   return siteDefaults.service;
 }

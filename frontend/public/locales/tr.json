@@ -66,16 +66,211 @@
     "tempMax": "Maks",
     "frostAlert": "Don Uyarisi"
   },
+  "dashboard": {
+    "nav": {
+      "overview": "Özet",
+      "profile": "Profil",
+      "alerts": "Don Uyarıları",
+      "favorites": "Favoriler",
+      "notifications": "Bildirimler",
+      "support": "Destek",
+      "security": "Güvenlik"
+    },
+    "overview": {
+      "greeting": "Hoş geldiniz",
+      "greetingWithUser": "Hoş geldin, {name}",
+      "guest": "Üye",
+      "subtitle": "Konumlarınızı, don uyarılarınızı ve bildirim tercihlerinizi buradan yönetin.",
+      "activeAlerts": "Aktif uyarı",
+      "favoriteProducts": "Favoriler",
+      "unreadNotifications": "Okunmamış bildirim",
+      "openTickets": "Açık destek talebi",
+      "quickActions": "Hızlı işlemler",
+      "addAlert": "Don uyarısı oluştur",
+      "addAlertDesc": "Konum ve kanal seçerek yeni bir erken uyarı kuralı ekleyin.",
+      "viewForecast": "Canlı tahmini aç",
+      "viewForecastDesc": "Seçili bölge için hava ve don riskini görüntüleyin.",
+      "profileSettings": "Profil ayarları",
+      "profileSettingsDesc": "İletişim bilgilerinizi ve hesap tercihlerinizi düzenleyin.",
+      "viewPrices": "Canlı tahmini aç",
+      "logout": "Çıkış yap"
+    },
+    "profile": {
+      "title": "Profil Bilgileri",
+      "subtitle": "Hesabınızda görünen temel bilgileri güncelleyin.",
+      "fullName": "Ad Soyad",
+      "fullNamePlaceholder": "Adınız ve soyadınız",
+      "phone": "Telefon",
+      "phonePlaceholder": "Telefon numaranız",
+      "city": "Şehir",
+      "cityPlaceholder": "Bulunduğunuz şehir",
+      "address": "Adres",
+      "addressPlaceholder": "Adres satırı",
+      "bio": "Notlar",
+      "bioPlaceholder": "Tarım faaliyetleriniz veya takip etmek istediğiniz bilgiler",
+      "save": "Kaydet",
+      "saving": "Kaydediliyor...",
+      "updateButton": "Bilgileri Güncelle",
+      "saveSuccess": "Profil bilgileriniz güncellendi.",
+      "saveError": "Profil güncellenemedi. Tekrar deneyin."
+    },
+    "alerts": {
+      "empty": "Henüz tanımlı uyarınız yok.",
+      "above": "Üzeri",
+      "below": "Altı",
+      "channelEmail": "E-posta",
+      "channelTelegram": "Telegram",
+      "lastTriggered": "Son tetikleme",
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "save": "Kaydet",
+      "cancel": "Vazgeç"
+    },
+    "notifications": {
+      "empty": "Bildirim bulunmuyor.",
+      "markAllRead": "Tümünü okundu işaretle",
+      "markRead": "Okundu"
+    },
+    "security": {
+      "title": "Şifre Değiştir",
+      "currentPassword": "Mevcut Şifre",
+      "newPassword": "Yeni Şifre",
+      "newPasswordPlaceholder": "En az 8 karakter",
+      "confirmPassword": "Yeni Şifre (Tekrar)",
+      "verified": "Doğrulandı",
+      "notVerified": "Doğrulanmadı",
+      "submit": "Şifreyi Güncelle",
+      "saving": "Güncelleniyor...",
+      "success": "Şifreniz başarıyla güncellendi.",
+      "errorMinLength": "Yeni şifre en az 8 karakter olmalı.",
+      "errorMismatch": "Yeni şifreler eşleşmiyor.",
+      "errorCurrentWrong": "Mevcut şifre yanlış.",
+      "errorGeneric": "Güncellenemedi. Tekrar deneyin."
+    },
+    "support": {
+      "newTitle": "Yeni Destek Talebi",
+      "subject": "Konu",
+      "subjectPlaceholder": "Sorunuzu özetleyin",
+      "message": "Mesaj",
+      "messagePlaceholder": "Detaylı açıklayın...",
+      "submit": "Talebi Gönder",
+      "submitting": "Gönderiliyor...",
+      "created": "Talebiniz alındı. En kısa sürede dönüş yapılacak.",
+      "createError": "Gönderilemedi. Tekrar deneyin.",
+      "subjectMinError": "Konu en az 2 karakter olmalı.",
+      "messageMinError": "Mesaj en az 10 karakter olmalı.",
+      "emailMissingError": "Hesap e-posta bilgisi bulunamadı. Lütfen tekrar giriş yapın.",
+      "listTitle": "Taleplerim",
+      "empty": "Destek talebiniz bulunmuyor.",
+      "back": "Geri",
+      "you": "Siz",
+      "supportTeam": "Destek Ekibi",
+      "replyPlaceholder": "Yanıtınızı yazın...",
+      "reply": "Yanıtla",
+      "status": {
+        "open": "Açık",
+        "answered": "Yanıtlandı",
+        "closed": "Kapalı"
+      }
+    },
+    "favorites": {
+      "empty": "Henüz favoriniz yok.",
+      "remove": "Kaldır"
+    }
+  },
+  "public": {
+    "auth": {
+      "loginEyebrow": "Üye girişi",
+      "registerEyebrow": "Yeni hesap",
+      "heroTitle": "Don riskini erken gör, sahayı zamanında koru.",
+      "heroLead": "Tarımİklim hesabınızla konum bazlı uyarılarınızı, Telegram ve push bildirimlerinizi tek panelden yönetin.",
+      "loginTitle": "Giriş yap",
+      "registerTitle": "Hesap oluştur",
+      "loginLead": "{app} paneline devam etmek için e-posta adresinizle giriş yapın.",
+      "registerLead": "Don uyarıları ve konum takibi için ücretsiz hesap açın.",
+      "fullName": "Ad soyad",
+      "email": "E-posta",
+      "password": "Parola",
+      "loginButton": "Giriş yap",
+      "registerButton": "Kayıt ol",
+      "loading": "Bekleyin...",
+      "googleLoading": "Google oturumu açılıyor...",
+      "googleError": "Google ile giriş tamamlanamadı.",
+      "or": "veya",
+      "switchToRegister": "Hesabınız yok mu? Kayıt olun",
+      "switchToLogin": "Zaten hesabınız var mı? Giriş yapın",
+      "loginError": "E-posta veya parola hatalı.",
+      "registerError": "Kayıt tamamlanamadı."
+    },
+    "contact": {
+      "titlePrefix": "Size Nasıl",
+      "titleHighlight": "Yardımcı",
+      "titleSuffix": "Olabiliriz?",
+      "lead": "Her türlü soru, görüş ve önerileriniz için yanınızdayız. Mesajınızı iletin, en kısa sürede size dönüş yapalım."
+    },
+    "contactForm": {
+      "name": "Ad soyad",
+      "email": "E-posta",
+      "message": "Mesajınız",
+      "submit": "Gönder",
+      "sent": "Mesaj alındı"
+    },
+    "about": {
+      "eyebrow": "Dijital Tarım Ekosistemi",
+      "title": "Tarımda Bilgiye Erişimi Demokratikleştiriyoruz",
+      "summary": "{app}, Türkiye'nin dijital tarım dönüşümüne katkı sağlamak amacıyla kurulan bağımsız bir platformdur.",
+      "visionTitle": "Verinin Gücüyle Geleceği Şekillendiriyoruz",
+      "cta": "Bizimle İletişime Geçin"
+    }
+  },
   "premium": {
+    "auth": {
+      "login": {
+        "title": "Tekrar Hoş Geldiniz",
+        "description": "Hesabınıza giriş yaparak zirai don uyarılarını ve parsel verilerini yönetmeye devam edin.",
+        "welcomeBack": "Türkiye'nin İklim Zekâsına Giriş Yapın",
+        "heroTagline": "Sahada zaman kazanan, iklimi veriyle okuyan çiftçiler için.",
+        "email": "E-posta",
+        "password": "Şifre",
+        "button": "Giriş Yap",
+        "loading": "Giriş Yapılıyor...",
+        "noAccount": "Hesabınız yok mu?",
+        "register": "Kayıt Ol",
+        "forgotPassword": "Şifremi Unuttum"
+      },
+      "register": {
+        "title": "Ücretsiz Kayıt Olun",
+        "description": "Zirai don uyarıları ve parsel bazlı sulama planlaması için hesabınızı oluşturun.",
+        "welcomeBack": "İklim Zekâsına İlk Adımı Atın",
+        "heroTagline": "Veriyle yönetilen bir tarım geleceği için bugün kaydolun.",
+        "fullName": "Ad Soyad",
+        "email": "E-posta",
+        "phone": "Telefon",
+        "password": "Şifre",
+        "button": "Hesap Oluştur",
+        "loading": "Kayıt Yapılıyor...",
+        "hasAccount": "Zaten hesabınız var mı?",
+        "login": "Giriş Yap"
+      }
+    },
+    "me": {
+      "sidebar": {
+        "dashboard": "Özet Panel",
+        "alerts": "Bildirim Kuralları",
+        "locations": "Parsellerim",
+        "settings": "Hesap Ayarları",
+        "logout": "Çıkış Yap"
+      }
+    },
     "meta": {
       "title": "TarımİKlim — Türkiye'nin İklim Zekâsı",
       "description": "7 günlük tahmin, dört faktörlü don riski ve tarımsal karar destek sistemi."
     },
     "alertBar": {
-      "message": "Aktif uyarı · İç Anadolu'da don riski · 34 lokasyon · son güncelleme 12 dk önce",
-      "uptime": "API 99.97% uptime",
+      "message": "Canlı hava verisi · Don riski paneli · 34 lokasyon",
+      "uptime": "API aktif",
       "version": "v2.4.1",
-      "locales": "TR · EN · AR",
+      "locales": "TR · EN",
       "metricsLabel": "Servis metrikleri"
     },
     "nav": {
@@ -656,5 +851,32 @@
         "creditUrl": "https://guezelwebdesign.com"
       }
     }
+  },
+  "city": {
+    "breadcrumbHome": "Ana Sayfa",
+    "table": {
+      "date": "Tarih",
+      "min": "En Düşük",
+      "max": "En Yüksek",
+      "rain": "Yağış",
+      "humidity": "Nem",
+      "wind": "Rüzgâr",
+      "frost": "Don Riski"
+    },
+    "forecastTitle": "{city} 7 Günlük Tahmin",
+    "source": "Veriler OpenWeatherMap'ten alınır ve gün içinde otomatik güncellenir.",
+    "noData": "Canlı tahmin şu anda yüklenemedi. Lütfen birazdan tekrar deneyin veya aşağıdaki interaktif paneli kullanın.",
+    "ctaTitle": "{city} için kişisel uyarı alın",
+    "ctaText": "Konumunuzu seçin; saatlik tahmin, ilaçlama uygunluğu ve don bildirimleri için interaktif panele geçin.",
+    "ctaButton": "İnteraktif paneli aç",
+    "relatedTitle": "{city} için diğer sayfalar",
+    "peersTitle": "{region} Bölgesi'ndeki diğer iller",
+    "allProvinces": "Tüm illeri görüntüle →",
+    "hubEyebrow": "81 İl",
+    "hubTitle": "İl İl {hub}",
+    "hubIntro": "Türkiye'nin 81 ili için {hub}. İlinizi seçin, güncel tahmini ve zirai don riskini görün.",
+    "otherSections": "Diğer bölümler",
+    "provinceListTitle": "İller",
+    "provinceLinksTitle": "İl İl Don Uyarısı"
   }
 }

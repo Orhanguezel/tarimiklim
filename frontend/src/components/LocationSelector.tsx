@@ -27,10 +27,10 @@ export function LocationSelector({ options, valueId, onChange, label }: Props) {
         style={{
           minWidth: 220,
           padding: '0.5rem 0.75rem',
-          borderRadius: 8,
-          border: '1px solid var(--color-border, #e4e4e7)',
-          background: 'var(--color-surface, #fff)',
-          color: 'var(--color-text)',
+          borderRadius: 'var(--radius-sm)',
+          border: '1px solid var(--line)',
+          background: 'var(--surface-strong)',
+          color: 'var(--ink)',
         }}
       >
         {options.map((o) => (

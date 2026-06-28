@@ -18,20 +18,26 @@ Bu dosya, frontend’in markadan bağımsız ve admin tarafından yönetilebilir
 
 ## Faz C — Dinamik Tema ve Dark/Light
 
-- [ ] `design_tokens` tabanlı runtime token apply (TarMinGO yaklaşımı).
-- [ ] Light/dark mode toggle + kalıcılık.
-- [ ] Admin panelde token düzenleme sonrası public cache revalidate.
-- [ ] `design-tokens.css` sabitlerinin fallback moduna çekilmesi.
+- [x] `design_tokens` tabanlı runtime token apply (TarMinGO yaklaşımı).
+- [x] Light/dark mode toggle + kalıcılık.
+- [x] Admin panelde token düzenleme sonrası public cache revalidate.
+- [x] `design-tokens.css` sabitlerinin fallback moduna çekilmesi.
 
 ## Faz D — Auth ve Uyarı Talebi
 
-- [ ] Frontend login/register sayfaları.
-- [ ] Auth session/token yönetimi (shared-backend ile uyumlu).
-- [ ] Üye için “don uyarısı talebi oluştur” UI (`/me/alert-rules`).
-- [ ] Telegram chat-id bağlama akışı (`/me/telegram-chat-id`).
+- [x] Frontend login/register sayfaları.
+- [x] Auth session/token yönetimi (shared-backend ile uyumlu).
+- [x] Üye için “don uyarısı talebi oluştur” UI (`/me/alert-rules`).
+- [x] Telegram chat-id bağlama akışı (`/me/telegram-chat-id`).
 
 ## Faz E — Refactor ve Ortak Paketler
 
-- [ ] TarMinGO’dan alınan parçaları ortaklaştırma (duplikasyon temizliği).
-- [ ] Widget/brand ayrımı netleştirme.
+- [x] TarMinGO’dan alınan parçaları ortaklaştırma (duplikasyon temizliği) — `@agro/shared-frontend` eklendi.
+- [x] Widget/brand ayrımı netleştirme (bkz: `WIDGET-BRAND-STRATEGY.md`).
 - [ ] Dokümantasyon + test checklist güncellemesi.
+
+## Geçici Not (2026-05-06)
+
+- BereketFide widget entegrasyon dosyaları geçici olarak mevcut davranışta bırakılacak.
+- Bu repo içinde kırılma riski yaratmadan ilerlenecek; BereketFide tarafı adapte edilince ilgili uyarı/not o repoya taşınacak.
+- Sonrasında burada kalan geçici istisna temizlenecek.

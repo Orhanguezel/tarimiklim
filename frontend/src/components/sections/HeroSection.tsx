@@ -20,13 +20,13 @@ export function HeroSection() {
           </h1>
           <p className="hero-copy">{t('copy')}</p>
           <div className="hero-actions">
-            <a href="#panel" className="button-primary">
+            <a href="?section=panel" className="button-primary">
               {t('actions.primary')}
             </a>
-            <a href="#api" className="button-ghost">
+            <a href="?section=api" className="button-ghost">
               {t('actions.secondary')}
             </a>
-            <a href="#docs" className="hero-meta-link">
+            <a href="?section=docs" className="hero-meta-link">
               {t('actions.tertiaryPrefix')} <span>{t('actions.tertiary')}</span>
             </a>
           </div>

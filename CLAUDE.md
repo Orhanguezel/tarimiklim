@@ -168,7 +168,7 @@ GET  /api/v1/internal/weather/forecast
      ?lat=...&lon=...&hours=48
      → Saatlik detayli tahmin (sicaklik, nem, ruzgar)
 
-# Verim Tahmini Motoru icin
+# Tahmin Motoru icin
 GET  /api/v1/internal/weather/historical
      ?location=...&from=2025-01-01&to=2025-12-31
      → Gecmis iklim verisi (AI modeli girdisi)
@@ -454,9 +454,10 @@ DAILY_SUMMARY_HOUR=6                     # Saat (UTC+3)
 |----------------|----------|----------|
 | **Sera SaaS** | `/internal/weather/forecast` | Havalandirma zamanlama, isitma karari |
 | **Acik Tarla** | `/weather/rain-forecast` | Sulama planlamasi, ekim zamani |
-| **Verim Tahmini** | `/internal/weather/historical` | AI modeli egitim verisi |
+| **Tahmin Motoru** | `/internal/weather/historical` | AI modeli egitim verisi |
 | **Hastalik Uyari** | `/internal/weather/humidity-risk` | Mantar/bakteri riski tahmini |
 | **Ziraat Haber** | `/weather/widget-data` | Sidebar hava durumu widget'i |
+| **Hal Fiyatlari** | `/weather/widget-data` | /hal/[slug] sayfasi — sehir hava ozeti sidebar widget'i |
 | **Hal Fiyatlari** | `/weather/frost-risk` | Don -> fiyat etkisi korelasyonu |
 | **IoT Sensor** | Cift yonlu | Tahmin vs gercek karsilastirma |
 
@@ -492,6 +493,36 @@ bun run db:seed
 # Yeni ortama / production'a tasima (DROP YOK — eksik tablolari ekler)
 bun run db:seed:no-drop
 ```
+
+---
+
+## Widget Entegrasyonlari (2026-05-12)
+
+### `@agro/ecosystem-weather-widget` — Ekosistem Native Widget Paketi
+
+Monorepo paketi: `packages/ecosystem-weather-widget`  
+Paket adi: `@agro/ecosystem-weather-widget`
+
+Bu paket, ekosistem projelerinin tarimiklim verisini **iframe olmadan** React component olarak embed etmesini saglar.
+
+#### Hal Fiyatlari Entegrasyonu — CANLI
+
+- Route: `https://haldefiyat.com/tr/hava/widget?location={slug}` (iframe embed icin)
+- Kaynak dosya: `projects/hal-fiyatlari/frontend/src/app/[locale]/(widget)/hava/widget/page.tsx`
+- Brand token: `haldefiyat` (mavi tonlari — `packages/ecosystem-weather-widget/src/brands.ts`)
+- `apiBase`: `https://tarimiklim.com/api/v1`
+- `location` query param: sehir slug'i (ornek: `?location=ankara`) veya `auto` (tarayici konum)
+- CORS: `haldefiyat.com` zaten VPS `.env` `CORS_ORIGIN` listesinde
+
+Hal Fiyatlari ayrica SSR Server Component olarak da `/weather/widget-data` tuketiyor:
+- Dosya: `projects/hal-fiyatlari/frontend/src/components/sections/WeatherWidget.tsx`
+- Env: `TARIMIKLIM_API_URL=http://127.0.0.1:8088` (internal VPS)
+- Bu, `/hal/[slug]` sayfasinda sehir bazli sidebar widget olarak render oluyor.
+
+#### Bereketfide Entegrasyonu
+
+- Mevcut widget sayfasi: `projects/tarimiklim/frontend/src/app/widget/bereketfide/page.tsx`
+- 2026-05-06 karari: Bu repo'daki widget degistirilmez; bereketfide dinamik brand'e gectiginde orada yonetilecek.
 
 ---
 

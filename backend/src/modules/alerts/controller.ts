@@ -4,14 +4,18 @@ import { listAlerts } from './service.js';
 import {
   createUserAlertRuleSchema,
   listAlertsQuerySchema,
+  pushTokenSchema,
   telegramChatIdSchema,
   updateUserAlertRuleSchema,
 } from './validation.js';
 import {
   repoCreateAlertRule,
   repoDeleteAlertRuleForUser,
+  repoDeletePushTokenForUser,
   repoGetAlertRulesByUser,
   repoGetTelegramChatId,
+  repoListPushTokensForUser,
+  repoUpsertPushToken,
   repoUpdateAlertRuleActiveForUser,
   repoUpdateTelegramChatId,
 } from './repository.js';
@@ -100,5 +104,43 @@ export async function updateMyTelegramChatIdHandler(req: FastifyRequest, reply: 
     return reply.send({ success: true, data: { chat_id: saved } });
   } catch (err) {
     return handleRouteError(reply, req, err, 'alerts.me.telegram.update');
+  }
+}
+
+export async function listMyPushTokensHandler(req: FastifyRequest, reply: FastifyReply) {
+  try {
+    const userId = getAuthUserId(req);
+    const tokens = await repoListPushTokensForUser((req.server as any).db, userId);
+    return reply.send({ success: true, data: tokens });
+  } catch (err) {
+    return handleRouteError(reply, req, err, 'alerts.me.pushTokens.list');
+  }
+}
+
+export async function upsertMyPushTokenHandler(req: FastifyRequest, reply: FastifyReply) {
+  try {
+    const userId = getAuthUserId(req);
+    const body = pushTokenSchema.parse(req.body);
+    const token = await repoUpsertPushToken((req.server as any).db, {
+      userId,
+      token: body.token,
+      provider: body.provider,
+      platform: body.platform,
+      deviceId: body.deviceId,
+    });
+    return reply.status(201).send({ success: true, data: token });
+  } catch (err) {
+    return handleRouteError(reply, req, err, 'alerts.me.pushTokens.upsert');
+  }
+}
+
+export async function deleteMyPushTokenHandler(req: FastifyRequest, reply: FastifyReply) {
+  try {
+    const userId = getAuthUserId(req);
+    const { id } = req.params as { id: string };
+    await repoDeletePushTokenForUser((req.server as any).db, id, userId);
+    return reply.send({ success: true });
+  } catch (err) {
+    return handleRouteError(reply, req, err, 'alerts.me.pushTokens.delete');
   }
 }

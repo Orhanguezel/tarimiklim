@@ -19,7 +19,7 @@ Bu servis ekosistemin **çevresel veri katmanı**. Diğer modüllere hava tahmin
 | **Ziraat Haber Portali** | → widget verir | REST / embed | `GET /widget-data?location=antalya` | ⏳ Endpoint hazır, job yok |
 | **Sera SaaS** | → tahmin verir | REST API | `GET /internal/weather/forecast` | ⏳ Endpoint hazır, job yok |
 | **Açık Tarla** | → sulama verisi | REST API | `GET /rain-forecast?location=...` | ⏳ Endpoint hazır, job yok |
-| **Verim Tahmini** | → iklim verisi | REST API | `GET /internal/weather/historical` | 🔲 Yazılmadı |
+| **Tahmin Motoru** | → iklim verisi | REST API | `GET /internal/weather/historical` | 🔲 Yazılmadı |
 | **Hastalık Uyarı** | → nem/sıcaklık | REST API | `GET /internal/weather/humidity-risk` | 🔲 Yazılmadı |
 | **Hal Fiyatları** | ↔ korelasyon | REST API | `GET /frost-risk?location=...` | ⏳ Endpoint hazır, job yok |
 | **IoT Sensor** | ↔ doğrulama | REST API | Çift yönlü, tahmin vs gerçek | 🔲 Yazılmadı |
@@ -49,7 +49,7 @@ Bu servis ekosistemin **çevresel veri katmanı**. Diğer modüllere hava tahmin
 ### P2 — Internal Endpoint'ler (Diğer Modüller İçin)
 
 - [x] `GET /api/v1/internal/weather/forecast` — Saatlik detaylı tahmin (Sera SaaS, Açık Tarla)
-- [x] `GET /api/v1/internal/weather/historical` — Geçmiş iklim verisi (Verim Tahmini AI girdisi)
+- [x] `GET /api/v1/internal/weather/historical` — Geçmiş iklim verisi (Tahmin Motoru AI girdisi)
 - [x] `GET /api/v1/internal/weather/humidity-risk` — Yüksek nem dönemi tahmini (Hastalık Uyarı)
 
 ### P3 — Widget Embed

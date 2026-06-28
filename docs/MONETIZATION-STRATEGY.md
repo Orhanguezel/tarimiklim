@@ -53,7 +53,7 @@ Kayıtlı ve canlıda çalışan yetenekler:
 | Sera Kontrol | Canlı | API + IoT köprü |
 | Ziraat Haber | Yakında | Widget |
 | Hal Fiyatları | Yakında | Don→fiyat korelasyonu |
-| Verim Tahmini | Pilot | ML iklim girdisi |
+| Tahmin Motoru | Pilot | ML iklim girdisi |
 | Hastalık Uyarı | Q3 2026 | Nem-sıcaklık fungal risk |
 
 ### Doğruluk/kalite metrikleri (mevcut iddialar)
@@ -519,6 +519,72 @@ TarımİKlim **düşük maliyetli SaaS freemium'la canlıda gelir başlatabilece
 - ✅ Ekosistem kardeşleri (Bereketfide, VistaSeed) **referans**. "Aynı iklim beyni — 3 farklı uygulama" satış hikayesi güçlü.
 - ⚠️ Aşırı feature creep'e kapılma — FAZ 1 sonunda IoT donanıma başlama. Yazılım kanalları doygunlaşmadan donanım fragmente eder.
 - ⚠️ Müşteri tipi doğrulama: orta ölçek çiftçi (10-100 dönüm) gerçek ödeyen. Onlarla 20+ görüşme yap (discovery) FAZ 1'de.
+
+---
+
+## 11. Uygulanabilir Checklist — 2026-05-06 Kod Durumu
+
+Bu bölüm stratejiyi mevcut Tarımİklim repo durumuna göre uygulanabilir iş listesine indirger.
+
+### P0 — Satışa Hazırlık, Kod Yazmadan Yapılacaklar
+
+- [ ] Şirket / tahsilat tetikleyicilerini netleştir: `docs/billing-implementation-plan.md` içindeki GWD Teknoloji Ltd., Tarvista sözleşmesi, Iyzico merchant ve KVKK koşulları tamamlandı mı?
+- [ ] OWM API key ve provider maliyetini doğrula; ücretli plana geçilecekse aylık maliyet sınırı belirle.
+- [ ] 3 paket için nihai fiyat kararını ver: Free, Başlangıç, Profesyonel. Mobil dokümandaki ₺135 ile bu dokümandaki ₺199 farkını tek fiyat politikasına indir.
+- [ ] KVKK aydınlatma, üyelik sözleşmesi, mesafeli satış / cayma hakkı ve çerez metinlerini avukat metniyle hazırla.
+- [ ] İlk satış kitini hazırla: 1 sayfa PDF, 30 sn widget demo videosu, `/widget` embed örneği, API endpoint listesi.
+- [ ] İlk 20 müşteri görüşmesi listesini çıkar: orta ölçek üretici, kooperatif, fide/tohum firması, tarım danışmanı.
+- [ ] Referans dilini güncelle: public sitede widget artık genel `/widget`; BereketFide/VistaSeed sadece vaka çalışması olarak anlatılmalı.
+
+### P1 — Hemen Uygulanabilir Teknik Altyapı
+
+- [ ] `billing_plans`, `subscriptions`, `invoices`, `api_keys`, `usage_counters` seed dosyalarını ekle. Hazır mimari kaynak: `docs/billing-implementation-plan.md`.
+- [ ] Admin paneldeki subscription/pricing ekranlarını stub endpointlerden gerçek billing endpointlerine bağla.
+- [ ] Public fiyat sayfası oluştur: `/[locale]/fiyat`. Plan kartları, yıllık indirim, SSS, KVKK linkleri, CTA.
+- [ ] Abonelik yönetim sayfası oluştur: `/[locale]/me/subscription`. Aktif plan, yenileme tarihi, limitler, iptal talebi.
+- [ ] API key üretim / yenileme akışı ekle: kullanıcı başına `tk_live_` / `tk_test_` key, hash saklama, son kullanım tarihi.
+- [ ] Redis tabanlı tier rate limit ekle: Free / Başlangıç / Profesyonel / Kurumsal limitleri endpoint bazında tanımla.
+- [ ] Feature gate middleware ekle: sınırsız parsel, SMS/WhatsApp, yüksek kota, internal API erişimi plan bazlı kilitlensin.
+- [ ] Kullanım ölçümü ekle: günlük API çağrısı, widget domain, don uyarısı gönderimi, aktif lokasyon sayısı.
+- [ ] Public analytics loader ekle: admin paneldeki `gtm_container_id`, `ga4_measurement_id`, `meta_pixel_id`, `cookie_consent` ayarları frontend layout tarafından consent'e göre yüklensin.
+- [ ] Cookie consent UI ekle: necessary / analytics / marketing ayrımı, localStorage veya cookie ile sürüm takibi.
+
+### P2 — Ödeme ve Faturalama
+
+- [ ] Iyzico sandbox hesabı aç, API keyleri sadece `.env` üzerinden bağla.
+- [ ] Iyzico checkout ve subscription flow ekle: plan seçimi, 3D secure, başarılı / başarısız dönüş sayfaları.
+- [ ] Iyzico webhook endpoint'i ekle: ödeme başarılı, ödeme başarısız, abonelik iptal, yenileme.
+- [ ] Webhook idempotency tablosu ekle; aynı event ikinci kez gelirse çift fatura / çift aktivasyon olmasın.
+- [ ] Faz 1 için manuel PDF fatura / makbuz akışı kur; e-Arşiv entegrasyonunu Faz 2'ye bırak.
+- [ ] Admin panelde ödeme ve abonelik durumlarını göster: trialing, active, past_due, canceled, refunded.
+- [ ] E-posta şablonları ekle: ödeme başarılı, ödeme başarısız, abonelik yenileme, iptal, kota aşımı.
+
+### P3 — Gelir Kanalları, Düşük Riskli Başlangıç
+
+- [ ] B2B widget lisansı için teklif formu ekle: firma, domain, aylık trafik, istenen lokasyon, marka rengi.
+- [ ] Widget domain tracking ekle: `document.referrer` / query param ile aktif embed domain raporu.
+- [ ] Widget lisans planları ekle: Standart, Premium, Enterprise. Ödeme otomasyonundan önce manuel teklif + fatura yeterli.
+- [ ] Telegram Don Uyarısı TR kanalı için landing ve kayıt CTA'sı ekle.
+- [ ] SMS bildirim paketi için provider kararı ver: Netgsm / alternatif. Önce beta ve manuel whitelist ile başlat.
+- [ ] RapidAPI veya developer portal için dokümantasyon hazırla: auth, quota, örnek cevap, hata kodları.
+- [ ] 10 SEO içeriği için başlık listesi çıkar; ilk 3 yazıyı yayınla.
+- [ ] 5 kooperatif demo görüşmesini CRM olarak takip et: tarih, ilgili kişi, ihtiyaç, teklif, sonraki adım.
+
+### P4 — Şimdilik Bekletilecek / Tetikleyici Gerektiren İşler
+
+- [ ] IoT donanım prototipine müşteri tetikleyicisi olmadan başlanmasın. İlgili plan: `docs/iot-ingestion-plan.md`.
+- [ ] Parametrik sigorta pilotu için önce doğruluk raporu, veri saklama prosedürü ve hukuki disclaimer tamamlanmalı.
+- [ ] E-Arşiv / GİB entegrasyonu ilk 50 müşteri öncesi zorunlu değil; manuel fatura ile başlanabilir.
+- [ ] Affiliate / sponsored bildirimler güven etkisi nedeniyle ödeme altyapısı ve kullanıcı onayı oturmadan açılmasın.
+- [ ] Mobil premium ödeme, web billing modeli doğrulanmadan ana öncelik olmasın.
+
+### P5 — Başarı Metrikleri ve Raporlama
+
+- [ ] Haftalık dashboard metrikleri: yeni kayıt, aktif kullanıcı, aktif alert rule, widget domain, API çağrısı, push/Telegram gönderimi.
+- [ ] Finansal metrikler: MRR, ARR, ARPU, churn, failed payment, LTV/CAC.
+- [ ] Teknik metrikler: p95 API latency, OWM/Open-Meteo hata oranı, cache hit, job başarısızlık sayısı.
+- [ ] Satış metrikleri: demo sayısı, teklif sayısı, kazanılan/kaybedilen teklif, ortalama satış döngüsü.
+- [ ] Don sezonu sonrası doğruluk raporu: uyarı zamanı, gerçekleşen minimum sıcaklık, false positive / false negative.
 
 ---
 

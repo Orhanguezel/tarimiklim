@@ -1,9 +1,9 @@
-// /var/www/tarimiklim/admin_panel/ecosystem.config.cjs
+// /var/www/tarim-dijital-ekosistem/projects/tarimiklim/admin_panel/ecosystem.config.cjs
 module.exports = {
   apps: [
     {
       name: 'tarimiklim-admin',
-      cwd: '/var/www/tarimiklim/admin_panel',
+      cwd: '/var/www/tarim-dijital-ekosistem/projects/tarimiklim/admin_panel',
       script: '/usr/bin/bun',
       args: 'run start -- -p 3096 -H 127.0.0.1',
       exec_mode: 'fork',
@@ -22,8 +22,8 @@ module.exports = {
         HOSTNAME: '127.0.0.1',
         NEXT_TELEMETRY_DISABLED: '1',
       },
-      out_file: '/root/.pm2/logs/tarimiklim-admin.out.log',
-      error_file: '/root/.pm2/logs/tarimiklim-admin.err.log',
+      out_file: '/home/orhan/.pm2/logs/tarimiklim-admin.out.log',
+      error_file: '/home/orhan/.pm2/logs/tarimiklim-admin.err.log',
       combine_logs: true,
       time: true,
     },

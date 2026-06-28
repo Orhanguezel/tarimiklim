@@ -2240,17 +2240,14 @@
         "charCount": "{count} / 160"
       },
       "pageLabels": {
+        "site": "Website",
         "home": "Startseite",
-        "birth-chart": "Geburtshoroskop",
-        "consultants": "Berater",
-        "consultant-detail": "Berater Detail",
-        "pricing": "Preise",
-        "daily": "Tageshoroskop",
-        "blog": "Blog",
-        "blog-post": "Blog-Beitrag",
-        "about": "Über uns",
-        "contact": "Kontakt",
-        "faqs": "FAQs"
+        "don-uyarisi": "Frostwarnung",
+        "auth-login": "Anmelden",
+        "auth-register": "Registrieren",
+        "widget-bereketfide": "Bereket Fide Widget",
+        "widget-vistaseed": "VistaSeed Widget",
+        "widget-haldefiyat": "Haldefiyat Widget"
       }
     },
     "payment": {
@@ -2991,7 +2988,8 @@
   "telegram": {
     "header": {
       "title": "Telegram",
-      "description": "Telegram-Benachrichtigungen und automatische Antworten konfigurieren"
+      "description": "Telegram-Benachrichtigungen und automatische Antworten konfigurieren",
+      "test": "Testnachricht senden"
     },
     "tabs": {
       "settings": "Einstellungen",
@@ -3005,6 +3003,7 @@
       "enableWebhook": "Webhook aktivieren",
       "enableWebhookDesc": "Für eingehende Nachrichten und Raw-Reply-Abläufe.",
       "botToken": "Bot-Token",
+      "botTokenPlaceholder": "z.B. 1234567890:AA...",
       "primaryChatId": "Primäre Chat-ID",
       "defaultChatId": "Standard Chat-ID",
       "events": {
@@ -3058,6 +3057,7 @@
       "testSending": "Wird gesendet...",
       "testEmpty": "Testnachricht darf nicht leer sein.",
       "testRequirements": "Für den Test: Benachrichtigungen aktiv + Token + Chat-ID erforderlich.",
+      "testTitle": "Telegram-Testnachricht",
       "testSent": "Testnachricht gesendet.",
       "testFailed": "Telegram-Test fehlgeschlagen.",
       "save": "Speichern",

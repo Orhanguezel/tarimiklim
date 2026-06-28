@@ -1,18 +1,18 @@
-import { useTranslations } from 'next-intl';
 import { SiteNavMobile } from './SiteNavMobile';
-
-const ANCHOR_IDS = ['modules', 'api', 'ekosistem', 'docs'] as const;
+import { ThemeModeToggle } from '@/components/ThemeModeToggle';
+import { resolveLocalizedHref, type NavItem } from '@/lib/navigation';
+import { AuthNavButtons } from '@/components/AuthNavButtons';
 
 interface Props {
   locale: string;
   logoUrl?: string | null;
+  items?: NavItem[];
 }
 
-export function SiteNav({ locale, logoUrl }: Props) {
-  const t = useTranslations('premium.nav');
-  const panelHref = `/${locale}/don-uyarisi`;
-  const homeHref = `/${locale}`;
-  const anchorHref = (id: string) => `${homeHref}#${id}`;
+export function SiteNav({ locale, logoUrl, items = [] }: Props) {
+  const activeItems = items.filter((item) => item.is_active !== false);
+  const cta = activeItems.find((item) => item.icon === 'cta');
+  const links = activeItems.filter((item) => item.icon !== 'cta');
 
   return (
     <nav className="site-nav">
@@ -32,20 +32,20 @@ export function SiteNav({ locale, logoUrl }: Props) {
           </a>
           <div className="site-nav-desktop">
             <ul className="site-nav-links">
-              <li>
-                <a href={panelHref}>{t('links.panel')}</a>
-              </li>
-              {ANCHOR_IDS.map((id) => (
-                <li key={id}>
-                  <a href={anchorHref(id)}>{t(`links.${id}`)}</a>
+              {links.map((item) => (
+                <li key={item.id}>
+                  <a href={resolveLocalizedHref(item.href, locale)}>{item.title}</a>
                 </li>
               ))}
             </ul>
           </div>
-          <a href={panelHref} className="site-nav-cta site-nav-desktop-cta">
-            {t('cta')}
-          </a>
-          <SiteNavMobile locale={locale} />
+          {cta ? (
+            <div className="site-nav-desktop">
+              <AuthNavButtons locale={locale} className="site-nav-desktop" ctaItem={cta} />
+            </div>
+          ) : null}
+          <ThemeModeToggle />
+          <SiteNavMobile locale={locale} items={activeItems} />
         </div>
       </div>
     </nav>

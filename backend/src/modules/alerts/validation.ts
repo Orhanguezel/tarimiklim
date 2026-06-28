@@ -31,6 +31,21 @@ export const telegramChatIdSchema = z.object({
   chatId: z.string().trim().max(50).nullable().optional(),
 }).transform((input) => ({ chatId: input.chatId ?? input.chat_id ?? null }));
 
+export const pushTokenSchema = z
+  .object({
+    token: z.string().trim().min(10).max(512),
+    provider: z.enum(['fcm', 'expo']).default('fcm'),
+    platform: z.enum(['ios', 'android', 'web', 'unknown']).default('unknown'),
+    device_id: z.string().trim().max(128).nullable().optional(),
+    deviceId: z.string().trim().max(128).nullable().optional(),
+  })
+  .transform((input) => ({
+    token: input.token,
+    provider: input.provider,
+    platform: input.platform,
+    deviceId: input.deviceId ?? input.device_id ?? null,
+  }));
+
 export const updateUserAlertRuleSchema = z.object({
   is_active: z.boolean().optional(),
   isActive: z.boolean().optional(),
@@ -50,3 +65,4 @@ export const listAlertRulesQuerySchema = z.object({
 
 export type CreateAlertRuleInput = z.infer<typeof createAlertRuleSchema>;
 export type CreateUserAlertRuleInput = z.infer<typeof createUserAlertRuleSchema>;
+export type PushTokenInput = z.infer<typeof pushTokenSchema>;

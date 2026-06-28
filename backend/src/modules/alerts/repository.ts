@@ -1,7 +1,16 @@
 import { eq, and, gte, desc, sql } from 'drizzle-orm';
 import { randomUUID } from 'crypto';
 import type { MySql2Database } from 'drizzle-orm/mysql2';
-import { weatherAlerts, alertRules, type WeatherAlert, type NewWeatherAlert, type AlertRule, type NewAlertRule } from './schema.js';
+import {
+  weatherAlerts,
+  alertRules,
+  userPushTokens,
+  type WeatherAlert,
+  type NewWeatherAlert,
+  type AlertRule,
+  type NewAlertRule,
+  type UserPushToken,
+} from './schema.js';
 
 export type AlertRuleWithUser = AlertRule & {
   userEmail: string | null;
@@ -19,6 +28,7 @@ export type SubscribedAlertUser = {
   alertType: string;
   threshold: string;
   channel: string;
+  pushTokens: UserPushToken[];
 };
 
 function rowsFromExecute<T>(result: unknown): T[] {
@@ -148,7 +158,21 @@ export async function repoGetSubscribedUsersForLocation(
       AND ar.alert_type = ${alertType}
       AND ar.is_active = 1
   `);
-  return rowsFromExecute<SubscribedAlertUser>(rows);
+  const subscribers = rowsFromExecute<Omit<SubscribedAlertUser, 'pushTokens'>>(rows);
+  const pushUserIds = subscribers
+    .filter((subscriber) => subscriber.channel === 'push')
+    .map((subscriber) => subscriber.userId);
+  const pushTokens = pushUserIds.length ? await repoListActivePushTokensForUsers(db, pushUserIds) : [];
+  const tokensByUser = new Map<string, UserPushToken[]>();
+  for (const token of pushTokens) {
+    const items = tokensByUser.get(token.userId) ?? [];
+    items.push(token);
+    tokensByUser.set(token.userId, items);
+  }
+  return subscribers.map((subscriber) => ({
+    ...subscriber,
+    pushTokens: tokensByUser.get(subscriber.userId) ?? [],
+  }));
 }
 
 export async function repoGetTelegramChatId(db: MySql2Database, userId: string): Promise<string | null> {
@@ -168,6 +192,78 @@ export async function repoUpdateTelegramChatId(db: MySql2Database, userId: strin
     ON DUPLICATE KEY UPDATE telegram_chat_id = VALUES(telegram_chat_id)
   `);
   return repoGetTelegramChatId(db, userId);
+}
+
+export async function repoListPushTokensForUser(db: MySql2Database, userId: string): Promise<UserPushToken[]> {
+  return db
+    .select()
+    .from(userPushTokens)
+    .where(eq(userPushTokens.userId, userId))
+    .orderBy(desc(userPushTokens.lastSeenAt));
+}
+
+export async function repoListActivePushTokensForUsers(db: MySql2Database, userIds: string[]): Promise<UserPushToken[]> {
+  if (!userIds.length) return [];
+  const rows = await db.execute(sql`
+    SELECT
+      id,
+      user_id AS userId,
+      token,
+      provider,
+      platform,
+      device_id AS deviceId,
+      is_active AS isActive,
+      last_seen_at AS lastSeenAt,
+      created_at AS createdAt,
+      updated_at AS updatedAt
+    FROM user_push_tokens
+    WHERE is_active = 1
+      AND user_id IN (${sql.join(userIds, sql`, `)})
+  `);
+  return rowsFromExecute<UserPushToken>(rows);
+}
+
+export async function repoUpsertPushToken(
+  db: MySql2Database,
+  input: {
+    userId: string;
+    token: string;
+    provider: string;
+    platform: string;
+    deviceId?: string | null;
+  },
+): Promise<UserPushToken> {
+  const id = randomUUID();
+  await db.execute(sql`
+    INSERT INTO user_push_tokens (id, user_id, token, provider, platform, device_id, is_active, last_seen_at)
+    VALUES (${id}, ${input.userId}, ${input.token}, ${input.provider}, ${input.platform}, ${input.deviceId ?? null}, 1, NOW())
+    ON DUPLICATE KEY UPDATE
+      provider = VALUES(provider),
+      platform = VALUES(platform),
+      device_id = VALUES(device_id),
+      is_active = 1,
+      last_seen_at = NOW(),
+      updated_at = NOW()
+  `);
+  const rows = await db
+    .select()
+    .from(userPushTokens)
+    .where(and(eq(userPushTokens.userId, input.userId), eq(userPushTokens.token, input.token)))
+    .limit(1);
+  return rows[0]!;
+}
+
+export async function repoDeletePushTokenForUser(db: MySql2Database, id: string, userId: string): Promise<void> {
+  await db.delete(userPushTokens).where(and(eq(userPushTokens.id, id), eq(userPushTokens.userId, userId)));
+}
+
+export async function repoDeactivatePushTokens(db: MySql2Database, tokens: string[]): Promise<void> {
+  if (!tokens.length) return;
+  await db.execute(sql`
+    UPDATE user_push_tokens
+    SET is_active = 0, updated_at = NOW()
+    WHERE token IN (${sql.join(tokens, sql`, `)})
+  `);
 }
 
 // Don uyarisi spam kontrolu: son 12 saat icinde ayni user+konum+tip+tarih icin uyari gonderildiyse true

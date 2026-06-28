@@ -3,11 +3,14 @@ import { requireAuth } from '@agro/shared-backend/middleware/auth';
 import {
   createMyAlertRuleHandler,
   deleteMyAlertRuleHandler,
+  deleteMyPushTokenHandler,
   getMyTelegramChatIdHandler,
   listAlertsHandler,
   listMyAlertRulesHandler,
+  listMyPushTokensHandler,
   updateMyAlertRuleHandler,
   updateMyTelegramChatIdHandler,
+  upsertMyPushTokenHandler,
 } from './controller.js';
 
 export async function registerAlerts(app: FastifyInstance) {
@@ -18,4 +21,7 @@ export async function registerAlerts(app: FastifyInstance) {
   app.delete('/me/alert-rules/:id', { onRequest: [requireAuth], schema: { tags: ['Alerts:Me'] } }, deleteMyAlertRuleHandler);
   app.get('/me/telegram-chat-id', { onRequest: [requireAuth], schema: { tags: ['Alerts:Me'] } }, getMyTelegramChatIdHandler);
   app.put('/me/telegram-chat-id', { onRequest: [requireAuth], schema: { tags: ['Alerts:Me'] } }, updateMyTelegramChatIdHandler);
+  app.get('/me/push-tokens', { onRequest: [requireAuth], schema: { tags: ['Alerts:Me'] } }, listMyPushTokensHandler);
+  app.post('/me/push-tokens', { onRequest: [requireAuth], schema: { tags: ['Alerts:Me'] } }, upsertMyPushTokenHandler);
+  app.delete('/me/push-tokens/:id', { onRequest: [requireAuth], schema: { tags: ['Alerts:Me'] } }, deleteMyPushTokenHandler);
 }

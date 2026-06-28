@@ -24,7 +24,7 @@
 - [x] Lokal test: kural olmadan job çalıştır, mesaj gitmediğini doğrula
   - Sonuç: `sent: false`, `reason: "no_subscribers"`
   - `weather_alerts` satır sayısı değişmedi: `0 → 0`
-- [ ] VPS deploy
+- [x] VPS deploy
 
 > **Etki:** Bu tek değişiklik mevcut spamı keser. Hiçbir kullanıcı
 > subscribe olmadığı sürece mesaj gitmiyor.
@@ -105,7 +105,7 @@ modules/alerts/
 - [x] Her user için:
   - `channel === 'telegram'` ve `user.telegram_chat_id` varsa → o chat_id'ye gönder
   - `channel === 'email'` → `user.email` adresine gönder
-- [ ] `channel === 'push'` → kullanıcının Firebase/FCM tokenlarına gönder
+- [x] `channel === 'push'` → kullanıcının Firebase/FCM/Expo tokenlarına gönder
 - [x] Admin global fallback'i tamamen kaldır
 
 ### Spam Koruması
@@ -189,45 +189,50 @@ Rota: `/admin/tarimiklim/alert-subscriptions`
 
 ### Push Token Saklama
 
-- [ ] `user_push_tokens` tablosu ekle
+- [x] `user_push_tokens` tablosu ekle
   - Önerilen kolonlar: `id`, `user_id`, `token`, `provider`, `platform`, `device_id`, `is_active`, `last_seen_at`, `created_at`, `updated_at`
   - `provider`: `fcm` veya `expo`
   - Unique: `(user_id, token)`
-- [ ] Drizzle schema ve seed SQL güncelle
-- [ ] Token silme/deaktive etme mekanizması ekle
+- [x] Drizzle schema ve seed SQL güncelle
+- [x] Token silme/deaktive etme mekanizması ekle
   - Firebase invalid token dönerse `is_active=0`
 
 ### Push Token API
 
-- [ ] `GET /api/v1/me/push-tokens` — kullanıcının kayıtlı cihaz tokenları
-- [ ] `POST /api/v1/me/push-tokens` — cihaz tokenı kaydet/güncelle
+- [x] `GET /api/v1/me/push-tokens` — kullanıcının kayıtlı cihaz tokenları
+- [x] `POST /api/v1/me/push-tokens` — cihaz tokenı kaydet/güncelle
   - Body: `{ token, provider, platform, device_id? }`
   - `user_id` token'dan alınır
-- [ ] `DELETE /api/v1/me/push-tokens/:id` — kendi tokenını sil
+- [x] `DELETE /api/v1/me/push-tokens/:id` — kendi tokenını sil
 
 ### Mobil Uygulama Entegrasyonu
 
-- [ ] `mobile/app/src/lib/notifications.ts` içindeki FAZ 2 yorumunu gerçek API çağrısına çevir
+- [x] `mobile/app/src/lib/notifications.ts` içindeki FAZ 2 yorumunu gerçek API çağrısına çevir
   - Şu an Expo push token alıp local storage'a yazıyor
   - Backend'e `POST /api/v1/me/push-tokens` göndermeli
-- [ ] Firebase/FCM mi Expo Push mu kullanılacağı netleştir
+- [x] Firebase/FCM mi Expo Push mu kullanılacağı netleştir
   - Expo managed akış kalacaksa provider `expo`
   - Native FCM token alınacaksa provider `fcm`
-- [ ] Kullanıcı abonelik formunda Push kanalını kullanıcı tarafında aktif et
+- [x] Kullanıcı abonelik formunda Push kanalını kullanıcı tarafında aktif et
   - Backend validation zaten `push` kabul ediyor
   - UI'da kullanıcı abonelik sayfasına `Push` seçeneği eklenmeli
 
 ### Delivery Refactor
 
-- [ ] `repoGetSubscribedUsersForLocation` sonucu push tokenları da içerecek şekilde genişlet
-- [ ] `sendFcmFrostAlert` fonksiyonunu kullanıcı token listesi alacak hale getir
+- [x] `repoGetSubscribedUsersForLocation` sonucu push tokenları da içerecek şekilde genişlet
+- [x] `sendFcmFrostAlert` fonksiyonunu kullanıcı token listesi alacak hale getir
   - Mevcut durum: `FCM_DEVICE_TOKENS` env listesinden global token okuyor
   - Hedef: subscriber bazlı DB tokenları
-- [ ] `checkAndSendFrostAlerts` içinde `channel === 'push'` yolunu aktif et
-- [ ] Push delivery testleri
+- [x] `checkAndSendFrostAlerts` içinde `channel === 'push'` yolunu aktif et
+- [x] Push delivery build/type kontrolleri
+  - Backend build geçti: `bun run build`
+  - Mobil TypeScript geçti: `bun x tsc --noEmit`
+- [x] Push delivery entegrasyon testleri
   - Token yoksa delivery failed ama alert kaydı kontrollü oluşmalı
   - Geçerli token mock/fixture ile success count doğrulanmalı
   - Invalid token durumunda token pasifleştirilmeli
+  - Test script'i hazır: `backend/src/modules/alerts/push-delivery.integration.ts`
+  - Canlı DB üzerinde geçici `push-test-*` kayıtlarıyla çalıştırıldı: `push-delivery integration ok`
 
 ---
 
@@ -238,16 +243,21 @@ Rota: `/admin/tarimiklim/alert-subscriptions`
 ### Mevcut Telegram Durumu
 
 - [x] Canlı VPS Telegram ayarları lokale taşındı
-  - Kaynak: `vps-vistainsaat:/var/www/tarimiklim/backend/.env`
+  - Kaynak: `vps-vistainsaat:/var/www/tarim-dijital-ekosistem/projects/tarimiklim/backend/.env`
   - Hedef: `backend/.env`
   - Taşınanlar: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_ALERT_CHANNEL_ID`
   - Secret değerler ekrana basılmadı
 - [x] Lokal doğrulama: `TELEGRAM_BOT_TOKEN=<set>`, `TELEGRAM_ALERT_CHANNEL_ID=<set>`
 
-- [ ] `/start` komutu → chat_id'yi user token ile eşleştir
-- [ ] `/subscribe antalya frost` → konum + tip aboneliği
-- [ ] `/unsubscribe` → tüm abonelikleri iptal
-- [ ] Webhook'tan gelen chat_id'yi user_profiles'a otomatik yaz
+- [x] `/start` komutu → chat_id'yi user token ile eşleştir
+  - Route: `POST /api/v1/telegram/bot-webhook`
+  - Kullanım: `/start <access_token>`
+- [x] `/subscribe antalya frost` → konum + tip aboneliği
+  - Telegram chat_id ile eşleşmiş kullanıcı için `weather_alert_rules` kaydı oluşturur/yeniden aktif eder
+- [x] `/unsubscribe` → tüm abonelikleri iptal
+  - Kullanıcının aktif kurallarını pasifleştirir
+- [x] Webhook'tan gelen chat_id'yi user_profiles'a otomatik yaz
+  - `/start <access_token>` başarılıysa `profiles.telegram_chat_id` güncellenir
 
 ---
 

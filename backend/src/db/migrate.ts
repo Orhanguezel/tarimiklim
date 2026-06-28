@@ -16,6 +16,7 @@ async function migrate() {
       password_hash VARCHAR(255) NOT NULL,
       full_name VARCHAR(255),
       phone VARCHAR(50),
+      ecosystem_id CHAR(36) NULL,
       is_active TINYINT NOT NULL DEFAULT 1,
       email_verified TINYINT NOT NULL DEFAULT 0,
       reset_token VARCHAR(255),
@@ -25,9 +26,20 @@ async function migrate() {
       rules_accepted_at DATETIME(3),
       last_sign_in_at DATETIME(3),
       PRIMARY KEY (id),
-      UNIQUE KEY users_email_unique (email)
+      UNIQUE KEY users_email_unique (email),
+      KEY users_ecosystem_id_idx (ecosystem_id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
   `);
+
+  await connection.execute(`ALTER TABLE users ADD COLUMN ecosystem_id CHAR(36) NULL AFTER phone;`)
+    .catch((err: any) => {
+      if (err?.errno !== 1060) throw err;
+    });
+
+  await connection.execute(`ALTER TABLE users ADD KEY users_ecosystem_id_idx (ecosystem_id);`)
+    .catch((err: any) => {
+      if (err?.errno !== 1061) throw err;
+    });
 
   await connection.execute(`
     CREATE TABLE IF NOT EXISTS user_roles (
@@ -196,6 +208,26 @@ async function migrate() {
       KEY idx_user (user_id),
       KEY idx_location (location_id),
       KEY idx_active (is_active)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `);
+
+  await connection.execute(`
+    CREATE TABLE IF NOT EXISTS user_push_tokens (
+      id VARCHAR(36) NOT NULL,
+      user_id VARCHAR(36) NOT NULL,
+      token VARCHAR(512) NOT NULL,
+      provider VARCHAR(20) NOT NULL,
+      platform VARCHAR(20) NOT NULL,
+      device_id VARCHAR(128) DEFAULT NULL,
+      is_active TINYINT DEFAULT 1,
+      last_seen_at DATETIME DEFAULT NOW(),
+      created_at DATETIME DEFAULT NOW(),
+      updated_at DATETIME DEFAULT NOW() ON UPDATE NOW(),
+      PRIMARY KEY (id),
+      UNIQUE KEY uq_user_push_token (user_id, token),
+      KEY idx_user_push_tokens_user (user_id),
+      KEY idx_user_push_tokens_active (is_active),
+      KEY idx_user_push_tokens_provider (provider)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
   `);
 

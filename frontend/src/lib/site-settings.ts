@@ -9,6 +9,9 @@ function backendOrigin(): string {
 }
 
 function resolveMediaUrl(value: unknown): string | null {
+  if (value && typeof value === 'object') {
+    return resolveMediaUrl((value as { url?: unknown }).url);
+  }
   if (typeof value !== 'string') return null;
   const trimmed = value.trim();
   if (!trimmed) return null;
@@ -23,7 +26,36 @@ export interface SiteMedia {
   appleTouchIcon: string | null;
 }
 
+export type SiteSettingRow = {
+  key: string;
+  locale: string;
+  value: unknown;
+};
+
 const MEDIA_KEYS = ['site_logo', 'site_favicon', 'site_apple_touch_icon'] as const;
+
+export async function fetchSetting(
+  key: string,
+  locale?: string,
+  opts?: { revalidate?: number },
+): Promise<SiteSettingRow | null> {
+  const cleanKey = key.trim();
+  if (!cleanKey) return null;
+
+  const params = new URLSearchParams();
+  if (locale) params.set('locale', locale);
+
+  try {
+    const qs = params.toString();
+    const res = await fetch(`${API_URL}/site_settings/${encodeURIComponent(cleanKey)}${qs ? `?${qs}` : ''}`, {
+      next: { revalidate: opts?.revalidate ?? 600, tags: [cleanKey, 'site-settings'] },
+    });
+    if (!res.ok) return null;
+    return (await res.json()) as SiteSettingRow;
+  } catch {
+    return null;
+  }
+}
 
 export async function fetchSiteMedia(locale?: string): Promise<SiteMedia> {
   const params = new URLSearchParams({ key_in: MEDIA_KEYS.join(',') });

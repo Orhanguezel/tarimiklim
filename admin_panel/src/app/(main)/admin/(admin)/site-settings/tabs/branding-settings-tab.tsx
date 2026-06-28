@@ -178,6 +178,13 @@ export const BrandingSettingsTab: React.FC = () => {
         locale: '*',
       }).unwrap();
 
+      // Sync individual keys for frontend fetchSiteMedia
+      await Promise.all([
+        updateSetting({ key: 'site_logo', value: form.logo_url, locale: '*' }).unwrap(),
+        updateSetting({ key: 'site_favicon', value: form.favicon_url, locale: '*' }).unwrap(),
+        updateSetting({ key: 'site_apple_touch_icon', value: form.apple_touch_icon, locale: '*' }).unwrap(),
+      ]);
+
       toast.success(t('admin.siteSettings.branding.saved'));
       await refetch();
     } catch (err: any) {

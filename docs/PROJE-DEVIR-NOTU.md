@@ -20,7 +20,7 @@ Ekosistem içinde **Katman 4 (Veri & AI)** altında çalışır. Bağımsız uyg
 |-|-|
 | **Domain** | [tarimiklim.com](https://tarimiklim.com) · [tarimiklim.com.tr](http://tarimiklim.com.tr) → tarimiklim.com'a yönlenir |
 | **Repo** | https://github.com/Orhanguezel/tarimiklim |
-| **VPS** | vps-vistainsaat (187.124.166.65) — `/var/www/tarimiklim/` |
+| **VPS** | vps-vistainsaat (187.124.166.65) — `/var/www/tarim-dijital-ekosistem/projects/tarimiklim/` |
 | **API** | https://tarimiklim.com/api/v1 |
 | **Swagger** | https://tarimiklim.com/documentation |
 | **Health** | https://tarimiklim.com/api/v1/health |
@@ -39,7 +39,7 @@ Ekosistem içinde **Katman 4 (Veri & AI)** altında çalışır. Bağımsız uyg
 Bu servis ──→ Ziraat Haber Portali  (sidebar hava widget)
          ──→ Sera SaaS              (don uyarısı, havalandırma kararı)
          ──→ Açık Tarla             (sulama planlaması)
-         ──→ Verim Tahmini          (iklim verisi → AI girdisi)
+         ──→ Tahmin Motoru          (iklim verisi → AI girdisi)
          ──→ Hastalık Uyarı         (yüksek nem → mantar/bakteri riski)
          ──→ Hal Fiyatları          (don → fiyat etkisi korelasyonu)
 ```
@@ -118,7 +118,7 @@ ssh vps-vistainsaat "certbot --nginx -d tarimiklim.com.tr -d www.tarimiklim.com.
 
 ```bash
 # VPS'te
-cd /var/www/tarimiklim/admin_panel
+cd /var/www/tarim-dijital-ekosistem/projects/tarimiklim/admin_panel
 cp .env.example .env.local
 # NEXT_PUBLIC_API_URL=https://tarimiklim.com/api/v1 doldur
 bun install && bun run build
@@ -180,13 +180,13 @@ pm2 logs tarimiklim-backend --lines 50
 pm2 logs tarimiklim-frontend --lines 20
 
 # Yeni deploy (kod güncellemesi)
-cd /var/www/tarimiklim
+cd /var/www/tarim-dijital-ekosistem/projects/tarimiklim
 git pull origin main
 cd frontend && bun run build && pm2 restart tarimiklim-frontend
 pm2 restart tarimiklim-backend --update-env
 
 # DB işlemleri (production — DROP YOK)
-cd /var/www/tarimiklim/backend
+cd /var/www/tarim-dijital-ekosistem/projects/tarimiklim/backend
 NODE_ENV=production bun run db:seed:no-drop
 ```
 

@@ -57,6 +57,9 @@ const AUTH_SKIP_REAUTH = new Set<string>([
   '/auth/logout',
 ]);
 
+// Prevent refresh storms after session expires.
+let refreshBlocked = false;
+
 function extractPath(u: string): string {
   try {
     if (isAbsUrl(u)) {
@@ -227,7 +230,15 @@ const baseQueryWithReauth: RBQ = async (args, api, extra) => {
   let result = await rawBaseQuery(req, api, extra);
   result = await coerceSerializableError(result);
 
-  if (result.error?.status === 401 && !AUTH_SKIP_REAUTH.has(cleanPath)) {
+  // Successful explicit auth calls re-enable refresh flow.
+  if (
+    !result.error &&
+    (cleanPath === '/auth/token' || cleanPath === '/auth/signup' || cleanPath === '/auth/google')
+  ) {
+    refreshBlocked = false;
+  }
+
+  if (result.error?.status === 401 && !AUTH_SKIP_REAUTH.has(cleanPath) && !refreshBlocked) {
     const refreshRes = await rawBaseQuery(
       {
         url: '/auth/token/refresh',
@@ -242,6 +253,7 @@ const baseQueryWithReauth: RBQ = async (args, api, extra) => {
       const access_token = (refreshRes.data as { access_token?: string } | undefined)?.access_token;
 
       if (access_token) {
+        refreshBlocked = false;
         tokenStore.set(access_token);
         safeSetLocalStorageItem('mh_access_token', access_token);
 
@@ -253,11 +265,13 @@ const baseQueryWithReauth: RBQ = async (args, api, extra) => {
         result = await rawBaseQuery(retry, api, extra);
         result = await coerceSerializableError(result);
       } else {
+        refreshBlocked = true;
         tokenStore.set(null);
         safeRemoveLocalStorageItem('mh_access_token');
         safeRemoveLocalStorageItem('mh_refresh_token');
       }
     } else {
+      refreshBlocked = true;
       tokenStore.set(null);
       safeRemoveLocalStorageItem('mh_access_token');
       safeRemoveLocalStorageItem('mh_refresh_token');

@@ -262,7 +262,7 @@ Codex token'ı bittiğinde Claude Code roller üstlendi.
 - [ ] **[Claude]** **Kritik:** `/widget/bereketfide` ve `/widget/vistaseed` hâlâ çalışıyor mu (iframe test)
 - [ ] **[Claude]** Backend `/api/v1/weather/*` endpoint'lerinde regresyon yok (frontend'e dokunduk sadece)
 - [ ] **[Claude]** `bun run build` hata vermiyor
-- [ ] **[Claude]** VPS deploy rehearsal — staging path: `/var/www/tarimiklim-staging/`
+- [ ] **[Claude]** VPS deploy rehearsal — staging path da monorepo kok altinda planlanacak; eski daginik canli yol modeli kullanilmayacak.
 - [ ] **[Claude]** Preview URL'de son Antigravity taraması
 - [ ] **[Claude]** Ana branch'e merge, `pm2 restart tarimiklim-frontend`
 - [ ] **[Claude]** Canlı doğrulama: tarimiklim.com ana sayfa + /panel + /widget/* + API health

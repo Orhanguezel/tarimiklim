@@ -38,6 +38,21 @@ async function get<T>(path: string, params?: Record<string, string | number>): P
   return json.data;
 }
 
+async function post<T>(path: string, body: unknown, accessToken?: string | null): Promise<T> {
+  const res = await fetch(`${API_URL}${path}`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const json = (await res.json()) as Envelope<T>;
+  return json.data;
+}
+
 export const api = {
   weather: (lat: number, lon: number, days = 7) =>
     get<ForecastResponse>('/weather', { lat, lon, days }),
@@ -59,4 +74,14 @@ export const api = {
 
   locations: () =>
     get<{ items: WeatherLocation[] }>('/locations', { active: 'true', limit: 100 }),
+
+  registerPushToken: (
+    body: {
+      token: string;
+      provider: 'expo' | 'fcm';
+      platform: 'ios' | 'android' | 'web' | 'unknown';
+      device_id?: string;
+    },
+    accessToken?: string | null,
+  ) => post('/me/push-tokens', body, accessToken),
 };

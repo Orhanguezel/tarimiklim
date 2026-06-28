@@ -29,45 +29,14 @@ import { getDefaultSiteNameForSeo, getPublicSiteHostname } from '@/lib/admin-bra
 
 // Sayfa anahtarlari backend seo_pages seed ile uyumlu tutulur (frontend route haritasi).
 const PAGE_KEYS = [
-  // Temel sayfalar
-  { key: 'home',                       path: '/' },
-  { key: 'birth-chart',                path: '/birth-chart' },
-  { key: 'consultants',                path: '/consultants' },
-  { key: 'consultant-detail',          path: '/consultants/[id]' },
-  { key: 'pricing',                    path: '/pricing' },
-  { key: 'daily',                      path: '/daily' },
-  { key: 'blog',                       path: '/blog' },
-  { key: 'blog-post',                  path: '/blog/[slug]' },
-  { key: 'about',                      path: '/about' },
-  { key: 'contact',                    path: '/contact' },
-  { key: 'faqs',                       path: '/faqs' },
-  // Burçlar (FAZ 20)
-  { key: 'burclar',                    path: '/burclar' },
-  { key: 'burclar-sign',               path: '/burclar/[sign]' },
-  { key: 'burclar-bugun',              path: '/burclar/[sign]/bugun' },
-  { key: 'burclar-haftalik',           path: '/burclar/[sign]/haftalik' },
-  { key: 'burclar-aylik',              path: '/burclar/[sign]/aylik' },
-  { key: 'burclar-ask',                path: '/burclar/[sign]/ask' },
-  { key: 'burclar-kariyer',            path: '/burclar/[sign]/kariyer' },
-  { key: 'burclar-saglik',             path: '/burclar/[sign]/saglik' },
-  { key: 'burclar-uyumlulik',          path: '/burclar/[sign]/uyumluluk' },
-  { key: 'burclar-meditasyon',         path: '/burclar/[sign]/meditasyon' },
-  { key: 'burclar-pair-uyumu',         path: '/burclar/uyum/[pair]' },
-  { key: 'burclar-transit',            path: '/burclar/transit/[month]' },
-  // Doğum haritası araçları
-  { key: 'yukselen-burc-hesaplayici',  path: '/yukselen-burc-hesaplayici' },
-  { key: 'big-three',                  path: '/big-three' },
-  // Hibrit feature'lar
-  { key: 'yildizname',                 path: '/yildizname' },
-  { key: 'yildizname-result',          path: '/yildizname/result/[id]' },
-  { key: 'tarot',                      path: '/tarot' },
-  { key: 'tarot-reading',              path: '/tarot/reading/[id]' },
-  { key: 'kahve-fali',                 path: '/kahve-fali' },
-  { key: 'kahve-fali-result',          path: '/kahve-fali/result/[id]' },
-  { key: 'ruya-tabiri',                path: '/ruya-tabiri' },
-  { key: 'ruya-tabiri-result',         path: '/ruya-tabiri/result/[id]' },
-  { key: 'sinastri',                   path: '/sinastri' },
-  { key: 'sinastri-result',            path: '/sinastri/result/[id]' },
+  { key: 'site', path: '/[locale]' },
+  { key: 'home', path: '/[locale]' },
+  { key: 'don-uyarisi', path: '/[locale]/don-uyarisi' },
+  { key: 'auth-login', path: '/[locale]/auth/login' },
+  { key: 'auth-register', path: '/[locale]/auth/register' },
+  { key: 'widget-bereketfide', path: '/widget/bereketfide' },
+  { key: 'widget-vistaseed', path: '/widget/vistaseed' },
+  { key: 'widget-haldefiyat', path: '/widget/haldefiyat' },
 ] as const;
 
 type PageSeo = {
@@ -376,7 +345,7 @@ export const SeoSettingsTab: React.FC<SeoSettingsTabProps> = ({ locale, settingP
                             <div className="space-y-1.5">
                               <p className="text-[11px] text-[#dadce0] truncate font-sans">
                                 {previewDomain} › {locale}
-                                {cfg.path === '/' ? '' : cfg.path}
+                                {cfg.path === '/[locale]' ? '' : cfg.path}
                               </p>
                               <p className="text-[18px] text-[#8ab4f8] truncate font-sans hover:underline cursor-pointer">
                                 {page.title ||

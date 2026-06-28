@@ -1,0 +1,15 @@
+{
+  "name": "tarimiklim-deploy",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend",
+    "admin_panel",
+    "packages/shared-backend",
+    "packages/shared-types",
+    "packages/shared-config",
+    "packages/shared-frontend",
+    "packages/shared-ui",
+    "packages/ecosystem-weather-widget"
+  ]
+}

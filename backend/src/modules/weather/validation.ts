@@ -10,7 +10,7 @@ export const hourlyQuerySchema = z.object({
   lat: z.coerce.number().min(-90).max(90),
   lon: z.coerce.number().min(-180).max(180),
   /** OpenWeatherMap 3 saatlik slot sayisi (en fazla 40) */
-  slots: z.coerce.number().min(4).max(40).default(40),
+  slots: z.coerce.number().min(1).max(40).default(40),
 });
 
 export const frostRiskQuerySchema = z.object({

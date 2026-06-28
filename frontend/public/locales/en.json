@@ -66,16 +66,173 @@
     "tempMax": "Max",
     "frostAlert": "Frost Alert"
   },
+  "dashboard": {
+    "nav": {
+      "overview": "Overview",
+      "profile": "Profile",
+      "alerts": "Frost Alerts",
+      "favorites": "Favorites",
+      "notifications": "Notifications",
+      "support": "Support",
+      "security": "Security"
+    },
+    "overview": {
+      "greeting": "Welcome back",
+      "greetingWithUser": "Welcome, {name}",
+      "guest": "Member",
+      "subtitle": "Manage your locations, frost alerts and notification preferences here.",
+      "activeAlerts": "Active alerts",
+      "favoriteProducts": "Favorites",
+      "unreadNotifications": "Unread notifications",
+      "openTickets": "Open tickets",
+      "quickActions": "Quick actions",
+      "addAlert": "Create frost alert",
+      "addAlertDesc": "Add an early warning rule with location and channel preferences.",
+      "viewForecast": "Open live forecast",
+      "viewForecastDesc": "View weather and frost risk for the selected region.",
+      "profileSettings": "Profile settings",
+      "profileSettingsDesc": "Edit contact details and account preferences.",
+      "viewPrices": "Open live forecast",
+      "logout": "Sign out"
+    },
+    "profile": {
+      "title": "Profile Details",
+      "subtitle": "Update the basic details shown on your account.",
+      "fullName": "Full name",
+      "fullNamePlaceholder": "Your full name",
+      "phone": "Phone",
+      "phonePlaceholder": "Your phone number",
+      "city": "City",
+      "cityPlaceholder": "Your city",
+      "address": "Address",
+      "addressPlaceholder": "Address line",
+      "bio": "Notes",
+      "bioPlaceholder": "Your farming activity or details you want to track",
+      "save": "Save",
+      "saving": "Saving...",
+      "updateButton": "Update Details",
+      "saveSuccess": "Profile details updated.",
+      "saveError": "Could not update profile. Please try again."
+    },
+    "alerts": {
+      "empty": "You do not have any alerts yet.",
+      "above": "Above",
+      "below": "Below",
+      "channelEmail": "E-mail",
+      "channelTelegram": "Telegram",
+      "lastTriggered": "Last triggered",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "notifications": {
+      "empty": "No notifications found.",
+      "markAllRead": "Mark all as read",
+      "markRead": "Read"
+    },
+    "security": {
+      "title": "Change Password",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "newPasswordPlaceholder": "At least 8 characters",
+      "confirmPassword": "Confirm New Password",
+      "verified": "Verified",
+      "notVerified": "Not verified",
+      "submit": "Update Password",
+      "saving": "Updating...",
+      "success": "Your password has been updated.",
+      "errorMinLength": "New password must be at least 8 characters.",
+      "errorMismatch": "New passwords do not match.",
+      "errorCurrentWrong": "Current password is incorrect.",
+      "errorGeneric": "Could not update. Please try again."
+    },
+    "support": {
+      "newTitle": "New Support Request",
+      "subject": "Subject",
+      "subjectPlaceholder": "Summarize your issue",
+      "message": "Message",
+      "messagePlaceholder": "Describe the details...",
+      "submit": "Send Request",
+      "submitting": "Sending...",
+      "created": "Your request has been received. We will get back shortly.",
+      "createError": "Could not send. Please try again.",
+      "subjectMinError": "Subject must be at least 2 characters.",
+      "messageMinError": "Message must be at least 10 characters.",
+      "emailMissingError": "Account e-mail is missing. Please sign in again.",
+      "listTitle": "My Requests",
+      "empty": "You have no support requests.",
+      "back": "Back",
+      "you": "You",
+      "supportTeam": "Support Team",
+      "replyPlaceholder": "Write your reply...",
+      "reply": "Reply",
+      "status": {
+        "open": "Open",
+        "answered": "Answered",
+        "closed": "Closed"
+      }
+    },
+    "favorites": {
+      "empty": "You do not have any favorites yet.",
+      "remove": "Remove"
+    }
+  },
+  "public": {
+    "auth": {
+      "loginEyebrow": "Member login",
+      "registerEyebrow": "New account",
+      "heroTitle": "See frost risk early and protect the field in time.",
+      "heroLead": "Use your Tarımİklim account to manage location-based alerts, Telegram and push notifications from one panel.",
+      "loginTitle": "Sign in",
+      "registerTitle": "Create account",
+      "loginLead": "Sign in with your email to continue to the {app} panel.",
+      "registerLead": "Create a free account for frost alerts and location tracking.",
+      "fullName": "Full name",
+      "email": "E-mail",
+      "password": "Password",
+      "loginButton": "Sign in",
+      "registerButton": "Register",
+      "loading": "Please wait...",
+      "googleLoading": "Signing in with Google...",
+      "googleError": "Google sign-in could not be completed.",
+      "or": "or",
+      "switchToRegister": "Don't have an account? Register",
+      "switchToLogin": "Already have an account? Sign in",
+      "loginError": "Invalid e-mail or password.",
+      "registerError": "Registration failed."
+    },
+    "contact": {
+      "titlePrefix": "How can we",
+      "titleHighlight": "help",
+      "titleSuffix": "you?",
+      "lead": "We are here for all your questions, feedback, and support requests. Send your message and we will respond shortly."
+    },
+    "contactForm": {
+      "name": "Full name",
+      "email": "E-mail",
+      "message": "Your message",
+      "submit": "Send",
+      "sent": "Message received"
+    },
+    "about": {
+      "eyebrow": "Digital Agriculture Ecosystem",
+      "title": "We democratize access to agricultural intelligence",
+      "summary": "{app} is an independent platform built to accelerate Türkiye's digital agriculture transformation.",
+      "visionTitle": "Shaping the future with data",
+      "cta": "Contact us"
+    }
+  },
   "premium": {
     "meta": {
       "title": "TarimIKlim — Turkiye's Climate Intelligence",
       "description": "7-day forecast, four-factor frost risk scoring and climate infrastructure for agricultural products."
     },
     "alertBar": {
-      "message": "Active alert · frost risk in Central Anatolia · 34 locations · updated 12 min ago",
-      "uptime": "API 99.97% uptime",
+      "message": "Live weather data · Frost-risk panel · 34 locations",
+      "uptime": "API active",
       "version": "v2.4.1",
-      "locales": "TR · EN · AR",
+      "locales": "TR · EN",
       "metricsLabel": "Service metrics"
     },
     "nav": {
@@ -656,5 +813,32 @@
         "creditUrl": "https://guezelwebdesign.com"
       }
     }
+  },
+  "city": {
+    "breadcrumbHome": "Home",
+    "table": {
+      "date": "Date",
+      "min": "Min",
+      "max": "Max",
+      "rain": "Rain",
+      "humidity": "Humidity",
+      "wind": "Wind",
+      "frost": "Frost Risk"
+    },
+    "forecastTitle": "{city} 7-Day Forecast",
+    "source": "Data is sourced from OpenWeatherMap and updates automatically during the day.",
+    "noData": "Live forecast could not be loaded right now. Please try again shortly or use the interactive panel below.",
+    "ctaTitle": "Get personalised alerts for {city}",
+    "ctaText": "Choose your location and switch to the interactive panel for hourly forecasts, spraying suitability and frost notifications.",
+    "ctaButton": "Open interactive panel",
+    "relatedTitle": "Other pages for {city}",
+    "peersTitle": "Other provinces in the {region} region",
+    "allProvinces": "View all provinces →",
+    "hubEyebrow": "81 Provinces",
+    "hubTitle": "{hub} by Province",
+    "hubIntro": "{hub} for all 81 provinces of Türkiye. Pick your province for the latest forecast and frost risk.",
+    "otherSections": "Other sections",
+    "provinceListTitle": "Provinces",
+    "provinceLinksTitle": "Frost Alerts by Province"
   }
 }

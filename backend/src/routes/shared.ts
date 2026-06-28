@@ -14,6 +14,7 @@ import { registerHealth } from '@agro/shared-backend/modules/health/router';
 import { registerProfiles } from '@agro/shared-backend/modules/profiles';
 import { registerMenuItems, registerMenuItemsAdmin } from '@agro/shared-backend/modules/menuItems';
 import { registerUserRoles } from '@agro/shared-backend/modules/userRoles';
+import { registerSupport } from '@agro/shared-backend/modules/support';
 
 import { registerStorageAdmin } from '@agro/shared-backend/modules/storage/admin.routes';
 import { registerContactsAdmin } from '@agro/shared-backend/modules/contact/admin.routes';
@@ -45,6 +46,7 @@ export async function registerSharedPublic(api: FastifyInstance) {
   await api.register(registerNotifications);
   await api.register(registerTelegram);
   await api.register(registerTheme);
+  await api.register(registerSupport);
 }
 
 export async function registerSharedAdmin(api: FastifyInstance) {

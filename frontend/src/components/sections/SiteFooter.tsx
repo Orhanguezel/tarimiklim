@@ -1,19 +1,26 @@
-import { useTranslations } from 'next-intl';
-
-const GROUPS = ['product', 'developer', 'ecosystem', 'company'] as const;
-const GROUP_LINKS: Record<(typeof GROUPS)[number], readonly string[]> = {
-  product: ['panel', 'frost', 'irrigation', 'forecast', 'alerts', 'widgets'],
-  developer: ['api', 'sdk', 'widget', 'webhooks', 'status', 'changelog'],
-  ecosystem: ['bereketfide', 'vistaseed', 'sera', 'ziraatHaber', 'hal', 'yield'],
-  company: ['about', 'blog', 'careers', 'press', 'privacy', 'kvkk'],
-};
+import { resolveLocalizedHref, type FooterContent, type FooterSection, type NavItem } from '@/lib/navigation';
 
 interface Props {
+  locale?: string;
   logoUrl?: string | null;
+  sections?: FooterSection[];
+  items?: NavItem[];
+  content?: FooterContent | null;
 }
 
-export function SiteFooter({ logoUrl }: Props = {}) {
-  const t = useTranslations('premium.footer');
+export function SiteFooter({ locale = 'tr', logoUrl, sections = [], items = [], content }: Props = {}) {
+  const linksBySection = new Map<string, NavItem[]>();
+  for (const item of items.filter((entry) => entry.is_active !== false)) {
+    const key = item.section_id || item.section_slug || '__none__';
+    const list = linksBySection.get(key) ?? [];
+    list.push(item);
+    linksBySection.set(key, list);
+    if (item.section_slug && item.section_slug !== key) {
+      const slugList = linksBySection.get(item.section_slug) ?? [];
+      slugList.push(item);
+      linksBySection.set(item.section_slug, slugList);
+    }
+  }
 
   return (
     <footer className="site-footer">
@@ -28,51 +35,56 @@ export function SiteFooter({ logoUrl }: Props = {}) {
                 <span>Tarim<em>IKlim</em></span>
               </div>
             )}
-            <p className="site-footer-tag">{t('tagline')}</p>
-            <p className="site-footer-copy">{t('copy')}</p>
+            <p className="site-footer-tag">{content?.tagline ?? ''}</p>
+            <p className="site-footer-copy">{content?.copy ?? ''}</p>
             <ul className="site-footer-contact">
-              <li>{t('contact.company')}</li>
-              <li>{t('contact.city')}</li>
-              <li>
-                <a href={`mailto:${t('contact.email')}`}>{t('contact.email')}</a>
-              </li>
-              <li>{t('contact.social')}</li>
+              {content?.contact?.company ? <li>{content.contact.company}</li> : null}
+              {content?.contact?.city ? <li>{content.contact.city}</li> : null}
+              {content?.contact?.email ? (
+                <li>
+                  <a href={`mailto:${content.contact.email}`}>{content.contact.email}</a>
+                </li>
+              ) : null}
+              {content?.contact?.social ? <li>{content.contact.social}</li> : null}
             </ul>
           </div>
 
           <div className="site-footer-links">
-            {GROUPS.map((group) => (
-              <div key={group} className="site-footer-col">
-                <h3 className="site-footer-col-title">{t(`groups.${group}.title`)}</h3>
+            {sections.filter((section) => section.is_active !== false).map((section) => {
+              const sectionItems = linksBySection.get(section.id) ?? linksBySection.get(section.slug) ?? [];
+              return (
+              <div key={section.id} className="site-footer-col">
+                <h3 className="site-footer-col-title">{section.title}</h3>
                 <ul className="site-footer-col-list">
-                  {GROUP_LINKS[group].map((link) => (
-                    <li key={link}>
-                      <a href={t(`groups.${group}.items.${link}.href`)}>
-                        {t(`groups.${group}.items.${link}.label`)}
+                  {sectionItems.map((item) => (
+                    <li key={item.id}>
+                      <a href={resolveLocalizedHref(item.href, locale)}>
+                        {item.title}
                       </a>
                     </li>
                   ))}
                 </ul>
               </div>
-            ))}
+            );})}
           </div>
         </div>
 
         <div className="site-footer-bottom">
-          <span className="site-footer-copyright">{t('bottom.copyright')}</span>
+          <span className="site-footer-copyright">{content?.bottom?.copyright ?? ''}</span>
           <nav className="site-footer-legal" aria-label="Legal">
-            <a href={t('bottom.privacyHref')}>{t('bottom.privacy')}</a>
-            <a href={t('bottom.termsHref')}>{t('bottom.terms')}</a>
-            <a href={t('bottom.cookiesHref')}>{t('bottom.cookies')}</a>
-            <a href={t('bottom.securityHref')}>{t('bottom.security')}</a>
+            {(linksBySection.get('__none__') ?? []).map((item) => (
+              <a key={item.id} href={resolveLocalizedHref(item.href, locale)}>{item.title}</a>
+            ))}
           </nav>
         </div>
-        <div className="site-footer-credit">
-          {t('bottom.creditLabel')}:{' '}
-          <a href={t('bottom.creditUrl')} target="_blank" rel="noopener noreferrer">
-            {t('bottom.creditBy')}
+        {content?.bottom?.creditBy ? (
+          <div className="site-footer-credit">
+          {content.bottom.creditLabel}: {' '}
+          <a href={content.bottom.creditUrl ?? '#'} target="_blank" rel="noopener noreferrer">
+            {content.bottom.creditBy}
           </a>
         </div>
+        ) : null}
       </div>
     </footer>
   );

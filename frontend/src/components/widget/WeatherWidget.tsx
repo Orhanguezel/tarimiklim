@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { fetchWidgetData } from '@/lib/api';
+import { fetchWidgetDataWithBase } from '@/lib/api';
 import type { WidgetDataResponse } from '@/types/weather';
 import { requestBrowserLocation } from '@/lib/user-location';
 
-export type Brand = 'bereketfide' | 'vistaseed' | 'haldefiyat';
+export type Brand = 'tarimiklim' | 'bereketfide' | 'vistaseed' | 'haldefiyat';
 
 interface BrandTokens {
   bg: string;
@@ -18,6 +18,15 @@ interface BrandTokens {
 }
 
 const BRAND: Record<Brand, BrandTokens> = {
+  tarimiklim: {
+    bg: '#f1ebdd',
+    card: '#fffdf8',
+    border: '#d8ccb4',
+    text: '#141b14',
+    textMuted: '#2b3527',
+    primary: '#1e3023',
+    badge: '#c69b3a',
+  },
   bereketfide: {
     bg: '#faf8f5',
     card: '#ffffff',
@@ -83,9 +92,6 @@ export function WeatherWidget({ location, brand, apiBase }: Props) {
 
   useEffect(() => {
     let cancelled = false;
-    if (apiBase) {
-      process.env.NEXT_PUBLIC_API_URL = apiBase;
-    }
 
     async function load() {
       setLoading(true);
@@ -107,7 +113,7 @@ export function WeatherWidget({ location, brand, apiBase }: Props) {
           }
         }
 
-        const d = await fetchWidgetData(locSlug, lat, lon);
+        const d = await fetchWidgetDataWithBase(apiBase, locSlug, lat, lon);
         if (!cancelled) setData(d);
       } catch (err) {
         if (!cancelled) setError(true);

@@ -1,19 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
-
-const ANCHOR_IDS = ['modules', 'api', 'ekosistem', 'docs'] as const;
+import { resolveLocalizedHref, type NavItem } from '@/lib/navigation';
+import { AuthNavButtons } from '@/components/AuthNavButtons';
 
 interface Props {
   locale: string;
+  items?: NavItem[];
 }
 
-export function SiteNavMobile({ locale }: Props) {
-  const t = useTranslations('premium.nav');
+export function SiteNavMobile({ locale, items = [] }: Props) {
   const [open, setOpen] = useState(false);
-  const panelHref = `/${locale}/don-uyarisi`;
-  const anchorHref = (id: string) => `/${locale}#${id}`;
+  const cta = items.find((item) => item.icon === 'cta');
+  const links = items.filter((item) => item.icon !== 'cta');
 
   return (
     <>
@@ -24,27 +23,27 @@ export function SiteNavMobile({ locale }: Props) {
         aria-controls="mobile-site-nav"
         onClick={() => setOpen((value) => !value)}
       >
-        {open ? t('close') : t('menu')}
+        {open ? 'Kapat' : 'Menu'}
       </button>
       <div id="mobile-site-nav" className="site-nav-mobile-panel" data-open={open}>
         <ul>
-          <li>
-            <a href={panelHref} onClick={() => setOpen(false)}>
-              {t('links.panel')}
-            </a>
-          </li>
-          {ANCHOR_IDS.map((id) => (
-            <li key={id}>
-              <a href={anchorHref(id)} onClick={() => setOpen(false)}>
-                {t(`links.${id}`)}
+          {links.map((item) => (
+            <li key={item.id}>
+              <a href={resolveLocalizedHref(item.href, locale)} onClick={() => setOpen(false)}>
+                {item.title}
               </a>
             </li>
           ))}
           <li>
-            <a className="site-nav-cta" href={panelHref} onClick={() => setOpen(false)}>
-              {t('cta')}
-            </a>
+            <AuthNavButtons locale={locale} />
           </li>
+          {cta ? (
+            <li>
+              <a className="site-nav-cta" href={resolveLocalizedHref(cta.href, locale)} onClick={() => setOpen(false)}>
+                {cta.title}
+              </a>
+            </li>
+          ) : null}
         </ul>
       </div>
     </>

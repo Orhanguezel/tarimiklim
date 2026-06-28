@@ -1,0 +1,140 @@
+"use client";
+
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
+import { useAuthSession } from "@/components/providers/AuthSessionProvider";
+import { useProfile } from "@/lib/hooks/useProfile";
+
+const NAV_ITEMS = [
+  { href: "hesabim",             key: "overview",      icon: GridIcon },
+  { href: "hesabim/profil",      key: "profile",       icon: UserIcon },
+  { href: "hesabim/alert-rules", key: "alerts",        icon: BellIcon },
+  { href: "hesabim/bildirimler", key: "notifications", icon: InboxIcon },
+  { href: "hesabim/destek",      key: "support",       icon: HelpIcon },
+  { href: "hesabim/guvenlik",    key: "security",      icon: LockIcon },
+];
+
+interface Props {
+  locale: string;
+}
+
+export function DashboardSidebar({ locale }: Props) {
+  const t = useTranslations("dashboard");
+  const pathname = usePathname();
+  const { user, logout } = useAuthSession();
+  const { data: profile } = useProfile();
+
+  return (
+    <aside className="dashboard-sidebar">
+      <div className="dashboard-sidebar-profile">
+        {profile?.avatar_url ? (
+          <img
+            src={profile.avatar_url}
+            alt=""
+            className="dashboard-avatar"
+          />
+        ) : (
+          <div className="dashboard-avatar dashboard-avatar-fallback">
+            {user?.full_name?.charAt(0)?.toUpperCase() ?? user?.email?.charAt(0)?.toUpperCase() ?? "?"}
+          </div>
+        )}
+        <p className="dashboard-sidebar-name">
+          {user?.full_name ?? t("overview.guest")}
+        </p>
+        <p className="dashboard-sidebar-email">{user?.email}</p>
+      </div>
+
+      <nav className="dashboard-nav">
+        {NAV_ITEMS.map(({ href, key, icon: Icon }) => {
+          const full = `/${locale}/${href}`;
+          const active = pathname === full || pathname.startsWith(`${full}/`);
+          return (
+            <Link
+              key={href}
+              href={`/${locale}/${href}`}
+              className={`dashboard-nav-link${active ? " is-active" : ""}`}
+            >
+              <Icon size={17} />
+              {t(`nav.${key}`)}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="dashboard-sidebar-footer">
+        <button
+          onClick={logout}
+          className="dashboard-logout"
+        >
+          <LogoutIcon size={17} />
+          {t("overview.logout")}
+        </button>
+      </div>
+    </aside>
+  );
+}
+
+// ── İkonlar ──────────────────────────────────────────────────────────────────
+
+function GridIcon({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden>
+      <rect x="2" y="2" width="7" height="7" rx="1.5" /><rect x="11" y="2" width="7" height="7" rx="1.5" />
+      <rect x="2" y="11" width="7" height="7" rx="1.5" /><rect x="11" y="11" width="7" height="7" rx="1.5" />
+    </svg>
+  );
+}
+function UserIcon({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden>
+      <circle cx="10" cy="7" r="3.5" /><path d="M3 17c0-3.3 3.1-6 7-6s7 2.7 7 6" strokeLinecap="round" />
+    </svg>
+  );
+}
+function BellIcon({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden>
+      <path d="M10 2.5a5.5 5.5 0 0 1 5.5 5.5v3l1.5 2H3l1.5-2V8A5.5 5.5 0 0 1 10 2.5z" />
+      <path d="M8 16.5a2 2 0 0 0 4 0" strokeLinecap="round" />
+    </svg>
+  );
+}
+function InboxIcon({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden>
+      <path d="M3 12l2-7h10l2 7" /><rect x="2" y="12" width="16" height="6" rx="1.5" />
+      <path d="M7.5 15h5" strokeLinecap="round" />
+    </svg>
+  );
+}
+function HelpIcon({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden>
+      <circle cx="10" cy="10" r="8" /><path d="M7.5 8a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2-2.5 3.5" strokeLinecap="round" />
+      <circle cx="10" cy="15" r=".5" fill="currentColor" />
+    </svg>
+  );
+}
+function LockIcon({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden>
+      <rect x="4" y="9" width="12" height="9" rx="2" /><path d="M7 9V6a3 3 0 0 1 6 0v3" />
+    </svg>
+  );
+}
+function ArrowLeftIcon({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden>
+      <path d="M13 10H4m0 0 4-4m-4 4 4 4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+function LogoutIcon({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden>
+      <path d="M13 5l4 5-4 5M17 10H8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8 3H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h4" strokeLinecap="round" />
+    </svg>
+  );
+}

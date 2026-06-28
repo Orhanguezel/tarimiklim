@@ -195,7 +195,7 @@ export default function HomeLayoutAdminClient() {
   const [items, setItems] = React.useState<AdminHomeSectionDto[]>([]);
   const [expandedId, setExpandedId] = React.useState<string | null>(null);
   const [showNew, setShowNew] = React.useState(false);
-  const [newRow, setNewRow] = React.useState({ slug: '', label: '', component_key: 'HeroNew' });
+  const [newRow, setNewRow] = React.useState({ slug: '', label: '', component_key: 'TarimHero' });
 
   React.useEffect(() => {
     if (data) setItems(data);
@@ -259,7 +259,7 @@ export default function HomeLayoutAdminClient() {
       }).unwrap();
       toast.success('Eklendi');
       setShowNew(false);
-      setNewRow({ slug: '', label: '', component_key: 'HeroNew' });
+      setNewRow({ slug: '', label: '', component_key: 'TarimHero' });
     } catch (e: any) {
       toast.error(e?.data?.error?.message || 'Eklenemedi');
     }

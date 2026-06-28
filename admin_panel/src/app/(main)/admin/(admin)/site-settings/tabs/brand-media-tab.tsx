@@ -32,6 +32,7 @@ export const SITE_MEDIA_KEYS = [
   'site_logo_dark',
   'site_logo_light',
   'site_favicon',
+  'site_apple_touch_icon',
   'site_og_default_image',
   'site_appointment_cover',
 ] as const;
@@ -47,6 +48,7 @@ const MEDIA_LABELS: Record<MediaKey, string> = {
   site_logo_dark: 'Secondary Logo (Footer)',
   site_logo_light: 'Light Logo (Header Dark)',
   site_favicon: 'Favicon',
+  site_apple_touch_icon: 'Apple Touch Icon',
   site_og_default_image: 'OG Image',
   site_appointment_cover: 'Termin Cover',
 };
@@ -62,6 +64,7 @@ const previewConfig: Record<
   site_logo_dark: { aspect: '4x3', fit: 'contain' },
   site_logo_light: { aspect: '4x3', fit: 'contain' },
   site_favicon: { aspect: '1x1', fit: 'contain' },
+  site_apple_touch_icon: { aspect: '1x1', fit: 'contain' },
   site_og_default_image: { aspect: '16x9', fit: 'cover' },
   site_appointment_cover: { aspect: '16x9', fit: 'cover' },
 };

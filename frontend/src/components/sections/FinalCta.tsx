@@ -18,10 +18,10 @@ export function FinalCta() {
           <div>
             <p className="final-cta-copy">{t('copy')}</p>
             <div className="final-actions">
-              <a href="#api" className="button-final">
+              <a href="?section=api" className="button-final">
                 {t('actions.primary')}
               </a>
-              <a href="#panel" className="button-final-ghost">
+              <a href="?section=panel" className="button-final-ghost">
                 {t('actions.secondary')}
               </a>
             </div>
