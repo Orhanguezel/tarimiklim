@@ -5,15 +5,16 @@ import { routing } from './i18n/routing';
 
 const intlMiddleware = createMiddleware(routing);
 
-// SEO: tek kanonik host + kalıcı yönlendirmeler.
-// Canonical host env'den (NEXT_PUBLIC_SITE_URL) türetilir, hard-coded değil.
-function canonicalHost(): string {
+// SEO: tek kanonik origin env'den (NEXT_PUBLIC_SITE_URL) türetilir, hard-coded değil.
+// Yönlendirme hedefi her zaman bu temiz origin'den kurulur; gelen isteğin host/port'u
+// (nginx arkasında 3088 sızabilir) asla kopyalanmaz.
+const SITE_ORIGIN = (() => {
   try {
-    return new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://tarimiklim.com').host;
+    return new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://tarimiklim.com').origin;
   } catch {
-    return 'tarimiklim.com';
+    return 'https://tarimiklim.com';
   }
-}
+})();
 
 export function proxy(req: NextRequest) {
   const url = req.nextUrl;
@@ -22,15 +23,13 @@ export function proxy(req: NextRequest) {
   // 1) www → non-www (301 kalıcı). Google'ın /en için www, /tr için non-www seçmesinden
   //    kaynaklanan sinyal bölünmesini önler.
   if (host.startsWith('www.')) {
-    const target = new URL(url);
-    target.protocol = 'https:';
-    target.host = canonicalHost();
+    const target = new URL(`${url.pathname}${url.search}`, SITE_ORIGIN);
     return NextResponse.redirect(target, 301);
   }
 
   // 2) Kök → varsayılan dil (308 kalıcı). next-intl varsayılanı 307 (geçici).
   if (url.pathname === '/') {
-    const target = new URL(`/${routing.defaultLocale}`, url);
+    const target = new URL(`/${routing.defaultLocale}`, SITE_ORIGIN);
     return NextResponse.redirect(target, 308);
   }
 
