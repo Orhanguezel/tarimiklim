@@ -52,6 +52,9 @@ function mockCurrent(): CurrentWeather {
   };
 }
 
+/** OWM free forecast (5 gun / 3 saat) en fazla ~6 takvim gunu dondurur; DB cache yeterlilik esigi bunu asamaz. */
+export const OWM_MAX_FORECAST_DAYS = 6;
+
 export interface WeatherApiDay {
   date: string;
   tempMin: number;

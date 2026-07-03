@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import type { MySql2Database } from 'drizzle-orm/mysql2';
-import { fetchForecast, fetchCurrentWeather } from './helpers/weather-api.js';
+import { fetchForecast, fetchCurrentWeather, OWM_MAX_FORECAST_DAYS } from './helpers/weather-api.js';
 import { FROST_TEMP_THRESHOLD_C } from './helpers/frost-rules.js';
 import { fetchHourlyForecast, type HourlySlot } from './helpers/hourly-forecast.js';
 import { repoGetForecastsByLocation, repoUpsertForecasts } from './repository.js';
@@ -59,7 +59,9 @@ export async function getForecast(
 
   if (location) {
     const cached = await repoGetForecastsByLocation(db, location.id, today);
-    if (cached.length >= days) {
+    // Saglayici zaten `days`ten az gun verebiliyorsa cache'i yeterli say,
+    // yoksa 7 gunluk istekler DB'yi hic kullanmayip her seferinde OWM'ye gider
+    if (cached.length >= Math.min(days, OWM_MAX_FORECAST_DAYS)) {
       const slice = cached.slice(0, days).map(withFrostGuard);
       const result = { forecasts: slice, location, fromCache: true };
       if (redis && ttl > 0) {
