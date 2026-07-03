@@ -2,7 +2,7 @@ import * as Location from 'expo-location';
 import type { SavedLocation } from '@/types/weather';
 
 const NOMINATIM = 'https://nominatim.openstreetmap.org';
-const UA = 'tarimiklim-mobile/0.1 (destek@tarimiklim.com)';
+const UA = 'tarimiklim-mobile/0.1 (info@vistaseeds.com.tr)';
 
 export interface GeoResult {
   status: 'granted' | 'denied' | 'unavailable' | 'pending';

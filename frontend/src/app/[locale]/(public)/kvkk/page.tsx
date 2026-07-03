@@ -47,7 +47,7 @@ export default async function KvkkPage({ params }: Props) {
             <h2>Sharing and retention</h2>
             <p>Data may be shared only with infrastructure, email, notification, hosting and analytics providers necessary for the service. Retention is limited to service needs and legal requirements.</p>
             <h2>Your rights</h2>
-            <p>You can contact destek@tarimiklim.com for access, correction, deletion, objection and related privacy requests.</p>
+            <p>You can contact info@vistaseeds.com.tr for access, correction, deletion, objection and related privacy requests.</p>
           </>
         ) : (
           <>
@@ -61,7 +61,7 @@ export default async function KvkkPage({ params }: Props) {
             <h2>Aktarım ve saklama</h2>
             <p>Veriler yalnızca hizmet için gerekli altyapı, e-posta, bildirim, barındırma ve analitik sağlayıcılarıyla sınırlı olarak paylaşılabilir. Saklama süreleri hizmet ihtiyacı ve mevzuat gereklilikleriyle sınırlıdır.</p>
             <h2>Haklarınız</h2>
-            <p>KVKK madde 11 kapsamındaki bilgi alma, düzeltme, silme, itiraz ve zarar giderimi haklarınız için destek@tarimiklim.com adresinden başvurabilirsiniz.</p>
+            <p>KVKK madde 11 kapsamındaki bilgi alma, düzeltme, silme, itiraz ve zarar giderimi haklarınız için info@vistaseeds.com.tr adresinden başvurabilirsiniz.</p>
           </>
         )
       }

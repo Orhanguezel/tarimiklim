@@ -74,7 +74,7 @@ Push kanalları birlikte tetiklenir.
 ## Sahiplik
 
 Tarvista Tarım Teknolojileri A.Ş. · Antalya · Türkiye
-İletişim: destek@tarimiklim.com
+İletişim: info@vistaseeds.com.tr
 `;
 
 export function GET(): Response {

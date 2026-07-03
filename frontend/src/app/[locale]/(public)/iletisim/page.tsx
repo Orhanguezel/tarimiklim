@@ -32,7 +32,7 @@ export default async function ContactPage({ params }: Props) {
     about: {
       '@type': 'Organization',
       name: 'Tarvista Tarım Teknolojileri A.Ş.',
-      email: 'destek@tarimiklim.com',
+      email: 'info@vistaseeds.com.tr',
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Antalya',
@@ -41,7 +41,7 @@ export default async function ContactPage({ params }: Props) {
       contactPoint: {
         '@type': 'ContactPoint',
         contactType: 'customer support',
-        email: 'destek@tarimiklim.com',
+        email: 'info@vistaseeds.com.tr',
         availableLanguage: ['tr', 'en'],
       },
     },
@@ -79,7 +79,7 @@ export default async function ContactPage({ params }: Props) {
                   <dl className="space-y-3">
                     <div>
                       <dt className="font-bold text-foreground">E-posta</dt>
-                      <dd><a className="text-brand underline" href="mailto:destek@tarimiklim.com">destek@tarimiklim.com</a></dd>
+                      <dd><a className="text-brand underline" href="mailto:info@vistaseeds.com.tr">info@vistaseeds.com.tr</a></dd>
                     </div>
                     <div>
                       <dt className="font-bold text-foreground">Merkez</dt>

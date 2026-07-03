@@ -5,7 +5,7 @@
  */
 
 const NOMINATIM = 'https://nominatim.openstreetmap.org';
-const UA = 'tarimiklim.com/1.0 (destek@tarimiklim.com)';
+const UA = 'tarimiklim.com/1.0 (info@vistaseeds.com.tr)';
 
 export interface GeocodeResult {
   name: string;

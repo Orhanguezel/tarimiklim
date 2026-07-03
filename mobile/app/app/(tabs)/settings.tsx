@@ -59,7 +59,7 @@ export default function SettingsScreen() {
           <Text style={styles.aboutText}>
             Tarvista Tarım Teknolojileri A.Ş.{'\n'}Antalya · Türkiye{'\n'}v0.1.0
           </Text>
-          <Text style={styles.aboutLink}>destek@tarimiklim.com</Text>
+          <Text style={styles.aboutLink}>info@vistaseeds.com.tr</Text>
         </View>
       </ScrollView>
     </SafeAreaView>

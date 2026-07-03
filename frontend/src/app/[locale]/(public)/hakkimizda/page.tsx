@@ -87,7 +87,7 @@ export default async function AboutPage({ params }: Props) {
       '@type': 'Organization',
       name: 'Tarvista Tarım Teknolojileri A.Ş.',
       url: site,
-      email: 'destek@tarimiklim.com',
+      email: 'info@vistaseeds.com.tr',
     },
   };
 

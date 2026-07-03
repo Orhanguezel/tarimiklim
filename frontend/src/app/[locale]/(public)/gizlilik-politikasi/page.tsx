@@ -47,7 +47,7 @@ export default async function PrivacyPage({ params }: Props) {
             <h2>Third-party services</h2>
             <p>Hosting, weather data, email, push notification and analytics providers may be used for service operation. These transfers are limited to the stated purpose.</p>
             <h2>Contact</h2>
-            <p>For privacy requests, write to destek@tarimiklim.com.</p>
+            <p>For privacy requests, write to info@vistaseeds.com.tr.</p>
           </>
         ) : (
           <>
@@ -61,7 +61,7 @@ export default async function PrivacyPage({ params }: Props) {
             <h2>Üçüncü taraf servisler</h2>
             <p>Barındırma, hava verisi, e-posta, push bildirim ve analitik sağlayıcıları hizmetin çalışması için kullanılabilir. Bu paylaşımlar amaçla sınırlı tutulur.</p>
             <h2>İletişim</h2>
-            <p>Gizlilik talepleri için destek@tarimiklim.com adresine yazabilirsiniz.</p>
+            <p>Gizlilik talepleri için info@vistaseeds.com.tr adresine yazabilirsiniz.</p>
           </>
         )
       }
