@@ -11,11 +11,19 @@ CREATE TABLE IF NOT EXISTS audit_request_logs (
   referer LONGTEXT,
   user_id VARCHAR(64),
   is_admin INT NOT NULL DEFAULT 0,
+  is_bot TINYINT NOT NULL DEFAULT 0,
+  is_internal TINYINT NOT NULL DEFAULT 0,
   country VARCHAR(8),
   city VARCHAR(64),
   error_message VARCHAR(512),
   error_code VARCHAR(64),
   request_body LONGTEXT,
+  gclid VARCHAR(255),
+  utm_source VARCHAR(255),
+  utm_medium VARCHAR(255),
+  utm_campaign VARCHAR(255),
+  utm_content VARCHAR(255),
+  utm_term VARCHAR(255),
   created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (id),
   KEY audit_request_logs_created_idx (created_at),
@@ -23,7 +31,11 @@ CREATE TABLE IF NOT EXISTS audit_request_logs (
   KEY audit_request_logs_path_idx (path),
   KEY audit_request_logs_ip_idx (ip),
   KEY audit_request_logs_status_idx (status_code),
-  KEY audit_request_logs_method_idx (method)
+  KEY audit_request_logs_method_idx (method),
+  KEY audit_request_logs_bot_idx (is_bot),
+  KEY audit_request_logs_internal_idx (is_internal),
+  KEY audit_request_logs_gclid_idx (gclid),
+  KEY audit_request_logs_utm_source_idx (utm_source)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS audit_auth_events (
