@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto';
 import type { MySql2Database } from 'drizzle-orm/mysql2';
 import { fetchForecast, fetchCurrentWeather } from './helpers/weather-api.js';
+import { FROST_TEMP_THRESHOLD_C } from './helpers/frost-rules.js';
 import { fetchHourlyForecast, type HourlySlot } from './helpers/hourly-forecast.js';
 import { repoGetForecastsByLocation, repoUpsertForecasts } from './repository.js';
 import { repoGetLocationBySlug, repoGetLocationByCoords } from '@/modules/locations/repository.js';
@@ -11,6 +12,15 @@ type ForecastCacheRedis = {
   get(key: string): Promise<string | null>;
   setex(key: string, seconds: number, value: string): Promise<unknown>;
 };
+
+/** Eski formulle DB'ye yazilmis bayat skorlara karsi koruma: don araligi disinda skor 0. */
+function withFrostGuard<T extends { tempMin: unknown; frostRisk: number | null }>(f: T): T {
+  const t = Number(f.tempMin);
+  if (Number.isFinite(t) && t > FROST_TEMP_THRESHOLD_C && (f.frostRisk ?? 0) > 0) {
+    return { ...f, frostRisk: 0 };
+  }
+  return f;
+}
 
 function forecastCacheKey(locationId: string | undefined, lat: number, lon: number, today: string, days: number) {
   return locationId
@@ -50,7 +60,7 @@ export async function getForecast(
   if (location) {
     const cached = await repoGetForecastsByLocation(db, location.id, today);
     if (cached.length >= days) {
-      const slice = cached.slice(0, days);
+      const slice = cached.slice(0, days).map(withFrostGuard);
       const result = { forecasts: slice, location, fromCache: true };
       if (redis && ttl > 0) {
         await redis.setex(key, ttl, JSON.stringify({ forecasts: slice, location }));

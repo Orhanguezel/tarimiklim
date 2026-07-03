@@ -1,6 +1,10 @@
-import { eq, and, gte, desc } from 'drizzle-orm';
+import { eq, and, gte, desc, isNull } from 'drizzle-orm';
 import type { MySql2Database } from 'drizzle-orm/mysql2';
 import { weatherForecasts, type NewWeatherForecast, type WeatherForecast } from './schema.js';
+
+function dateKey(d: WeatherForecast['forecastDate']): string {
+  return new Date(d as unknown as string | Date).toISOString().split('T')[0];
+}
 
 export async function repoGetForecastsByLocation(
   db: MySql2Database,
@@ -8,11 +12,20 @@ export async function repoGetForecastsByLocation(
   fromDate: string,
 ): Promise<WeatherForecast[]> {
   const from = new Date(fromDate.includes('T') ? fromDate : `${fromDate}T00:00:00.000Z`);
-  return db
+  const rows = await db
     .select()
     .from(weatherForecasts)
     .where(and(eq(weatherForecasts.locationId, locationId), gte(weatherForecasts.forecastDate, from)))
-    .orderBy(weatherForecasts.forecastDate);
+    .orderBy(weatherForecasts.forecastDate, desc(weatherForecasts.fetchedAt));
+
+  // hour=NULL gunluk satirlarda unique key devreye girmedigi icin ayni gune
+  // birden fazla satir birikmis olabilir — gun basina en guncel satiri sec
+  const byKey = new Map<string, WeatherForecast>();
+  for (const r of rows) {
+    const key = `${dateKey(r.forecastDate)}:${r.hour ?? 'daily'}`;
+    if (!byKey.has(key)) byKey.set(key, r);
+  }
+  return [...byKey.values()];
 }
 
 export async function repoGetLatestForecast(
@@ -30,28 +43,45 @@ export async function repoGetLatestForecast(
   return rows[0];
 }
 
+function forecastUpdateSet(row: NewWeatherForecast) {
+  return {
+    tempMin: row.tempMin,
+    tempMax: row.tempMax,
+    tempAvg: row.tempAvg,
+    humidity: row.humidity,
+    windSpeed: row.windSpeed,
+    windDirection: row.windDirection,
+    precipitation: row.precipitation,
+    condition: row.condition,
+    icon: row.icon,
+    uvIndex: row.uvIndex,
+    frostRisk: row.frostRisk,
+    fetchedAt: row.fetchedAt,
+  };
+}
+
 export async function repoUpsertForecasts(db: MySql2Database, rows: NewWeatherForecast[]): Promise<void> {
-  if (!rows.length) return;
   for (const row of rows) {
+    // MySQL unique index NULL degerleri esit saymaz: hour=NULL gunluk satirlar
+    // icin uk_location_date_hour calismaz, onDuplicateKeyUpdate hic tetiklenmez.
+    // Bu yuzden gunluk satirlarda once UPDATE denenir, satir yoksa INSERT edilir.
+    if (row.hour == null) {
+      const [res] = await db
+        .update(weatherForecasts)
+        .set(forecastUpdateSet(row))
+        .where(
+          and(
+            eq(weatherForecasts.locationId, row.locationId),
+            eq(weatherForecasts.forecastDate, row.forecastDate),
+            isNull(weatherForecasts.hour),
+          ),
+        );
+      if (res.affectedRows > 0) continue;
+    }
     await db
       .insert(weatherForecasts)
       .values(row)
-      .onDuplicateKeyUpdate({
-        set: {
-          tempMin: row.tempMin,
-          tempMax: row.tempMax,
-          tempAvg: row.tempAvg,
-          humidity: row.humidity,
-          windSpeed: row.windSpeed,
-          windDirection: row.windDirection,
-          precipitation: row.precipitation,
-          condition: row.condition,
-          icon: row.icon,
-          uvIndex: row.uvIndex,
-          frostRisk: row.frostRisk,
-          fetchedAt: row.fetchedAt,
-        },
-      });
+      .onDuplicateKeyUpdate({ set: forecastUpdateSet(row) });
   }
 }
 

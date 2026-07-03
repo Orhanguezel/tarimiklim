@@ -7,6 +7,9 @@ export interface FrostRiskInput {
 
 export type FrostSeverity = 'none' | 'low' | 'medium' | 'high' | 'critical';
 
+/** Bu sicakligin (°C) uzerinde don riski olamaz — formul ve DB okuma korumasi ayni esigi kullanir. */
+export const FROST_TEMP_THRESHOLD_C = 4;
+
 export interface FrostRiskResult {
   score: number;
   severity: FrostSeverity;
@@ -22,7 +25,7 @@ export function calculateFrostRisk(input: FrostRiskInput): FrostRiskResult {
   else if (input.tempMin <= -2) score += 50;
   else if (input.tempMin <= 0) score += 40;
   else if (input.tempMin <= 2) score += 30;
-  else if (input.tempMin <= 4) score += 15;
+  else if (input.tempMin <= FROST_TEMP_THRESHOLD_C) score += 15;
 
   // Sicaklik don araliginda degilse don riski olamaz — nem/ruzgar/bulut
   // sadece guclendirici faktordur, tek baslarina risk uretmez (yaz aylarinda
