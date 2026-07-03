@@ -24,6 +24,13 @@ export function calculateFrostRisk(input: FrostRiskInput): FrostRiskResult {
   else if (input.tempMin <= 2) score += 30;
   else if (input.tempMin <= 4) score += 15;
 
+  // Sicaklik don araliginda degilse don riski olamaz — nem/ruzgar/bulut
+  // sadece guclendirici faktordur, tek baslarina risk uretmez (yaz aylarinda
+  // acik+sakin gece 35 puan toplayip sahte "orta risk" uretiyordu)
+  if (score === 0) {
+    return { score: 0, severity: 'none', ...getSeverityMeta('none') };
+  }
+
   // Nem — %15 agirlik (yuksek nem + dusuk sicaklik = don riski artar)
   if (input.humidity > 80) score += 15;
   else if (input.humidity > 60) score += 10;
