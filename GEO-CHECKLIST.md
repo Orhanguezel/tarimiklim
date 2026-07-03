@@ -109,13 +109,13 @@ Teşhis tarihi: 2026-07-03. Kaynak: `tarimiklim.com-geo-audit-2026-07-03.pdf` / 
 
 ## Manuel doğrulama
 
-- [ ] **54. Canlı HTML kontrolü** — `curl -L https://tarimiklim.com/tr` ile ilk HTML'de marka, H1, ana içerik ve placeholder temizliği doğrulanmalı. 2026-07-03 canlı kontrolünde app hâlâ eski build: `Sayfa hazırlanıyor...`, `34 lokasyon` ve `no-store` görünüyor. Yerel frontend deploy sonrası tekrar kontrol edilecek.
+- [x] **54. Canlı HTML kontrolü** — 2026-07-03 deploy (4c39868) sonrası doğrulandı: ilk HTML'de H1, title ve 40 şehir linki SSR olarak mevcut; `34 lokasyon` izi yok. Not: `Sayfa hazırlanıyor...` eski build izi DEĞİL — güncel `app/loading.tsx` Suspense fallback'i, RSC payload'ında görünmesi normal. `no-store` da ana sayfanın dinamik yapısından (her istekte API'den bölüm çeker); bayat build göstergesi değil.
 - [ ] **55. JSON-LD validasyon** — Schema Markup Validator ve Rich Results Test ile ana sayfa, şehir sayfası, don uyarısı, metodoloji, hakkımızda ve iletişim test edilmeli.
-- [ ] **56. AI crawler simülasyonu** — JS kapalı / düşük timeout ile içerik görünürlüğü kontrol edilmeli. `Sayfa hazırlanıyor...` tek görünen içerik olmamalı. 2026-07-03 canlı HTML hâlâ eski streaming fallback'i gösteriyor; app deploy sonrası tekrar ölçülecek.
-- [ ] **57. Lighthouse tekrar ölçümü** — SSR/cache değişikliklerinden sonra mobil ve masaüstü yeniden ölçülmeli. Hedef: mobil Performance 85+, LCP ≤ 2,5 sn. Yerel build geçti; canlı deploy sonrası ölçülecek.
+- [x] **56. AI crawler simülasyonu** — 2026-07-03 deploy sonrası doğrulandı: JS'siz `curl` çıktısında tam içerik (H1, başlık, il isimleri, 40 şehir linki) SSR olarak geliyor; `Sayfa hazırlanıyor...` yalnızca Suspense fallback, tek içerik değil.
+- [ ] **57. Lighthouse tekrar ölçümü** — SSR/cache değişikliklerinden sonra mobil ve masaüstü yeniden ölçülmeli. Hedef: mobil Performance 85+, LCP ≤ 2,5 sn. 2026-07-03: deploy yapıldı ancak PSI anonim günlük kotası dolu — ertesi gün `/lighthouse` ile veya API key ile ölçülecek.
 - [ ] **58. Sosyal kart testi** — LinkedIn Post Inspector, Facebook Sharing Debugger, WhatsApp manuel paylaşım ve X Card Validator ile OG görseli kontrol edilmeli.
 - [ ] **59. DNS kayıt doğrulaması** — `dig TXT tarimiklim.com`, DKIM selector ve `_dmarc.tarimiklim.com` çıktıları kaydedilmeli. 2026-07-03 ölçümü `GEO-DNS-EPOSTA-NOTLARI.md` içinde; DKIM selector bilinmediği için madde açık.
-- [ ] **60. Bing/IndexNow test ping** — IndexNow key dosyası ve ping yanıtı doğrulanmalı. 2026-07-03 canlı kontrolünde `https://tarimiklim.com/9b8f0e7d4c6a41f2a3d5b6c7e8f90123.txt` düz metin yerine HTML döndü; yerel `public/` dosyası deploy edildikten sonra ping yapılacak.
+- [x] **60. Bing/IndexNow test ping** — 2026-07-03 deploy sonrası doğrulandı: key dosyası düz metin dönüyor, `api.indexnow.org` ve `bing.com/indexnow` test ping'leri **202 Accepted**. (Key doğrulaması Bing tarafında async; Bing Webmaster paneline site eklenince IndexNow raporu görünür.)
 
 ## Önerilen uygulama sırası
 
