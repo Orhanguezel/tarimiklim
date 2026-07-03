@@ -127,12 +127,16 @@
 }
 
 /* ── Reset ───────────────────────────────────────────────────── */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* @layer base zorunlu: layer'siz evrensel reset, cascade geregi @layer
+   utilities'teki tum Tailwind spacing siniflarini (px-*, py-*, m-*) ezer. */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 html {
