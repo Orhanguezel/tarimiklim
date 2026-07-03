@@ -85,7 +85,7 @@ INSERT INTO home_sections (id, slug, label, component_key, order_index, is_activ
     'TarimFinalCta',
     80,
     1,
-    '{"content":{"tr":{"megaPrefix":"Don riskini","megaEmphasis":"erken gör","megaSuffix":"sahada zaman kazan","titleLine1":"Tarım İklim verisini","titleLine2":"ürününüzde kullanın","copy":"Admin panelden bölüm sırasını, aktiflik durumunu ve bu metinleri güncelleyerek ana sayfayı canlı tutun.","primaryLabel":"API alanına git","secondaryLabel":"Paneli incele"},"en":{"megaPrefix":"See frost risk","megaEmphasis":"earlier","megaSuffix":"and move faster in the field","titleLine1":"Use Tarım İklim data","titleLine2":"inside your product","copy":"Keep the homepage fresh by editing section order, visibility and content from the admin panel.","primaryLabel":"Open API area","secondaryLabel":"Review panel"}}}'
+    '{"content":{"tr":{"megaPrefix":"Don riskini","megaEmphasis":"erken gör","megaSuffix":"sahada zaman kazan","titleLine1":"Tarım İklim verisini","titleLine2":"ürününüzde kullanın","copy":"Hava tahmini, don riski ve widget verisini kendi ürününüzde güvenilir bir servis katmanı olarak kullanın.","primaryLabel":"API alanına git","secondaryLabel":"Paneli incele"},"en":{"megaPrefix":"See frost risk","megaEmphasis":"earlier","megaSuffix":"and move faster in the field","titleLine1":"Use Tarım İklim data","titleLine2":"inside your product","copy":"Use weather forecasts, frost-risk scores and widget data as a reliable service layer inside your product.","primaryLabel":"Open API area","secondaryLabel":"Review panel"}}}'
   )
 ON DUPLICATE KEY UPDATE
   label = VALUES(label),

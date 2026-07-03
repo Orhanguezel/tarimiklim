@@ -28,7 +28,7 @@ export function SiteFooter({ locale = 'tr', logoUrl, sections = [], items = [], 
         <div className="site-footer-top">
           <div className="site-footer-brand">
             {logoUrl ? (
-              <img src={logoUrl} alt="TarimIKlim" className="site-footer-logo" />
+              <img src={logoUrl} alt="TarimIKlim" className="site-footer-logo" width={360} height={120} />
             ) : (
               <div className="site-footer-wordmark">
                 <span className="brand-mark" aria-hidden="true" />
@@ -37,6 +37,9 @@ export function SiteFooter({ locale = 'tr', logoUrl, sections = [], items = [], 
             )}
             <p className="site-footer-tag">{content?.tagline ?? ''}</p>
             <p className="site-footer-copy">{content?.copy ?? ''}</p>
+            <p className="site-footer-disclaimer">
+              Hava tahmini ve don riski verileri karar destek amacıyla sunulur; resmi uyarılar ve yerel uzman değerlendirmesi yerine geçmez.
+            </p>
             <ul className="site-footer-contact">
               {content?.contact?.company ? <li>{content.contact.company}</li> : null}
               {content?.contact?.city ? <li>{content.contact.city}</li> : null}

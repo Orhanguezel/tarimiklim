@@ -67,7 +67,7 @@ export function AvatarUpload() {
       <div className="dashboard-avatar-upload-wrap">
         <div className="dashboard-profile-avatar">
           {avatarSrc ? (
-            <img src={avatarSrc} alt="Avatar" />
+            <img src={avatarSrc} alt="Avatar" width={96} height={96} />
           ) : (
             <div className="dashboard-profile-avatar-fallback">
               {initials}

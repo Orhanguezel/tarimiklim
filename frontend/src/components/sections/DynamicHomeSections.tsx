@@ -3,6 +3,8 @@ import { HeroLiveCard } from './HeroLiveCard';
 import { TickerController } from './TickerController';
 import { CodeCopyButton } from './CodeCopyButton';
 import type { HomeSectionDto } from '@/lib/home-sections';
+import { PRIORITY_PROVINCE_SLUGS, getProvince } from '@/lib/provinces';
+import type { Province } from '@/lib/provinces';
 
 type LocalizedConfig = Record<string, unknown>;
 
@@ -38,7 +40,51 @@ export function DynamicHomeSections({ sections, locale }: { sections: HomeSectio
         }
         return <div key={section.id}>{node}</div>;
       })}
+      <PriorityCityLinks locale={locale} />
     </>
+  );
+}
+
+function PriorityCityLinks({ locale }: { locale: string }) {
+  const provinces = PRIORITY_PROVINCE_SLUGS.map((slug) => getProvince(slug)).filter((province): province is Province => Boolean(province)).slice(0, 20);
+  const copy =
+    locale === 'en'
+      ? {
+          label: 'POPULAR CITIES',
+          titlePrefix: 'Agricultural weather and',
+          titleEmphasis: 'frost alerts',
+          lead: 'Direct links to priority city forecasts help growers reach local weather and frost-risk pages faster.',
+          weather: 'Weather',
+          frost: 'Frost alert',
+        }
+      : {
+          label: 'POPÜLER İLLER',
+          titlePrefix: 'İl bazlı hava durumu ve',
+          titleEmphasis: 'don uyarıları',
+          lead: 'Öncelikli tarım illeri için hava durumu ve don riski sayfalarına doğrudan ulaşın.',
+          weather: 'Hava durumu',
+          frost: 'Don uyarısı',
+        };
+
+  return (
+    <section className="container-section priority-city-section" aria-labelledby="priority-city-heading">
+      <div className="section-label"><span>{copy.label}</span></div>
+      <h2 id="priority-city-heading" className="section-title">
+        {copy.titlePrefix} <em>{copy.titleEmphasis}</em>
+      </h2>
+      <p className="section-lead">{copy.lead}</p>
+      <div className="priority-city-grid">
+        {provinces.map((province) => (
+          <div key={province.slug} className="priority-city-row">
+            <strong>{province.name}</strong>
+            <span>
+              <a href={`/${locale}/hava-durumu/${province.slug}`}>{copy.weather}</a>
+              <a href={`/${locale}/don-uyarisi/${province.slug}`}>{copy.frost}</a>
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -72,11 +118,11 @@ function TarimHero({ data }: { data: LocalizedConfig }) {
     <section id="top">
       <div className="container-wide hero-grid">
         <div>
-          <div className="hero-eyebrow">{str(data, 'eyebrow', 'TARIM IKLIM')}</div>
+          <div className="hero-eyebrow">{str(data, 'eyebrow', 'TARIM İKLİM')}</div>
           <h1 className="hero-title">
-            <span className="hero-break">{str(data, 'titleLine1')}</span>
+            <span className="hero-break">{str(data, 'titleLine1')} </span>
             <span className="hero-break">
-              <em>{str(data, 'titleLine2')}</em>
+              <em>{str(data, 'titleLine2')}</em>{' '}
             </span>
             <span className="hero-break hero-indent">{str(data, 'titleLine3')}</span>
           </h1>
@@ -146,9 +192,9 @@ function TarimPillars({ data }: { data: LocalizedConfig }) {
 function TarimApi({ data }: { data: LocalizedConfig }) {
   const defaultCodeBody = '<iframe src="https://tarimiklim.com/widget?location=auto" width="100%" height="420"></iframe>';
   const defaultEndpoints = [
-    { method: 'GET', path: '/api/v1/weather', copy: '7 gunluk tahmin' },
+    { method: 'GET', path: '/api/v1/weather', copy: '7 günlük tahmin' },
     { method: 'GET', path: '/api/v1/weather/frost-risk', copy: 'Don riski skoru' },
-    { method: 'GET', path: '/widget', copy: 'Gomulebilir widget' },
+    { method: 'GET', path: '/widget', copy: 'Gömülebilir widget' },
   ];
   const endpoints = arr<{ method?: string; path?: string; copy?: string }>(data, 'endpoints');
   const codeBody = str(data, 'codeBody', defaultCodeBody);
@@ -157,7 +203,7 @@ function TarimApi({ data }: { data: LocalizedConfig }) {
     <section id="api" className="container-section">
       <div className="section-label"><span>{str(data, 'label', 'ENTEGRASYON')}</span></div>
       <h2 className="section-title">
-        {str(data, 'titlePrefix', 'Widget ve API ile')} <em>{str(data, 'titleEmphasis', 'her siteye baglanir')}</em>
+        {str(data, 'titlePrefix', 'Widget ve API ile')} <em>{str(data, 'titleEmphasis', 'her siteye bağlanır')}</em>
       </h2>
       <p className="section-lead">{str(data, 'lead', 'Hava durumu ve don riski widgetini kendi web sitenize iframe olarak ekleyin.')}</p>
       <div className="api-grid">
@@ -170,8 +216,8 @@ function TarimApi({ data }: { data: LocalizedConfig }) {
           <pre className="code-body">{codeBody}</pre>
         </article>
         <article className="api-copy">
-          <h3 className="api-copy-title"><em>{str(data, 'sideTitle', 'Gomulebilir hava paneli')}</em></h3>
-          <p className="api-copy-text">{str(data, 'sideCopy', 'Frontend, iframe veya API tuketimi icin ayni veri hattini kullanir.')}</p>
+          <h3 className="api-copy-title"><em>{str(data, 'sideTitle', 'Gömülebilir hava paneli')}</em></h3>
+          <p className="api-copy-text">{str(data, 'sideCopy', 'Frontend, iframe veya API tüketimi için aynı veri hattını kullanır.')}</p>
           <div className="api-endpoint-list">
             {visibleEndpoints.map((endpoint, index) => (
               <div key={`${endpoint.path ?? index}`} className="endpoint-row">

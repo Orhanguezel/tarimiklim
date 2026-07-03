@@ -20,7 +20,7 @@ export function SiteNav({ locale, logoUrl, items = [] }: Props) {
         <div className="site-nav-inner">
           <a href={`/${locale}`} className="brand-word" aria-label="TarimIKlim">
             {logoUrl ? (
-              <img src={logoUrl} alt="TarimIKlim" className="brand-logo" />
+              <img src={logoUrl} alt="TarimIKlim" className="brand-logo" width={360} height={48} />
             ) : (
               <>
                 <span className="brand-mark" aria-hidden="true" />

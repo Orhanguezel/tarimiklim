@@ -23,17 +23,16 @@ const STATIC_PATHS: Array<{ path: string; priority: number; freq: MetadataRoute.
   { path: '/hakkimizda', priority: 0.4, freq: 'monthly' },
   { path: '/iletisim', priority: 0.4, freq: 'monthly' },
   { path: '/api-docs', priority: 0.5, freq: 'monthly' },
+  { path: '/zirai-don-riski-nasil-hesaplanir', priority: 0.7, freq: 'monthly' },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
   const entries: MetadataRoute.Sitemap = [];
 
   for (const locale of LOCALES) {
     for (const { path, priority, freq } of STATIC_PATHS) {
       entries.push({
         url: `${SITE}/${locale}${path}`,
-        lastModified: now,
         changeFrequency: freq,
         priority: locale === 'tr' ? priority : Math.max(0.3, priority - 0.2),
         alternates: localizedAlternates(path),
@@ -46,7 +45,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
         const path = `/${variant}/${province.slug}`;
         entries.push({
           url: `${SITE}/${locale}${path}`,
-          lastModified: now,
           changeFrequency: 'daily',
           priority: locale === 'tr' ? 0.7 : 0.5,
           alternates: localizedAlternates(path),

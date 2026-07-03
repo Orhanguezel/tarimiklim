@@ -19,19 +19,29 @@ export async function buildWeatherForecastJsonLd(): Promise<Record<string, unkno
     };
     const forecasts = wJson?.data?.forecasts ?? [];
     const name = first.name ?? first.city ?? 'Forecast';
-    const dayForecast = forecasts.slice(0, 7).map((f) => ({
-      '@type': 'ForecastWeatherDay',
-      validDate: String(f.date ?? '').slice(0, 10),
-      lowTemperature: { '@type': 'QuantitativeValue', value: f.tempMin },
-      highTemperature: { '@type': 'QuantitativeValue', value: f.tempMax },
-    }));
+    const firstDate = String(forecasts[0]?.date ?? '').slice(0, 10);
+    const lastDate = String(forecasts.at(-1)?.date ?? '').slice(0, 10);
 
     return {
       '@context': 'https://schema.org',
-      '@type': 'WeatherForecast',
-      name,
-      validFrom: new Date().toISOString().slice(0, 10),
-      dayForecast,
+      '@type': 'Dataset',
+      name: `${name} 7 günlük tarımsal hava tahmini`,
+      description: `${name} için 7 günlük sıcaklık tahmini ve tarımsal hava verisi.`,
+      temporalCoverage: firstDate && lastDate ? `${firstDate}/${lastDate}` : undefined,
+      measurementTechnique: 'OpenWeatherMap forecast data with agricultural weather normalization',
+      variableMeasured: [
+        { '@type': 'PropertyValue', name: 'Minimum temperature', unitCode: 'CEL' },
+        { '@type': 'PropertyValue', name: 'Maximum temperature', unitCode: 'CEL' },
+      ],
+      spatialCoverage: {
+        '@type': 'Place',
+        name,
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: lat,
+          longitude: lon,
+        },
+      },
     };
   } catch {
     return null;

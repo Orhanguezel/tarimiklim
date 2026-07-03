@@ -42,6 +42,10 @@ export async function CityWeatherView({
   const prose = cityProse(variant, locale, province, data);
   const peers = getRegionPeers(province, 8);
   const otherVariants = CITY_VARIANTS.filter((v) => v !== variant);
+  const updatedLabel =
+    locale === 'en'
+      ? `Last updated: ${new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeZone: 'Europe/Istanbul' }).format(new Date())}`
+      : `Son güncelleme: ${new Intl.DateTimeFormat('tr-TR', { dateStyle: 'long', timeZone: 'Europe/Istanbul' }).format(new Date())}`;
 
   const tableLabels = {
     date: t('table.date'),
@@ -78,6 +82,7 @@ export async function CityWeatherView({
         <p className="city-eyebrow">{region}</p>
         <h1 className="city-title">{copy.h1(province.name)}</h1>
         <p className="city-sub">{copy.description(province.name)}</p>
+        <p className="city-updated">{updatedLabel} · OpenWeatherMap / Open-Meteo veri hattı</p>
       </header>
 
       <section className="city-forecast">

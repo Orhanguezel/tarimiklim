@@ -13,6 +13,7 @@ const monorepoRoot = fs.existsSync(path.join(root2, 'packages')) ? root2 : root3
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   turbopack: {
     root: monorepoRoot,
   },
@@ -29,6 +30,53 @@ const nextConfig: NextConfig = {
   },
   typescript: {
     ignoreBuildErrors: true,
+  },
+  async headers() {
+    const securityHeaders = [
+      {
+        key: 'Strict-Transport-Security',
+        value: 'max-age=63072000; includeSubDomains; preload',
+      },
+      {
+        key: 'Content-Security-Policy',
+        value: [
+          "default-src 'self'",
+          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
+          "style-src 'self' 'unsafe-inline'",
+          "img-src 'self' data: blob: https://openweathermap.org https:",
+          "font-src 'self' data:",
+          "connect-src 'self' https: http://localhost:*",
+          "frame-ancestors 'self'",
+          "base-uri 'self'",
+          "form-action 'self'",
+        ].join('; '),
+      },
+      { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+      { key: 'X-Content-Type-Options', value: 'nosniff' },
+      { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+      {
+        key: 'Permissions-Policy',
+        value: 'camera=(), microphone=(), payment=(), usb=(), geolocation=(self)',
+      },
+    ];
+
+    return [
+      {
+        source: '/((?!widget).*)',
+        headers: securityHeaders,
+      },
+      {
+        source: '/widget/:path*',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), payment=(), usb=(), geolocation=(self)',
+          },
+        ],
+      },
+    ];
   },
 };
 

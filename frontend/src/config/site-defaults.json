@@ -20,19 +20,19 @@
     }
   },
   "organization": {
-    "description": "Bölgesel hava tahmini, don riski uyarisi ve sulama planlama verisi sunan servis.",
-    "email": "",
+    "description": "Bölgesel hava tahmini, don riski uyarısı ve sulama planlama verisi sunan servis.",
+    "email": "destek@tarimiklim.com",
     "foundingDate": "",
     "addressCountry": "TR",
     "addressLocality": "",
-    "logoPath": "/brand/og-image.svg",
+    "logoPath": "/brand/og-image.png",
     "parentOrganizationName": "",
-    "sameAs": []
+    "sameAs": ["https://github.com/Orhanguezel/tarimiklim"]
   },
   "service": {
-    "apiPublicName": "Hava API",
+    "apiPublicName": "Tarım İklim API",
     "serviceTypeEn": "Agricultural weather and frost-risk data API",
-    "developerOfferDescription": "Ücretsiz geliştirici katmanı (örnek metin — üretimde güncelleyin)."
+    "developerOfferDescription": "Ücretsiz geliştirici katmanı; hava tahmini, don riski ve widget endpoint'leri için başlangıç erişimi sağlar."
   },
   "manifest": {
     "name": "{{appName}}",

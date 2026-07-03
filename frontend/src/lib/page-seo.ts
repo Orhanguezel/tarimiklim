@@ -69,7 +69,7 @@ export function mergePageMetadata(base: Metadata, seo: SeoPayload | null, locale
     site, // siteUrl param expects site origin
   );
 
-  const ogImage = seo.og_image?.trim();
+  const ogImage = seo.og_image?.trim().replace(/\/brand\/og-image\.svg$/, '/brand/og-image.png');
   const withCanonical: Metadata = {
     ...merged,
     alternates: {

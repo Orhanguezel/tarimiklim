@@ -15,6 +15,7 @@ const BODY = `# ${APP}
 - [Ana sayfa (TR)](${SITE}/tr)
 - [Ana sayfa (EN)](${SITE}/en)
 - [Canlı panel (don uyarısı)](${SITE}/tr/don-uyarisi)
+- [Zirai don riski metodolojisi](${SITE}/tr/zirai-don-riski-nasil-hesaplanir)
 - [Bereketfide widget'ı](${SITE}/widget/bereketfide?location=antalya)
 - [VistaSeed widget'ı](${SITE}/widget/vistaseed?location=izmir)
 
@@ -26,7 +27,7 @@ const BODY = `# ${APP}
 - GET ${SITE}/api/v1/weather/frost-risk?location — don riski skoru (0-100)
 - GET ${SITE}/api/v1/weather/rain-forecast?location&days — yağış tahmini
 - GET ${SITE}/api/v1/weather/widget-data?location — hafif widget payload
-- GET ${SITE}/api/v1/locations?active=true — takip edilen 8 şehir
+- GET ${SITE}/api/v1/locations?active=true — takip edilen 81 il
 
 ## Mimari
 
@@ -72,7 +73,7 @@ Push kanalları birlikte tetiklenir.
 
 ## Sahiplik
 
-Vista İnşaat Tarım Teknolojileri A.Ş. · Ankara · Türkiye
+Tarvista Tarım Teknolojileri A.Ş. · Antalya · Türkiye
 İletişim: destek@tarimiklim.com
 `;
 

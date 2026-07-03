@@ -9,7 +9,9 @@ import {
 
 // Tarımİklim bu fonksiyonları project-local `site-defaults.json` ile override eder.
 export function getPublicAppName(): string {
-  return getPublicAppNameBase(process.env);
+  const fromEnv = process.env.NEXT_PUBLIC_APP_NAME?.trim();
+  if (fromEnv) return getPublicAppNameBase(process.env);
+  return String(siteDefaults.brand.appName || '').trim() || 'Tarım İklim';
 }
 
 export function getPublicSiteUrl(): string {
@@ -32,7 +34,9 @@ export function getDefaultLogoAlt(): string {
 }
 
 export function getOpenGraphSiteName(): string {
-  return getOpenGraphSiteNameBase(process.env);
+  const fromEnv = process.env.NEXT_PUBLIC_OG_SITE_NAME?.trim() || process.env.NEXT_PUBLIC_APP_NAME?.trim();
+  if (fromEnv) return getOpenGraphSiteNameBase(process.env);
+  return getPublicAppName();
 }
 
 export type OrganizationDefaults = typeof siteDefaults.organization;

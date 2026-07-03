@@ -33,6 +33,8 @@ export function DashboardSidebar({ locale }: Props) {
             src={profile.avatar_url}
             alt=""
             className="dashboard-avatar"
+            width={48}
+            height={48}
           />
         ) : (
           <div className="dashboard-avatar dashboard-avatar-fallback">

@@ -18,12 +18,16 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'home' });
   const base = getPublicSiteUrl();
+  const description =
+    locale === 'en'
+      ? 'Tarım İklim provides 7-day agricultural weather forecasts, frost-risk scores and location-based alerts for growers across all 81 provinces of Türkiye.'
+      : 'Tarım İklim; 81 il için 7 günlük tarımsal hava tahmini, zirai don riski skoru ve konum bazlı üretici uyarıları sunar.';
   const baseMeta: Metadata = {
     title: t('title'),
-    description: t('description'),
+    description,
     openGraph: {
       title: t('title'),
-      description: t('description'),
+      description,
       locale,
       type: 'website',
       url: `${base}/${locale}`,
@@ -31,7 +35,8 @@ export async function generateMetadata({
     twitter: {
       card: 'summary_large_image',
       title: t('title'),
-      description: t('description'),
+      description,
+      images: [`${base}/brand/og-image.png`],
     },
   };
   const seo = await fetchPageSeo('home', locale);

@@ -16,9 +16,12 @@ export function ContactForm() {
       }}
     >
       <div className="grid gap-4">
-        <input className="rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink" placeholder={t('name')} required />
-        <input className="rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink" type="email" placeholder={t('email')} required />
-        <textarea className="min-h-32 rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink" placeholder={t('message')} required />
+        <label className="sr-only" htmlFor="contact-name">{t('name')}</label>
+        <input id="contact-name" name="name" className="rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink" placeholder={t('name')} autoComplete="name" required />
+        <label className="sr-only" htmlFor="contact-email">{t('email')}</label>
+        <input id="contact-email" name="email" className="rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink" type="email" placeholder={t('email')} autoComplete="email" required />
+        <label className="sr-only" htmlFor="contact-message">{t('message')}</label>
+        <textarea id="contact-message" name="message" className="min-h-32 rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink" placeholder={t('message')} required />
         <button className="button-primary justify-center">{sent ? t('sent') : t('submit')}</button>
       </div>
     </form>

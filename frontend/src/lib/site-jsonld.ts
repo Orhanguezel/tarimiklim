@@ -12,7 +12,7 @@ export function organizationJsonLd(): Record<string, unknown> {
   const app = getPublicAppName();
   const org = getOrganizationDefaults();
   const base = SITE();
-  const logoPath = String(org.logoPath || '/brand/og-image.svg').replace(/^\//, '');
+  const logoPath = String(org.logoPath || '/brand/og-image.png').replace(/^\//, '');
   const sameAs = Array.isArray(org.sameAs) ? org.sameAs.filter((u) => String(u).trim()) : [];
   const parent = optionalParentOrg(org.parentOrganizationName);
 
@@ -33,6 +33,14 @@ export function organizationJsonLd(): Record<string, unknown> {
 
   const email = String(org.email || '').trim();
   if (email) out.email = email;
+  if (email) {
+    out.contactPoint = {
+      '@type': 'ContactPoint',
+      contactType: 'customer support',
+      email,
+      availableLanguage: ['tr', 'en'],
+    };
+  }
   const fd = String(org.foundingDate || '').trim();
   if (fd) out.foundingDate = fd;
   if (sameAs.length) out.sameAs = sameAs;

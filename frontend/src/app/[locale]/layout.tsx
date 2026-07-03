@@ -29,7 +29,7 @@ export async function generateMetadata({
     fetchSiteMedia(locale),
   ]);
 
-  const ogImage = media.logo;
+  const ogImage = media.logo ?? '/brand/og-image.png';
   const favicon = media.favicon ?? '/icon';
   const appleTouch = media.appleTouchIcon ?? favicon;
 

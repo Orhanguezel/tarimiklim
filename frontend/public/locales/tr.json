@@ -267,7 +267,7 @@
       "description": "7 günlük tahmin, dört faktörlü don riski ve tarımsal karar destek sistemi."
     },
     "alertBar": {
-      "message": "Canlı hava verisi · Don riski paneli · 34 lokasyon",
+      "message": "Canlı hava verisi · Don riski paneli · 81 il",
       "uptime": "API aktif",
       "version": "v2.4.1",
       "locales": "TR · EN",
@@ -365,12 +365,12 @@
       }
     },
     "dashboard": {
-      "label": "Canlı Panel · Ciftci Gorunumu",
+      "label": "Canlı Panel · Çiftçi Görünümü",
       "title": {
-        "prefix": "Sekiz ilden",
+        "prefix": "81 ilden",
         "emphasis": "şu anki durum."
       },
-      "lead": "Tarım havzalarından gerçek zamanlı kesit. Sarı nokta dikkat, kırmızı nokta acil eylem demek — her hücrenin arkasında 4 faktörlü don risk skoru calisir.",
+      "lead": "Tarım havzalarından gerçek zamanlı kesit. Sarı nokta dikkat, kırmızı nokta acil eylem demek — her hücrenin arkasında 4 faktörlü don risk skoru çalışır.",
       "tabLabel": "Görünüm filtresi",
       "tabs": {
         "now": "Şimdi",

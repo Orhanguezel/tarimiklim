@@ -4,6 +4,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { routing } from './i18n/routing';
 
 const intlMiddleware = createMiddleware(routing);
+const LOCALE_PREFIX_RE = new RegExp(`^/(${routing.locales.join('|')})(?=/|$)`);
 
 // SEO: tek kanonik origin env'den (NEXT_PUBLIC_SITE_URL) türetilir, hard-coded değil.
 // Yönlendirme hedefi her zaman bu temiz origin'den kurulur; gelen isteğin host/port'u
@@ -30,6 +31,13 @@ export function proxy(req: NextRequest) {
   // 2) Kök → varsayılan dil (308 kalıcı). next-intl varsayılanı 307 (geçici).
   if (url.pathname === '/') {
     const target = new URL(`/${routing.defaultLocale}`, SITE_ORIGIN);
+    return NextResponse.redirect(target, 308);
+  }
+
+  // 3) Locale'siz public path → varsayılan dil (308 kalıcı). next-intl'in 307 geçici
+  //    redirect'i GSC'de "Yönlendirmeli sayfa" sinyalini gereksiz uzatıyor.
+  if (!LOCALE_PREFIX_RE.test(url.pathname)) {
+    const target = new URL(`/${routing.defaultLocale}${url.pathname}${url.search}`, SITE_ORIGIN);
     return NextResponse.redirect(target, 308);
   }
 

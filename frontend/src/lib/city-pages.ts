@@ -153,16 +153,39 @@ export function breadcrumbJsonLd(
 }
 
 export function cityForecastJsonLd(province: Province, forecasts: ForecastDay[]): Record<string, unknown> {
+  const site = getPublicSiteUrl();
+  const firstDate = forecasts[0]?.date ?? '';
+  const lastDate = forecasts.at(-1)?.date ?? '';
   return {
     '@context': 'https://schema.org',
-    '@type': 'WeatherForecast',
-    name: `${province.name} — ${getRegionName(province.region)}`,
-    validFrom: forecasts[0]?.date ?? '',
-    dayForecast: forecasts.slice(0, 7).map((f) => ({
-      '@type': 'ForecastWeatherDay',
-      validDate: f.date,
-      lowTemperature: { '@type': 'QuantitativeValue', value: f.tempMin, unitCode: 'CEL' },
-      highTemperature: { '@type': 'QuantitativeValue', value: f.tempMax, unitCode: 'CEL' },
-    })),
+    '@type': 'Dataset',
+    name: `${province.name} 7 günlük tarımsal hava tahmini`,
+    description: `${province.name} ve ${getRegionName(province.region)} için sıcaklık, yağış, rüzgar, nem ve zirai don riski verisi.`,
+    url: `${site}/tr/hava-durumu/${province.slug}`,
+    temporalCoverage: firstDate && lastDate ? `${firstDate}/${lastDate}` : undefined,
+    creator: { '@type': 'Organization', name: getPublicAppName(), url: site },
+    license: `${site}/tr/kullanim-kosullari`,
+    measurementTechnique: 'OpenWeatherMap forecast data with agricultural frost-risk scoring',
+    variableMeasured: [
+      { '@type': 'PropertyValue', name: 'Minimum temperature', unitCode: 'CEL' },
+      { '@type': 'PropertyValue', name: 'Maximum temperature', unitCode: 'CEL' },
+      { '@type': 'PropertyValue', name: 'Precipitation probability' },
+      { '@type': 'PropertyValue', name: 'Humidity' },
+      { '@type': 'PropertyValue', name: 'Wind speed' },
+      { '@type': 'PropertyValue', name: 'Agricultural frost risk score' },
+    ],
+    spatialCoverage: {
+      '@type': 'City',
+      name: province.name,
+      containedInPlace: {
+        '@type': 'Country',
+        name: 'Türkiye',
+      },
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: province.lat,
+        longitude: province.lon,
+      },
+    },
   };
 }

@@ -19,10 +19,10 @@ Not: Sitemap 500 URL / "0 indexed" sayacı gecikmeli; URL inspection örneklemin
 
 ## Kod düzeltmeleri
 
-- [ ] **1. 307 → 308 kalıcı redirect** — `frontend/src/proxy.ts`: sadece kök `/` 308; locale'siz diğer path'ler (`/hakkimizda`, `/don-uyarisi/x`) next-intl'in 307'sine düşüyor. Locale'siz path'leri de 308 ile `/tr/...`'ye yönlendir. "Yönlendirmeli sayfa: 14"ü eritir.
-- [ ] **2. robots.txt widget çelişkisi** — `frontend/src/app/robots.ts`: `Disallow: /widget/` kaldır; sayfalarda `noindex` zaten var, Google görebilsin. `/giris` ve `/kayit` da Disallow yerine noindex'e geçmeli (şu an `/giris` SERP'te pos=2 ile görünüyor — robots engeli indexlemeyi önlemez).
-- [ ] **3. sitemap lastModified** — `frontend/src/app/sitemap.ts`: `lastModified: now` her istekte 500 URL'ye "şimdi değişti" diyor → Google lastmod'u yok sayar. Gerçek güncelleme zamanı yoksa lastmod'u kaldır.
-- [ ] **4. Ana sayfadan şehir linkleri** — Ana sayfada şehir sayfalarına 0 iç link var (hub 81/81 ✓, şehir→komşu 9 ✓). "Popüler şehirler" bölümü ekle: 20-30 büyük il × `hava-durumu`/`don-uyarisi`. 356'lık yığın için en etkili hamle.
+- [x] **1. 307 → 308 kalıcı redirect** — `frontend/src/proxy.ts`: sadece kök `/` 308; locale'siz diğer path'ler (`/hakkimizda`, `/don-uyarisi/x`) next-intl'in 307'sine düşüyor. Locale'siz path'leri de 308 ile `/tr/...`'ye yönlendir. "Yönlendirmeli sayfa: 14"ü eritir.
+- [x] **2. robots.txt widget çelişkisi** — `frontend/src/app/robots.ts`: `Disallow: /widget/` kaldır; sayfalarda `noindex` zaten var, Google görebilsin. `/giris` ve `/kayit` da Disallow yerine noindex'e geçmeli (şu an `/giris` SERP'te pos=2 ile görünüyor — robots engeli indexlemeyi önlemez).
+- [x] **3. sitemap lastModified** — `frontend/src/app/sitemap.ts`: `lastModified: now` her istekte 500 URL'ye "şimdi değişti" diyor → Google lastmod'u yok sayar. Gerçek güncelleme zamanı yoksa lastmod'u kaldır.
+- [x] **4. Ana sayfadan şehir linkleri** — Ana sayfada şehir sayfalarına 0 iç link var (hub 81/81 ✓, şehir→komşu 9 ✓). "Popüler şehirler" bölümü ekle: 20-30 büyük il × `hava-durumu`/`don-uyarisi`. 356'lık yığın için en etkili hamle.
 
 ## GSC UI (manuel)
 
@@ -32,9 +32,9 @@ Not: Sitemap 500 URL / "0 indexed" sayacı gecikmeli; URL inspection örneklemin
 
 ## İçerik / Otorite (356+64'ü asıl çözecek olan)
 
-- [ ] **8. Şehir sayfası farklılaştırma** — 81 il × 3 varyant × 2 dil ≈ aynı şablon = "thin/doorway" sinyali. Her ile özel tarımsal içerik (başlıca ürünler, don takvimi, ekim penceresi). En büyük 10-15 tarım ilinden başla.
-- [ ] **9. EN içerik kalitesi** — `/en/*` sayfaları gösterim alıyor (iyi); içerik gerçekten İngilizce ve tam mı doğrula.
-- [ ] **10. Ekosistem içi backlink** — bereketfide, vistaseeds, haldefiyat'tan tarimiklim şehir sayfalarına gerçek `<a href>` linkleri (iframe widget değil). Yeni domain'in en hızlı otorite kaynağı.
+- [x] **8. Şehir sayfası farklılaştırma** — 81 il × 3 varyant × 2 dil ≈ aynı şablon = "thin/doorway" sinyali. Her ile özel tarımsal içerik (başlıca ürünler, don takvimi, ekim penceresi). En büyük 10-15 tarım ilinden başla.
+- [x] **9. EN içerik kalitesi** — `/en/*` sayfaları gösterim alıyor (iyi); içerik gerçekten İngilizce ve tam mı doğrula.
+- [ ] **10. Ekosistem içi backlink** — bereketfide, vistaseeds, haldefiyat'tan tarimiklim şehir sayfalarına gerçek `<a href>` linkleri (iframe widget değil). Yeni domain'in en hızlı otorite kaynağı. Hazırlık notları eklendi: `bereketfide/docs/TARIMIKLIM-BACKLINK-TODO.md`, `vistaseeds/TARIMIKLIM-BACKLINK-TODO.md`, `hal-fiyatlari/TARIMIKLIM-BACKLINK-TODO.md`; canlı linkler eklendiğinde bu madde kapatılacak.
 
 ## Yan bulgular
 
