@@ -22,8 +22,8 @@ export const env = {
     socketPath: getOptional('DB_SOCKET_PATH', ''),
   },
 
-  JWT_SECRET: get('JWT_SECRET', 'dev-secret'),
-  COOKIE_SECRET: getOptional('COOKIE_SECRET', 'dev-cookie-secret'),
+  JWT_SECRET: process.env.JWT_SECRET || (() => { throw new Error('Missing required env: JWT_SECRET'); })(),
+  COOKIE_SECRET: process.env.COOKIE_SECRET || (() => { throw new Error('Missing required env: COOKIE_SECRET'); })(),
   AUTH_ADMIN_EMAILS: getOptional('AUTH_ADMIN_EMAILS', 'orhanguzell@gmail.com'),
 
   CORS_ORIGIN: getOptional(

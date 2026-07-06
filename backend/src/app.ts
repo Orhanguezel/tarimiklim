@@ -78,7 +78,7 @@ export async function createApp() {
     transformStaticCSP: (h) => h.replace('style-src', "style-src 'unsafe-inline'"),
   });
 
-  const cookieSecret = process.env.COOKIE_SECRET ?? 'cookie-secret';
+  const cookieSecret = process.env.COOKIE_SECRET ?? (() => { throw new Error('Missing required env: COOKIE_SECRET'); })();
   await app.register(cookie, {
     secret: cookieSecret,
     hook: 'onRequest',
