@@ -23,7 +23,9 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'openweathermap.org' },
       { protocol: 'http', hostname: 'localhost' },
     ],
-    formats: ['image/avif', 'image/webp'],
+    // AVIF YOK: tek cekirdekli sunucuda AVIF kodlamasi optimizer'i saniyelerce kilitler,
+    // istekler 502 doner ve surec yeniden baslar (vps-guezel'de 2026-08 olculdu).
+    formats: ['image/webp'],
   },
   experimental: {
     optimizePackageImports: ['next-intl'],
